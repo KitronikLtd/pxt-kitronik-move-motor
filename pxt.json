@@ -1,9 +1,11 @@
 {
-    "name": "Untitled",
-    "description": "",
+    "name": "pxt-kitronik-move-motor",
+    "version": "0.0.1",
+    "description": "Blocks to simplify using Kitronik MOVE Motor board in PXT",
+    "license": "MIT",
     "dependencies": {
         "core": "*",
-        "radio": "*"
+        "ws2812b": "github:KitronikLtd/pxt-ws2812b#v0.0.5"
     },
     "files": [
         "main.blocks",
@@ -16,5 +18,5 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "blocksprj"
+    "preferredEditor": "tsprj"
 }
