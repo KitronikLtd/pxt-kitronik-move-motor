@@ -1,7 +1,7 @@
 /**
  * Blocks for driving the Kitronik MOVE Motor Board
  */
-// % weight=100 color=#00A654 icon="\uf1b9" %
+// % weight=100 color=#00A654 icon="\uf1b9"
 // block="Move Motor" % groups='["Lights", "Sensors",
 // "Motors", "Sound"]'
 namespace Kitronik_Move_Motor {
@@ -132,8 +132,7 @@ namespace Kitronik_Move_Motor {
     * Turns on and off the horn.
     * @param motor which motor to turn off
     */
-    //% subcategory=Lights
-    //% group="Tail Lights"
+    //% group=Lights
     //% blockId=kitronik_move_motor_tail_light
     //% weight=95 blockGap=8
     //% block="turn tail light %illuminate"
@@ -159,8 +158,7 @@ namespace Kitronik_Move_Motor {
          * @param startHue the start hue value for the rainbow, eg: 1
          * @param endHue the end hue value for the rainbow, eg: 360
          */
-        //% subcategory=Lights
-        //% group="ZIP LEDs"
+        //% subcategory="ZIP LEDs"
         //% blockId="kitronik_move_motor_rainbow" 7
         //% block="%moveMotorZIP|show rainbow from %startHue|to %endHue"
         //% weight=94 blockGap=8
@@ -227,8 +225,7 @@ namespace Kitronik_Move_Motor {
          * @param value current value to plot
          * @param high maximum value, eg: 255
          */
-        //% subcategory=Lights
-        //% group="ZIP LEDs"
+        //% subcategory="ZIP LEDs"
         //% weight=84 blockGap=8
         //% blockId=kitronik_move_motor_show_bar_graph 
         //% block="%moveMotorZIP|show bar graph of %value|up to %high"
@@ -266,8 +263,7 @@ namespace Kitronik_Move_Motor {
         * @param start offset in the LED strip to start the range
         * @param length number of LEDs in the range. eg: 4
         */
-        //% subcategory=Lights
-        //% group="ZIP LEDs"
+        //% subcategory="ZIP LEDs"
         //% weight=89 blockGap=8
         //% blockId="kitronik_move_motor_range" 
         //% block="%moveMotorZIP|range from %start|with %length|leds"
@@ -288,8 +284,7 @@ namespace Kitronik_Move_Motor {
          * You need to call ``show`` to make the changes visible.
          * @param offset number of ZIP LEDs to rotate forward, eg: 1
          */
-        //% subcategory=Lights
-        //% group="ZIP LEDs"
+        //% subcategory="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_rotate" 
         //% block="%moveMotorZIP|rotate ZIP LEDs by %offset" 
         //% weight=93 blockGap=8
@@ -300,8 +295,7 @@ namespace Kitronik_Move_Motor {
          * Sets whole ZIP Halo display as a given color (range 0-255 for r, g, b). Call Show to make changes visible 
          * @param rgb RGB color of the LED
          */
-        //% subcategory=Lights
-        //% group="ZIP LEDs"
+        //% subcategory="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_only_set_strip_color" 
         //% block="%moveMotorZIP|set color %rgb=kitronik_move_motor_colors"
         //% weight=99 blockGap=8
@@ -313,8 +307,7 @@ namespace Kitronik_Move_Motor {
          * Shows whole ZIP Halo display as a given color (range 0-255 for r, g, b). 
          * @param rgb RGB color of the LED
          */
-        //% subcategory=Lights
-        //% group="ZIP LEDs"
+        //% subcategory="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_set_strip_color" 
         //% block="%moveMotorZIP|show color %rgb=kitronik_move_motor_colors"
         //% weight=99 blockGap=8
@@ -330,8 +323,7 @@ namespace Kitronik_Move_Motor {
          * @param zipLedNum position of the ZIP LED in the string
          * @param rgb RGB color of the ZIP LED
          */
-        //% subcategory=Lights
-        //% group="ZIP LEDs"
+        //% subcategory="ZIP LEDs"
         //% blockId="kitronik_move_motor_set_zip_color" 
         //% block="%moveMotorZIP|set ZIP LED %zipLedNum|to %rgb=kitronik_move_motor_colors"
         //% weight=98 blockGap=8
@@ -342,8 +334,7 @@ namespace Kitronik_Move_Motor {
         /**
          * Send all the changes to the ZIP Halo display.
          */
-        //% subcategory=Lights
-        //% group="ZIP LEDs"
+        //% subcategory="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_show" 
         //% block="%moveMotorZIP|show" blockGap=8
         //% weight=96
@@ -356,8 +347,7 @@ namespace Kitronik_Move_Motor {
          * Turn off all LEDs on the ZIP Halo display.
          * You need to call ``show`` to make the changes visible.
          */
-        //% subcategory=Lights
-        //% group="ZIP LEDs"
+        //% subcategory="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_clear"
         //% block="%moveMotorZIP|clear"
         //% weight=95 blockGap=8
@@ -369,8 +359,7 @@ namespace Kitronik_Move_Motor {
          * Set the brightness of the ZIP Halo display. This flag only applies to future show operation.
          * @param brightness a measure of LED brightness in 0-255. eg: 255
          */
-        //% subcategory=Lights
-        //% group="ZIP LEDs"
+        //% subcategory="ZIP LEDs"
         //% blockId="kitronik_move_motordisplay_set_brightness"
         //% block="%moveMotorZIP|set brightness %brightness" 
         //% weight=92 blockGap=8
@@ -426,8 +415,7 @@ namespace Kitronik_Move_Motor {
      * Create a new ZIP LED driver for MOVE Motor board.
 	 * @param numZips number of leds in the strip, eg: 4
      */
-    //% subcategory=Lights
-    //% group="ZIP LEDs"
+    //% subcategory="ZIP LEDs"
     //% blockId="kitronik_move_motor_ZIP_LED_create" 
     //% block="to Halo HD with %numZips|ZIP LEDs"
     //% weight=100 blockGap=8
@@ -454,8 +442,7 @@ namespace Kitronik_Move_Motor {
      * @param green value of the green channel between 0 and 255. eg: 255
      * @param blue value of the blue channel between 0 and 255. eg: 255
      */
-    //% subcategory=Lights
-    //% group="ZIP LEDs"
+    //% subcategory="ZIP LEDs"
     //% weight=1 blockGap=8
     //% blockId="kitronik_move_motor_rgb" block="red %red|green %green|blue %blue"
     export function rgb(red: number, green: number, blue: number): number {
@@ -465,8 +452,7 @@ namespace Kitronik_Move_Motor {
     /**
      * Gets the RGB value of a known color
     */
-    //% subcategory=Lights
-    //% group="ZIP LEDs"
+    //% subcategory="ZIP LEDs"
     //% weight=2 blockGap=8
     //% blockId="kitronik_move_motor_colors" block="%color"
     export function colors(color: ZipLedColors): number {
@@ -549,8 +535,6 @@ namespace Kitronik_Move_Motor {
      * @param unit desired conversion unit
      * @param maxCmDistance maximum distance in centimeters (default is 500)
      */
-    //% subcategory=Sensors
-    //% group="Ultrasonic"
     //% blockId=kitronik_move_motor_ultrasonic_measure
     //% block="measure distances in |unit %unit"
     export function measure(unit: Units, maxCmDistance = 500): number {
@@ -576,8 +560,6 @@ namespace Kitronik_Move_Motor {
     * Set sensor threshold block allows the user to adjust the point at which the sensor detects
     * @param level is the threshold percentage
     */
-    //% subcategory=Sensors
-    //% group="Line Following"
     //% blockId=kitronik_move_motor_line_follower_set_threshold
     //% block="set sensor threshold to %level|"
     //% level.min=0 level.max=100 level.defl=50
@@ -593,8 +575,6 @@ namespace Kitronik_Move_Motor {
     * Read sensor block allows user to read the value of the sensor (returns value in range 0-1023)
     * @param pinSelected is the selection of pin to read a particular sensor
     */
-    //% subcategory=Sensors
-    //% group="Line Following"
     //% blockId=kitronik_move_motor_line_follower_read_sensor
     //% block="read sensor on pin %pinSelected"
     //% weight=90 blockGap=8
@@ -619,8 +599,6 @@ namespace Kitronik_Move_Motor {
     * @param pinSelected is the selection of pin to read a particular sensor
 	* @param lightSelection is the selection of the sensor detecting light or dark
     */
-    //% subcategory=Sensors
-    //% group="Line Following"
     //% blockId=kitronik_move_motor_line_follower_digital_sensor
     //% block="sensor on pin %pinSelected| detected %LightSelection"
     //% weight=95 blockGap=8
@@ -734,13 +712,12 @@ namespace Kitronik_Move_Motor {
 
     /**
      * Turns on and off the horn.
-     * @param hornTimes is the number of times to sound the horn
+     * @param motor which motor to turn off
      */
-    //% subcategory=Sounds
     //% group=Sounds
     //% blockId=kitronik_move_motor_horn
     //% weight=95 blockGap=8
-    //% block="beep the horn %hornTimes"
+    //%block="beep the horn %hornTimes"
     //% hornTimes.min = 1 hornTimes.max = 5 hornTimes.defl = 1
     export function beepHorn(hornTimes: number): void {
         for (let u = 0; u <= hornTimes; u++) {
@@ -753,9 +730,8 @@ namespace Kitronik_Move_Motor {
 
     /**
     * Turns on and off the horn.
-    * @param siren is the selection to turn on or off the siren
+    * @param motor which motor to turn off
     */
-    //% subcategory=Sounds
     //% group=Sounds
     //% blockId=kitronik_move_motor_siren
     //% weight=95 blockGap=8
