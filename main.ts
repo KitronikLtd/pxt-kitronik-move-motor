@@ -1,18 +1,17 @@
 /**
  * Blocks for driving the Kitronik MOVE Motor Board
  */
-// % weight=100 color=#00A654 icon="\uf1b9"
-// block="Move Motor" % groups='["Lights", "Sensors",
-// "Motors", "Sound"]'
+//% weight=100 color=#00A654 icon="\uf1b9" block="Move Motor"
+//% groups='["Lights", "Sensors", "Motors", "Sound"]'
 namespace Kitronik_Move_Motor {
     //Constants 
-    let CHIP_ADDR = 0xE0 // CHIP_ADDR is the standard chip address for the PCA9632
+    let CHIP_ADDR = 0x62 // CHIP_ADDR is the standard chip address for the PCA9632
     let MODE_1_REG_ADDR = 0x00 //mode 1 register address
     let MODE_2_REG_ADDR = 0x01  //mode 2 register address
     let LED_OUT_ADDR = 0x08  //LED output register address
 
     let MODE_1_REG_VALUE = 0x00 //the prescale register address
-    let MODE_2_REG_VALUE = 0x10  //The mode 1 register address
+    let MODE_2_REG_VALUE = 0x04  //The mode 1 register address
     let LED_OUT_VALUE = 0xAA  //The mode 1 register address
 
     let MOTOR_DUTY_CYCLE_RATION = 0.4
@@ -27,7 +26,7 @@ namespace Kitronik_Move_Motor {
 
     /* ZIPLEDS*/
     //Well known colors for ZIP LEDs
-    enum ZipLedColors {
+    export enum ZipLedColors {
         //% block=red
         Red = 0xFF0000,
         //% block=orange
@@ -118,6 +117,7 @@ namespace Kitronik_Move_Motor {
         buf[0] = LED_OUT_ADDR
         buf[1] = LED_OUT_VALUE
         pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+        basic.pause(1)
 
         sensorLeftRef = pins.analogReadPin(AnalogPin.P1)
         sensorRightRef = pins.analogReadPin(AnalogPin.P2)
@@ -132,7 +132,7 @@ namespace Kitronik_Move_Motor {
     * Turns on and off the horn.
     * @param motor which motor to turn off
     */
-    //% group=Lights
+    //% subcategory="Lights"
     //% blockId=kitronik_move_motor_tail_light
     //% weight=95 blockGap=8
     //% block="turn tail light %illuminate"
@@ -158,7 +158,7 @@ namespace Kitronik_Move_Motor {
          * @param startHue the start hue value for the rainbow, eg: 1
          * @param endHue the end hue value for the rainbow, eg: 360
          */
-        //% subcategory="ZIP LEDs"
+        //% subcategory="Lights"
         //% blockId="kitronik_move_motor_rainbow" 7
         //% block="%moveMotorZIP|show rainbow from %startHue|to %endHue"
         //% weight=94 blockGap=8
@@ -225,7 +225,7 @@ namespace Kitronik_Move_Motor {
          * @param value current value to plot
          * @param high maximum value, eg: 255
          */
-        //% subcategory="ZIP LEDs"
+        //% subcategory="Lights"
         //% weight=84 blockGap=8
         //% blockId=kitronik_move_motor_show_bar_graph 
         //% block="%moveMotorZIP|show bar graph of %value|up to %high"
@@ -243,40 +243,19 @@ namespace Kitronik_Move_Motor {
             let v = Math.idiv((value * n), high);
             if (v == 0) {
                 this.setPixelRGB(0, 0x666600);
-                for (let j = 1; j < n; ++j)
-                    this.setPixelRGB(j, 0);
+                for (let i = 1; i < n; ++i)
+                    this.setPixelRGB(i, 0);
             } else {
-                for (let k = 0; k < n; ++k) {
-                    if (k <= v) {
-                        const g = Math.idiv(k * 255, n1);
+                for (let i = 0; i < n; ++i) {
+                    if (i <= v) {
+                        const g = Math.idiv(i * 255, n1);
                         //this.setPixelRGB(i, moveMotorZIP.rgb(0, g, 255 - g));
-                        this.setPixelRGB(k, rgb(g, 255 - g, 0));
+                        this.setPixelRGB(i, rgb(g, 255 - g, 0));
                     }
-                    else this.setPixelRGB(k, 0);
+                    else this.setPixelRGB(i, 0);
                 }
             }
             this.show();
-        }
-
-        /** 
-        * Create a range of LEDs.
-        * @param start offset in the LED strip to start the range
-        * @param length number of LEDs in the range. eg: 4
-        */
-        //% subcategory="ZIP LEDs"
-        //% weight=89 blockGap=8
-        //% blockId="kitronik_move_motor_range" 
-        //% block="%moveMotorZIP|range from %start|with %length|leds"
-        range(start: number, length: number): MoveMotorZIP {
-            start = start >> 0;
-            length = length >> 0;
-            let moveMotorZIP = new MoveMotorZIP();
-            moveMotorZIP.buf = this.buf;
-            moveMotorZIP.pin = this.pin;
-            moveMotorZIP.brightness = this.brightness;
-            moveMotorZIP.start = this.start + Math.clamp(0, this._length - 1, start);
-            moveMotorZIP._length = Math.clamp(0, this._length - (moveMotorZIP.start - this.start), length);
-            return moveMotorZIP;
         }
 
         /**
@@ -284,7 +263,7 @@ namespace Kitronik_Move_Motor {
          * You need to call ``show`` to make the changes visible.
          * @param offset number of ZIP LEDs to rotate forward, eg: 1
          */
-        //% subcategory="ZIP LEDs"
+        //% subcategory="Lights"
         //% blockId="kitronik_move_motor_display_rotate" 
         //% block="%moveMotorZIP|rotate ZIP LEDs by %offset" 
         //% weight=93 blockGap=8
@@ -295,7 +274,7 @@ namespace Kitronik_Move_Motor {
          * Sets whole ZIP Halo display as a given color (range 0-255 for r, g, b). Call Show to make changes visible 
          * @param rgb RGB color of the LED
          */
-        //% subcategory="ZIP LEDs"
+        //% subcategory="Lights"
         //% blockId="kitronik_move_motor_display_only_set_strip_color" 
         //% block="%moveMotorZIP|set color %rgb=kitronik_move_motor_colors"
         //% weight=99 blockGap=8
@@ -307,7 +286,7 @@ namespace Kitronik_Move_Motor {
          * Shows whole ZIP Halo display as a given color (range 0-255 for r, g, b). 
          * @param rgb RGB color of the LED
          */
-        //% subcategory="ZIP LEDs"
+        //% subcategory="Lights"
         //% blockId="kitronik_move_motor_display_set_strip_color" 
         //% block="%moveMotorZIP|show color %rgb=kitronik_move_motor_colors"
         //% weight=99 blockGap=8
@@ -323,7 +302,7 @@ namespace Kitronik_Move_Motor {
          * @param zipLedNum position of the ZIP LED in the string
          * @param rgb RGB color of the ZIP LED
          */
-        //% subcategory="ZIP LEDs"
+        //% subcategory="Lights"
         //% blockId="kitronik_move_motor_set_zip_color" 
         //% block="%moveMotorZIP|set ZIP LED %zipLedNum|to %rgb=kitronik_move_motor_colors"
         //% weight=98 blockGap=8
@@ -334,7 +313,7 @@ namespace Kitronik_Move_Motor {
         /**
          * Send all the changes to the ZIP Halo display.
          */
-        //% subcategory="ZIP LEDs"
+        //% subcategory="Lights"
         //% blockId="kitronik_move_motor_display_show" 
         //% block="%moveMotorZIP|show" blockGap=8
         //% weight=96
@@ -347,7 +326,7 @@ namespace Kitronik_Move_Motor {
          * Turn off all LEDs on the ZIP Halo display.
          * You need to call ``show`` to make the changes visible.
          */
-        //% subcategory="ZIP LEDs"
+        //% subcategory="Lights"
         //% blockId="kitronik_move_motor_display_clear"
         //% block="%moveMotorZIP|clear"
         //% weight=95 blockGap=8
@@ -359,7 +338,7 @@ namespace Kitronik_Move_Motor {
          * Set the brightness of the ZIP Halo display. This flag only applies to future show operation.
          * @param brightness a measure of LED brightness in 0-255. eg: 255
          */
-        //% subcategory="ZIP LEDs"
+        //% subcategory="Lights"
         //% blockId="kitronik_move_motordisplay_set_brightness"
         //% block="%moveMotorZIP|set brightness %brightness" 
         //% weight=92 blockGap=8
@@ -390,8 +369,8 @@ namespace Kitronik_Move_Motor {
             let blue = unpackB(rgb);
 
             const end = this.start + this._length;
-            for (let m = this.start; m < end; ++m) {
-                this.setBufferRGB(m * 3, red, green, blue)
+            for (let i = this.start; i < end; ++i) {
+                this.setBufferRGB(i * 3, red, green, blue)
             }
         }
 
@@ -403,11 +382,11 @@ namespace Kitronik_Move_Motor {
 
             pixeloffset = (pixeloffset + this.start) * 3;
 
-            let red2 = unpackR(rgb);
-            let green2 = unpackG(rgb);
-            let blue2 = unpackB(rgb);
+            let red = unpackR(rgb);
+            let green = unpackG(rgb);
+            let blue = unpackB(rgb);
 
-            this.setBufferRGB(pixeloffset, red2, green2, blue2)
+            this.setBufferRGB(pixeloffset, red, green, blue)
         }
     }
 
@@ -415,21 +394,21 @@ namespace Kitronik_Move_Motor {
      * Create a new ZIP LED driver for MOVE Motor board.
 	 * @param numZips number of leds in the strip, eg: 4
      */
-    //% subcategory="ZIP LEDs"
+    //% subcategory="Lights"
     //% blockId="kitronik_move_motor_ZIP_LED_create" 
     //% block="to Halo HD with %numZips|ZIP LEDs"
     //% weight=100 blockGap=8
     //% trackArgs=0,2
     //% blockSetVariable=moveMotorZIP
     export function createMoveMotorZIPLED(numZips: number): MoveMotorZIP {
-        let moveMotorZIP2 = new MoveMotorZIP();
-        moveMotorZIP2.buf = pins.createBuffer(numZips * 3);
-        moveMotorZIP2.start = 0;
-        moveMotorZIP2._length = numZips;
-        moveMotorZIP2.setBrightness(128)
-        moveMotorZIP2.pin = DigitalPin.P8;
-        pins.digitalWritePin(moveMotorZIP2.pin, 8);
-        return moveMotorZIP2;
+        let moveMotorZIP = new MoveMotorZIP();
+        moveMotorZIP.buf = pins.createBuffer(numZips * 3);
+        moveMotorZIP.start = 0;
+        moveMotorZIP._length = numZips;
+        moveMotorZIP.setBrightness(128)
+        moveMotorZIP.pin = DigitalPin.P8;
+        pins.digitalWritePin(moveMotorZIP.pin, 8);
+        return moveMotorZIP;
     }
 
     /*  The LEDs we are using have centre wavelengths of 470nm (Blue) 525nm(Green) and 625nm (Red) 
@@ -442,7 +421,7 @@ namespace Kitronik_Move_Motor {
      * @param green value of the green channel between 0 and 255. eg: 255
      * @param blue value of the blue channel between 0 and 255. eg: 255
      */
-    //% subcategory="ZIP LEDs"
+    //% subcategory="Lights"
     //% weight=1 blockGap=8
     //% blockId="kitronik_move_motor_rgb" block="red %red|green %green|blue %blue"
     export function rgb(red: number, green: number, blue: number): number {
@@ -452,7 +431,7 @@ namespace Kitronik_Move_Motor {
     /**
      * Gets the RGB value of a known color
     */
-    //% subcategory="ZIP LEDs"
+    //% subcategory="Lights"
     //% weight=2 blockGap=8
     //% blockId="kitronik_move_motor_colors" block="%color"
     export function colors(color: ZipLedColors): number {
@@ -470,8 +449,8 @@ namespace Kitronik_Move_Motor {
     }
     //Separates green value from combined number
     function unpackG(rgb: number): number {
-        let o = (rgb >> 8) & 0xFF;
-        return o;
+        let g = (rgb >> 8) & 0xFF;
+        return g;
     }
     //Separates blue value from combined number
     function unpackB(rgb: number): number {
@@ -491,31 +470,31 @@ namespace Kitronik_Move_Motor {
         s = Math.clamp(0, 99, s);
         l = Math.clamp(0, 99, l);
         let c = Math.idiv((((100 - Math.abs(2 * l - 100)) * s) << 8), 10000); //chroma, [0,255]
-        let h12 = Math.idiv(h, 60);//[0,6]
-        let h22 = Math.idiv((h - h12 * 60) * 256, 60);//[0,255]
-        let temp = Math.abs((((h12 % 2) << 8) + h22) - 256);
+        let h1 = Math.idiv(h, 60);//[0,6]
+        let h2 = Math.idiv((h - h1 * 60) * 256, 60);//[0,255]
+        let temp = Math.abs((((h1 % 2) << 8) + h2) - 256);
         let x = (c * (256 - (temp))) >> 8;//[0,255], second largest component of this color
         let r$: number;
         let g$: number;
         let b$: number;
-        if (h12 == 0) {
+        if (h1 == 0) {
             r$ = c; g$ = x; b$ = 0;
-        } else if (h12 == 1) {
+        } else if (h1 == 1) {
             r$ = x; g$ = c; b$ = 0;
-        } else if (h12 == 2) {
+        } else if (h1 == 2) {
             r$ = 0; g$ = c; b$ = x;
-        } else if (h12 == 3) {
+        } else if (h1 == 3) {
             r$ = 0; g$ = x; b$ = c;
-        } else if (h12 == 4) {
+        } else if (h1 == 4) {
             r$ = x; g$ = 0; b$ = c;
-        } else if (h12 == 5) {
+        } else if (h1 == 5) {
             r$ = c; g$ = 0; b$ = x;
         }
-        let p = Math.idiv((Math.idiv((l * 2 << 8), 100) - c), 2);
-        let t = r$ + p;
-        let q = g$ + p;
-        let d = b$ + p;
-        return packRGB(t, q, d);
+        let m = Math.idiv((Math.idiv((l * 2 << 8), 100) - c), 2);
+        let r = r$ + m;
+        let g = g$ + m;
+        let b = b$ + m;
+        return packRGB(r, g, b);
     }
 
     /**
@@ -535,6 +514,7 @@ namespace Kitronik_Move_Motor {
      * @param unit desired conversion unit
      * @param maxCmDistance maximum distance in centimeters (default is 500)
      */
+    //% subcategory="Sensors"
     //% blockId=kitronik_move_motor_ultrasonic_measure
     //% block="measure distances in |unit %unit"
     export function measure(unit: Units, maxCmDistance = 500): number {
@@ -560,6 +540,7 @@ namespace Kitronik_Move_Motor {
     * Set sensor threshold block allows the user to adjust the point at which the sensor detects
     * @param level is the threshold percentage
     */
+    //% subcategory="Sensors"
     //% blockId=kitronik_move_motor_line_follower_set_threshold
     //% block="set sensor threshold to %level|"
     //% level.min=0 level.max=100 level.defl=50
@@ -575,6 +556,7 @@ namespace Kitronik_Move_Motor {
     * Read sensor block allows user to read the value of the sensor (returns value in range 0-1023)
     * @param pinSelected is the selection of pin to read a particular sensor
     */
+    //% subcategory="Sensors"
     //% blockId=kitronik_move_motor_line_follower_read_sensor
     //% block="read sensor on pin %pinSelected"
     //% weight=90 blockGap=8
@@ -599,11 +581,12 @@ namespace Kitronik_Move_Motor {
     * @param pinSelected is the selection of pin to read a particular sensor
 	* @param lightSelection is the selection of the sensor detecting light or dark
     */
+    //% subcategory="Sensors"
     //% blockId=kitronik_move_motor_line_follower_digital_sensor
     //% block="sensor on pin %pinSelected| detected %LightSelection"
     //% weight=95 blockGap=8
     export function sensorDigitalDetection(pinSelected: LfSensor, lightLevel: LightSelection): boolean {
-        let value2 = 0
+        let value = 0
         let ref = 0
         let result = false
 
@@ -612,16 +595,16 @@ namespace Kitronik_Move_Motor {
         }
 
         if (pinSelected == LfSensor.left) {
-            value2 = pins.analogReadPin(AnalogPin.P1)
+            value = pins.analogReadPin(AnalogPin.P1)
             ref = sensorLeftRef
         }
         else if (pinSelected == LfSensor.right) {
-            value2 = pins.analogReadPin(AnalogPin.P2)
+            value = pins.analogReadPin(AnalogPin.P2)
             ref = sensorRightRef
         }
 
         if (lightLevel == LightSelection.Light) {
-            if (value2 >= (ref + detectionLevel)) {
+            if (value >= (ref + detectionLevel)) {
                 result = true
             }
             else {
@@ -629,7 +612,7 @@ namespace Kitronik_Move_Motor {
             }
         }
         else if (lightLevel == LightSelection.Dark) {
-            if (value2 <= (ref - detectionLevel)) {
+            if (value <= (ref - detectionLevel)) {
                 result = true
             }
             else {
@@ -661,29 +644,54 @@ namespace Kitronik_Move_Motor {
             setup()
         }
 
-        /*convert 0-100 to 0-250 (approx) We wont worry about the last 95 to make life simpler*/
-        let outputVal = Math.idiv(speed, MOTOR_DUTY_CYCLE_RATION)
+        /*convert 0-100 to 0-250 (approx) We wont worry about the last 5 to make life simpler*/
+        //let outputVal = Math.idiv(speed, MOTOR_DUTY_CYCLE_RATION)
+        let outputVal = Math.round(speed/MOTOR_DUTY_CYCLE_RATION)
 
-        let buf2 = pins.createBuffer(2)
-
-        switch (dir) {
-            case MotorDirection.Forward:
-                buf2[0] = motor
-                buf2[1] = outputVal
-                pins.i2cWriteBuffer(CHIP_ADDR, buf2, false)
-                buf2[0] = motor + 1
-                buf2[1] = 0x00
-                pins.i2cWriteBuffer(CHIP_ADDR, buf2, false)
-                break
-            case MotorDirection.Reverse:
-                buf2[0] = motor + 1
-                buf2[1] = outputVal
-                pins.i2cWriteBuffer(CHIP_ADDR, buf2, false)
-                buf2[0] = motor
-                buf2[1] = 0x00
-                pins.i2cWriteBuffer(CHIP_ADDR, buf2, false)
-                break
+        let buf = pins.createBuffer(2)
+        
+        if (motor == Motors.MotorRight){
+            switch (dir) {
+                case MotorDirection.Forward:
+                    buf[0] = motor
+                    buf[1] = outputVal
+                    pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+                    buf[0] = motor + 1
+                    buf[1] = 0x00
+                    pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+                    break
+                case MotorDirection.Reverse:
+                    buf[0] = motor
+                    buf[1] = 0x00
+                    pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+                    buf[0] = motor + 1
+                    buf[1] = outputVal
+                    pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+                    break
+            }
         }
+        else if (motor == Motors.MotorLeft){
+            switch (dir) {
+                case MotorDirection.Forward:
+                    buf[0] = motor
+                    buf[1] = 0x00
+                    pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+                    buf[0] = motor + 1
+                    buf[1] = outputVal
+                    pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+                    break
+                case MotorDirection.Reverse:
+                    buf[0] = motor
+                    buf[1] = outputVal
+                    pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+                    buf[0] = motor + 1
+                    buf[1] = 0x00
+                    pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+                    break
+            }
+        }
+
+
     }
 
     /**
@@ -696,13 +704,13 @@ namespace Kitronik_Move_Motor {
     //% weight=95 blockGap=8
     //%block="turn off %motor| motor"
     export function motorOff(motor: Motors): void {
-        let buf3 = pins.createBuffer(2)
-        buf3[0] = motor
-        buf3[1] = 0x00
-        pins.i2cWriteBuffer(CHIP_ADDR, buf3, false)
-        buf3[0] = motor + 1
-        buf3[1] = 0x00
-        pins.i2cWriteBuffer(CHIP_ADDR, buf3, false)
+        let buf = pins.createBuffer(2)
+        buf[0] = motor
+        buf[1] = 0x00
+        pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+        buf[0] = motor + 1
+        buf[1] = 0x00
+        pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
     }
 
 
@@ -714,13 +722,13 @@ namespace Kitronik_Move_Motor {
      * Turns on and off the horn.
      * @param motor which motor to turn off
      */
-    //% group=Sounds
+    //% subcategory=Sounds
     //% blockId=kitronik_move_motor_horn
     //% weight=95 blockGap=8
     //%block="beep the horn %hornTimes"
     //% hornTimes.min = 1 hornTimes.max = 5 hornTimes.defl = 1
     export function beepHorn(hornTimes: number): void {
-        for (let u = 0; u <= hornTimes; u++) {
+        for (let i = 0; i <= hornTimes; i++) {
             music.playTone(185, music.beat(BeatFraction.Quarter))
             basic.pause(75)
             music.playTone(185, music.beat(BeatFraction.Quarter))
@@ -732,7 +740,7 @@ namespace Kitronik_Move_Motor {
     * Turns on and off the horn.
     * @param motor which motor to turn off
     */
-    //% group=Sounds
+    //% subcategory=Sounds
     //% blockId=kitronik_move_motor_siren
     //% weight=95 blockGap=8
     //% block="turn siren %siren"
