@@ -14,8 +14,6 @@ namespace Kitronik_Move_Motor {
     let MODE_2_REG_VALUE = 0x04  //Setup to make changes on ACK, outputs set to open-drain
     let MOTOR_OUT_VALUE = 0xAA  //Outputs set to be controled PWM registers
 
-    let MOTOR_DUTY_CYCLE_RATION = 0.4
-
     /*GENERAL*/
     export enum OnOffSelection {
         //% block="on"
@@ -92,6 +90,9 @@ namespace Kitronik_Move_Motor {
 
     let initalised = false //a flag to allow us to initialise without explicitly calling the secret incantation
     //Motor global variables
+    let rightMotorBias = 1.0
+    let leftMotorBias = 1.0
+    //Sound global variables
     let sirenOn = false
     //Ultrasonic global variables
     let triggerPin = DigitalPin.P13
@@ -529,7 +530,7 @@ namespace Kitronik_Move_Motor {
 
         // read pulse
         const pulse = pins.pulseIn(echoPin, PulseValue.High, maxCmDistance * 39);
-        //From the HC-SR04 datasheet the formula for calculating distance is us of pulse / 58 for cm or us of pulse / 148 for inches.
+        //From the HC-SR04 datasheet the formula for calculating distance is "microSecs of pulse"/58 for cm or "microSecs of pulse"/148 for inches.
         //When measured actual distance compared to calculated distanceis not the same.  There must be an timing measurement with the pulse.
         //values have been changed to match the correct measured distances so 58 changed to 39 and 148 changed to 98
         switch (unit) {
@@ -551,9 +552,6 @@ namespace Kitronik_Move_Motor {
     //% level.min=0 level.max=100 level.defl=50
     //% weight=85 blockGap=8
     export function setSensorDetectionLevel(level: number) {
-        if (initalised == false) {
-            setup()
-        }
         detectionLevel = (level / 2) + 10
     }
 
@@ -568,10 +566,6 @@ namespace Kitronik_Move_Motor {
     //% weight=90 blockGap=8
     export function readSensor(sensorSelected: LfSensor) {
         let value = 0
-
-        if (initalised == false) {
-            setup()
-        }
 
         if (sensorSelected == LfSensor.left) {
             value = pins.analogReadPin(AnalogPin.P1)
@@ -596,10 +590,6 @@ namespace Kitronik_Move_Motor {
         let value2 = 0
         let ref = 0
         let result = false
-
-        if (initalised == false) {
-            setup()
-        }
 
         if (pinSelected == LfSensor.left) {
             value2 = pins.analogReadPin(AnalogPin.P1)
@@ -651,9 +641,11 @@ namespace Kitronik_Move_Motor {
             setup()
         }
 
-        /*convert 0-100 to 0-250 (approx) We wont worry about the last 5 to make life simpler*/
-        //let outputVal = Math.idiv(speed, MOTOR_DUTY_CYCLE_RATION)
-        let outputVal = Math.round(speed/MOTOR_DUTY_CYCLE_RATION)
+        /*convert 0-100 to 0-255 by a simple multiple by 2.55*/
+        let outputVal = Math.round(speed*2.55)
+        if (outputVal > 255){ 
+            outputVal = 255 
+        }
 
         let motorOnbuf = pins.createBuffer(2)
         
@@ -661,7 +653,7 @@ namespace Kitronik_Move_Motor {
             switch (dir) {
                 case MotorDirection.Forward:
                     motorOnbuf[0] = motor
-                    motorOnbuf[1] = outputVal
+                    //motorOnbuf[1] = outputVal * rightMotorBias
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
                     motorOnbuf[1] = 0x00
@@ -672,6 +664,7 @@ namespace Kitronik_Move_Motor {
                     motorOnbuf[1] = 0x00
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
+                    //motorOnbuf[1] = outputVal * rightMotorBias
                     motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     break
@@ -684,11 +677,13 @@ namespace Kitronik_Move_Motor {
                     motorOnbuf[1] = 0x00
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
+                    //motorOnbuf[1] = outputVal  * leftMotorBias
                     motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     break
                 case MotorDirection.Reverse:
                     motorOnbuf[0] = motor
+                    //motorOnbuf[1] = outputVal * leftMotorBias
                     motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
@@ -697,8 +692,6 @@ namespace Kitronik_Move_Motor {
                     break
             }
         }
-
-
     }
 
     /**
@@ -709,8 +702,12 @@ namespace Kitronik_Move_Motor {
     //% group=Motors
     //% blockId=kitronik_move_motor_motor_off
     //% weight=95 blockGap=8
-    //%block="turn off %motor| motor"
+    //% block="turn off %motor| motor"
     export function motorOff(motor: Motors): void {
+        if (initalised == false) {
+            setup()
+        }
+
         let motorOffbuf = pins.createBuffer(2)
         motorOffbuf[0] = motor
         motorOffbuf[1] = 0x00
@@ -720,6 +717,28 @@ namespace Kitronik_Move_Motor {
         pins.i2cWriteBuffer(CHIP_ADDR, motorOffbuf, false)
     }
 
+    /**
+     * Bias motor selection so that it can match each motor.
+     * @param motor which motor to turn off
+     * @param motorFactor number between 0 and 10 to help balance the motor speeds
+     */
+    //% subcategory=Motors
+    //% group=Motors
+    //% blockId=kitronik_move_motor_motor_off
+    //% weight=95 blockGap=8
+    //% block="bias %motor| motor by %motorFactor"
+    //% motorFactor.min=0 motorFactor.max=10
+    export function motorBias(motor: Motors, motorFactor: number): void {
+        if (initalised == false) {
+            setup()
+        }
+        if (motor == Motors.MotorRight){
+            rightMotorBias = motorFactor / 10
+        }
+        else if (motor == Motors.MotorLeft){
+            leftMotorBias = motorFactor / 10
+        }
+    }
 
     //////////////
     //  SOUNDS  //
