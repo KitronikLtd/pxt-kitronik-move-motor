@@ -87,6 +87,17 @@ namespace Kitronik_Move_Motor {
         //% block="Dark"
         Dark
     }
+    
+    //Detection mode selection
+    export enum DetectorSensitivity 
+    {
+        //% block="Low"
+        Low,
+        //% block="Medium"
+        Medium,
+        //% block="High"
+        High
+    }
 
     let initalised = false //a flag to allow us to initialise without explicitly calling the secret incantation
     //Motor global variables
@@ -134,6 +145,7 @@ namespace Kitronik_Move_Motor {
     * @param illuminate which selects the LED to turn on or off
     */
     //% subcategory="Lights"
+    //% group="Tail Light"
     //% blockId=kitronik_move_motor_tail_light
     //% weight=100 blockGap=8
     //% block="turn tail light %illuminate"
@@ -160,6 +172,7 @@ namespace Kitronik_Move_Motor {
          * @param endHue the end hue value for the rainbow, eg: 360
          */
         //% subcategory="Lights"
+        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_rainbow"
         //% block="%moveMotorZIP|show rainbow from %startHue|to %endHue"
         //% weight=94 blockGap=8
@@ -220,43 +233,26 @@ namespace Kitronik_Move_Motor {
             this.show();
         }
 
-		/**
-         * Displays a vertical bar graph based on the `value` and `high` value.
-         * If `high` is 0, the chart gets adjusted automatically.
-         * @param value current value to plot
-         * @param high maximum value, eg: 255
+		 /** 
+         * Create a range of LEDs.
+         * @param start offset in the LED strip to start the range
+         * @param length number of LEDs in the range. eg: 4
          */
         //% subcategory="Lights"
-        //% weight=84 blockGap=8
-        //% blockId=kitronik_move_motor_show_bar_graph 
-        //% block="%moveMotorZIP|show bar graph of %value|up to %high"
-        showBarGraph(value: number, high: number): void {
-            if (high <= 0) {
-                this.clear();
-                this.setPixelRGB(0, 0xFFFF00);
-                this.show();
-                return;
-            }
-
-            value = Math.abs(value);
-            const n = this._length;
-            const n1 = n - 1;
-            let v = Math.idiv((value * n), high);
-            if (v == 0) {
-                this.setPixelRGB(0, 0x666600);
-                for (let j = 1; j < n; ++j)
-                    this.setPixelRGB(j, 0);
-            } else {
-                for (let k = 0; k < n; ++k) {
-                    if (k <= v) {
-                        const g = Math.idiv(k * 255, n1);
-                        //this.setPixelRGB(i, moveMotorZIP.rgb(0, g, 255 - g));
-                        this.setPixelRGB(k, rgb(g, 255 - g, 0));
-                    }
-                    else this.setPixelRGB(k, 0);
-                }
-            }
-            this.show();
+        //% group="ZIP LEDs"
+        //% weight=89 blockGap=8
+        //% blockId="kitronik_move_motor_range" 
+        //% block="%moveMotorZIP|range from %start|with %length|leds"
+        range(start: number, length: number): MoveMotorZIP {
+            start = start >> 0;
+            length = length >> 0;
+            let moveMotorZIP = new MoveMotorZIP();
+            moveMotorZIP.buf = this.buf;
+            moveMotorZIP.pin = this.pin;
+            moveMotorZIP.brightness = this.brightness;
+            moveMotorZIP.start = this.start + Math.clamp(0, this._length - 1, start);
+            moveMotorZIP._length = Math.clamp(0, this._length - (moveMotorZIP.start - this.start), length);
+            return moveMotorZIP;
         }
 
         /**
@@ -265,9 +261,10 @@ namespace Kitronik_Move_Motor {
          * @param offset number of ZIP LEDs to rotate forward, eg: 1
          */
         //% subcategory="Lights"
+        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_rotate" 
         //% block="%moveMotorZIP|rotate ZIP LEDs by %offset" 
-        //% weight=93 blockGap=8
+        //% weight=97 blockGap=8
         rotate(offset: number = 1): void {
             this.buf.rotate(-offset * 3, this.start * 3, this._length * 3)
         }
@@ -276,6 +273,7 @@ namespace Kitronik_Move_Motor {
          * @param rgb RGB color of the LED
          */
         //% subcategory="Lights"
+        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_only_set_strip_color" 
         //% block="%moveMotorZIP|set color %rgb=kitronik_move_motor_colors"
         //% weight=99 blockGap=8
@@ -288,9 +286,10 @@ namespace Kitronik_Move_Motor {
          * @param rgb RGB color of the LED
          */
         //% subcategory="Lights"
+        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_set_strip_color" 
         //% block="%moveMotorZIP|show color %rgb=kitronik_move_motor_colors"
-        //% weight=99 blockGap=8
+        //% weight=93 blockGap=8
         showColor(rgb: number) {
             rgb = rgb >> 0;
             this.setAllRGB(rgb);
@@ -304,6 +303,7 @@ namespace Kitronik_Move_Motor {
          * @param rgb RGB color of the ZIP LED
          */
         //% subcategory="Lights"
+        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_set_zip_color" 
         //% block="%moveMotorZIP|set ZIP LED %zipLedNum|to %rgb=kitronik_move_motor_colors"
         //% weight=98 blockGap=8
@@ -315,9 +315,10 @@ namespace Kitronik_Move_Motor {
          * Send all the changes to the Move Motor ZIP LEDs.
          */
         //% subcategory="Lights"
+        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_show" 
         //% block="%moveMotorZIP|show" blockGap=8
-        //% weight=96
+        //% weight=95
         show() {
             //use the Kitronik version which respects brightness for all 
             ws2812b.sendBuffer(this.buf, this.pin, this.brightness);
@@ -328,9 +329,10 @@ namespace Kitronik_Move_Motor {
          * You need to call ``show`` to make the changes visible.
          */
         //% subcategory="Lights"
+        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_clear"
         //% block="%moveMotorZIP|clear"
-        //% weight=95 blockGap=8
+        //% weight=96 blockGap=8
         clear(): void {
             this.buf.fill(0, this.start * 3, this._length * 3);
         }
@@ -340,9 +342,10 @@ namespace Kitronik_Move_Motor {
          * @param brightness a measure of LED brightness in 0-255. eg: 255
          */
         //% subcategory="Lights"
+        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motordisplay_set_brightness"
         //% block="%moveMotorZIP|set brightness %brightness" 
-        //% weight=92 blockGap=8
+        //% weight=97 blockGap=8
         //% brightness.min=0 brightness.max=255
         setBrightness(brightness: number): void {
             //Clamp incoming variable at 0-255 as values out of this range cause unexpected brightnesses as the lower level code only expects a byte.
@@ -396,9 +399,10 @@ namespace Kitronik_Move_Motor {
 	 * @param numZips number of leds in the strip, eg: 4
      */
     //% subcategory="Lights"
+    //% group="ZIP LEDs"
     //% blockId="kitronik_move_motor_ZIP_LED_create" 
     //% block="to MOVE Motor with %numZips|ZIP LEDs"
-    //% weight=99 blockGap=8
+    //% weight=100 blockGap=8
     //% trackArgs=0,2
     //% blockSetVariable=moveMotorZIP
     export function createMoveMotorZIPLED(numZips: number): MoveMotorZIP {
@@ -423,6 +427,7 @@ namespace Kitronik_Move_Motor {
      * @param blue value of the blue channel between 0 and 255. eg: 255
      */
     //% subcategory="Lights"
+    //% group="ZIP LEDs"
     //% weight=1 blockGap=8
     //% blockId="kitronik_move_motor_rgb" block="red %red|green %green|blue %blue"
     export function rgb(red: number, green: number, blue: number): number {
@@ -433,6 +438,7 @@ namespace Kitronik_Move_Motor {
      * Gets the RGB value of a known color
     */
     //% subcategory="Lights"
+    //% group="ZIP LEDs"
     //% weight=2 blockGap=8
     //% blockId="kitronik_move_motor_colors" block="%color"
     export function colors(color: ZipLedColors): number {
@@ -519,6 +525,7 @@ namespace Kitronik_Move_Motor {
     //% group="Ultrasonic"
     //% blockId=kitronik_move_motor_ultrasonic_measure
     //% block="measure distances in |unit %unit"
+    //% weight=90 blockGap=8
     export function measure(unit: Units, maxCmDistance = 500): number {
         // send pulse
         pins.setPull(triggerPin, PinPullMode.PullNone);
@@ -542,17 +549,38 @@ namespace Kitronik_Move_Motor {
 
 
     /**
-    * Set sensor threshold block allows the user to adjust the point at which the sensor detects
-    * @param level is the threshold percentage
+    * Set the sensor sensitivity value in case the sensors are not working well on different surfaces. 
+    * Low sensitivity is for more reflective surfaces / closer distances. 
+    * High sensitivity is for less reflective surfaces / longer distances.
+    * Medium is the default, and a reasonable balance for most surfaces.
+    * @param setupSelected is the selection of preset sensor sensitivity
     */
     //% subcategory="Sensors"
     //% group="Line Following"
-    //% blockId=kitronik_move_motor_line_follower_set_threshold
-    //% block="set sensor threshold to %level|"
-    //% level.min=0 level.max=100 level.defl=50
+    //% blockId=kitronik_move_motor_line_follower_setup
+    //% block="set sensors to %setupSelected| sensitivity"
     //% weight=85 blockGap=8
-    export function setSensorDetectionLevel(level: number) {
-        detectionLevel = (level / 2) + 10
+    export function sensorSetup(setupSelected: DetectorSensitivity) 
+    {
+        switch(setupSelected)
+        {
+            case DetectorSensitivity.Low: 
+            detectionLevel =500
+            break
+            case DetectorSensitivity.Medium: 
+            detectionLevel =400
+            break
+            case DetectorSensitivity.High: 
+            detectionLevel =300
+            break
+        }
+    }
+
+    // not a block, but here in case someone advanced in the java world want sto set the value directly.
+    // No checking of 'goodness' of value - it should be analog in (0-1023)
+    export function setSensorDetectionLevel(value:number)
+    {
+        detectionLevel = value
     }
 
     /**
@@ -578,43 +606,41 @@ namespace Kitronik_Move_Motor {
 
     /**
     * Sensor on pin detection returns a true or false when the sensor has detected
-    * @param pinSelected is the selection of pin to read a particular sensor
-	* @param lightSelection is the selection of the sensor detecting light or dark
+    * @param sensorSelected is the selection of pin to read a particular sensor
+    * @param lightSelection is the selection of the sensor detecting light or dark
     */
     //% subcategory="Sensors"
     //% group="Line Following"
     //% blockId=kitronik_move_motor_line_follower_digital_sensor
-    //% block="sensor on pin %pinSelected| detected %LightSelection"
+    //% block="sensor on pin %sensorSelected| detects %LightSelection"
     //% weight=95 blockGap=8
-    export function sensorDigitalDetection(pinSelected: LfSensor, lightLevel: LightSelection): boolean {
-        let value2 = 0
-        let ref = 0
+    export function sensorDigitalDetection(sensorSelected: LfSensor, lightLevel: LightSelection): boolean {
+        let value = 0
         let result = false
-
-        if (pinSelected == LfSensor.left) {
-            value2 = pins.analogReadPin(AnalogPin.P1)
-            ref = sensorLeftRef
-        }
-        else if (pinSelected == LfSensor.right) {
-            value2 = pins.analogReadPin(AnalogPin.P2)
-            ref = sensorRightRef
-        }
-
-        if (lightLevel == LightSelection.Light) {
-            if (value2 >= (ref + detectionLevel)) {
-                result = true
+        value = readSensor(sensorSelected)
+        switch (lightLevel)
+        {
+            case LightSelection.Light:  //Light and Object are the same - but called out differently for ease of use.
+            {
+                if (value >= detectionLevel){
+                    result = true
+                }
+                else { 
+                    result = false
+                }
             }
-            else {
-                result = false
+            break
+            case LightSelection.Dark:
+            {
+                if (value <= detectionLevel)
+                {
+                    result = true
+                }
+                else { 
+                    result = false
+                }
             }
-        }
-        else if (lightLevel == LightSelection.Dark) {
-            if (value2 <= (ref - detectionLevel)) {
-                result = true
-            }
-            else {
-                result = false
-            }
+            break
         }
         return result;
     }
@@ -631,7 +657,7 @@ namespace Kitronik_Move_Motor {
      * @param speed how fast to spin the motor
      */
     //% subcategory=Motors
-    //% group=Motors
+    //% group="Drive"
     //% blockId=kitronik_move_motor_motor_on
     //% block="turn %motor|motor on direction %dir|speed %speed"
     //% weight=100 blockGap=8
@@ -699,7 +725,7 @@ namespace Kitronik_Move_Motor {
      * @param motor which motor to turn off
      */
     //% subcategory=Motors
-    //% group=Motors
+    //% group="Drive"
     //% blockId=kitronik_move_motor_motor_off
     //% weight=95 blockGap=8
     //% block="turn off %motor| motor"
@@ -723,8 +749,8 @@ namespace Kitronik_Move_Motor {
      * @param motorFactor number between 0 and 10 to help balance the motor speeds
      */
     //% subcategory=Motors
-    //% group=Motors
-    //% blockId=kitronik_move_motor_motor_off
+    //% group="Adjustment"
+    //% blockId=kitronik_move_motor_motor_bias
     //% weight=95 blockGap=8
     //% block="bias %motor| motor by %motorFactor"
     //% motorFactor.min=0 motorFactor.max=10
@@ -733,10 +759,10 @@ namespace Kitronik_Move_Motor {
             setup()
         }
         if (motor == Motors.MotorRight){
-            rightMotorBias = motorFactor / 10
+            rightMotorBias = 1 - (motorFactor / 10)
         }
         else if (motor == Motors.MotorLeft){
-            leftMotorBias = motorFactor / 10
+            leftMotorBias = 1 - (motorFactor / 10)
         }
     }
 
@@ -746,17 +772,15 @@ namespace Kitronik_Move_Motor {
 
     /**
      * Sound the beep horn with a selected number of times.
-     * @param hornTimes is the number of times the beep loops and sounds
+     * @param hornTimes is the number of times the beep loops and sounds eg: 2
      */
     //% subcategory=Sounds
     //% blockId=kitronik_move_motor_horn
     //% weight=95 blockGap=8
     //%block="beep the horn %hornTimes"
-    //% hornTimes.min = 1 hornTimes.max = 5 hornTimes.defl = 1
+    //% hornTimes.min = 1 hornTimes.max = 5
     export function beepHorn(hornTimes: number): void {
-        for (let u = 0; u <= hornTimes; u++) {
-            music.playTone(185, music.beat(BeatFraction.Quarter))
-            basic.pause(75)
+        for (let repeat = 1; repeat <= hornTimes; repeat++) {
             music.playTone(185, music.beat(BeatFraction.Quarter))
             basic.pause(75)
         }
@@ -768,7 +792,7 @@ namespace Kitronik_Move_Motor {
     */
     //% subcategory=Sounds
     //% blockId=kitronik_move_motor_siren
-    //% weight=95 blockGap=8
+    //% weight=90 blockGap=8
     //% block="turn siren %siren"
     export function soundSiren(siren: OnOffSelection): void {
         if (siren == OnOffSelection.On) {

@@ -8,7 +8,6 @@
         "ws2812b": "github:KitronikLtd/pxt-ws2812b#v0.0.5"
     },
     "files": [
-        "main.blocks",
         "main.ts",
         "README.md"
     ],
