@@ -51,9 +51,9 @@ namespace Kitronik_Move_Motor {
     // List of motors for the motor blocks to use. These represent register offsets in the PCA9832 driver IC.
     export enum Motors {
         //% block="Left"
-        MotorLeft = 0x02,
+        MotorLeft = 0x04,
         //% block="Right"
-        MotorRight = 0x04
+        MotorRight = 0x02
     }
     // Directions the motors can rotate.
     export enum MotorDirection {
@@ -101,17 +101,15 @@ namespace Kitronik_Move_Motor {
 
     let initalised = false //a flag to allow us to initialise without explicitly calling the secret incantation
     //Motor global variables
-    let rightMotorBias = 1.0
-    let leftMotorBias = 1.0
+    let rightMotorBias = 0
+    let leftMotorBias = 0
     //Sound global variables
     let sirenOn = false
     //Ultrasonic global variables
     let triggerPin = DigitalPin.P13
     let echoPin = DigitalPin.P14
     //Line following sensors global variables
-    let sensorLeftRef = 0
-    let sensorRightRef = 0
-    let detectionLevel = 45		//reading is done by converting 0.13V into ADC reading (3/1024)*45, this is the default setting
+    let detectionLevel = 245
 
 
 	/*
@@ -131,8 +129,6 @@ namespace Kitronik_Move_Motor {
         pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
         basic.pause(1)
 
-        sensorLeftRef = pins.analogReadPin(AnalogPin.P1)
-        sensorRightRef = pins.analogReadPin(AnalogPin.P2)
         initalised = true
     }
 
@@ -565,13 +561,13 @@ namespace Kitronik_Move_Motor {
         switch(setupSelected)
         {
             case DetectorSensitivity.Low: 
-            detectionLevel =500
+            detectionLevel =250
             break
             case DetectorSensitivity.Medium: 
-            detectionLevel =400
+            detectionLevel =205
             break
             case DetectorSensitivity.High: 
-            detectionLevel =300
+            detectionLevel =180
             break
         }
     }
@@ -590,13 +586,13 @@ namespace Kitronik_Move_Motor {
     //% subcategory="Sensors"
     //% group="Line Following"
     //% blockId=kitronik_move_motor_line_follower_read_sensor
-    //% block="read sensor on pin %pinSelected"
+    //% block="read %pinSelected| line following sensor"
     //% weight=90 blockGap=8
     export function readSensor(sensorSelected: LfSensor) {
         let value = 0
 
         if (sensorSelected == LfSensor.left) {
-            value = pins.analogReadPin(AnalogPin.P1)
+            value = pins.analogReadPin(AnalogPin.P2)
         }
         else if (sensorSelected == LfSensor.right) {
             value = pins.analogReadPin(AnalogPin.P1)
@@ -612,7 +608,7 @@ namespace Kitronik_Move_Motor {
     //% subcategory="Sensors"
     //% group="Line Following"
     //% blockId=kitronik_move_motor_line_follower_digital_sensor
-    //% block="sensor on pin %sensorSelected| detects %LightSelection"
+    //% block="%sensorSelected| line following sensor detects %LightSelection"
     //% weight=95 blockGap=8
     export function sensorDigitalDetection(sensorSelected: LfSensor, lightLevel: LightSelection): boolean {
         let value = 0
@@ -679,19 +675,20 @@ namespace Kitronik_Move_Motor {
             switch (dir) {
                 case MotorDirection.Forward:
                     motorOnbuf[0] = motor
-                    //motorOnbuf[1] = outputVal * rightMotorBias
+                    motorOnbuf[1] = 0x00
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
-                    motorOnbuf[1] = 0x00
+                    motorOnbuf[1] = outputVal  - rightMotorBias
+                    //motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     break
                 case MotorDirection.Reverse:
                     motorOnbuf[0] = motor
-                    motorOnbuf[1] = 0x00
+                    motorOnbuf[1] = outputVal - rightMotorBias
+                    //motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
-                    //motorOnbuf[1] = outputVal * rightMotorBias
-                    motorOnbuf[1] = outputVal
+                    motorOnbuf[1] = 0x00
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     break
             }
@@ -700,20 +697,20 @@ namespace Kitronik_Move_Motor {
             switch (dir) {
                 case MotorDirection.Forward:
                     motorOnbuf[0] = motor
-                    motorOnbuf[1] = 0x00
+                    motorOnbuf[1] = outputVal - leftMotorBias
+                    //motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
-                    //motorOnbuf[1] = outputVal  * leftMotorBias
-                    motorOnbuf[1] = outputVal
+                    motorOnbuf[1] = 0x00
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     break
                 case MotorDirection.Reverse:
                     motorOnbuf[0] = motor
-                    //motorOnbuf[1] = outputVal * leftMotorBias
-                    motorOnbuf[1] = outputVal
+                    motorOnbuf[1] = 0x00
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
-                    motorOnbuf[1] = 0x00
+                    motorOnbuf[1] = outputVal - leftMotorBias
+                    //motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     break
             }
@@ -744,25 +741,28 @@ namespace Kitronik_Move_Motor {
     }
 
     /**
-     * Bias motor selection so that it can match each motor.
-     * @param motor which motor to turn off
-     * @param motorFactor number between 0 and 10 to help balance the motor speeds
+     * Move the slider to the direction the MOVE Motor drives when not balanced. This will make the adjustment so it drives in a straight line.
+     * @param balance number between -10 and 10 to help balance the motor speeds eg: 0
      */
     //% subcategory=Motors
     //% group="Adjustment"
-    //% blockId=kitronik_move_motor_motor_bias
-    //% weight=95 blockGap=8
-    //% block="bias %motor| motor by %motorFactor"
-    //% motorFactor.min=0 motorFactor.max=10
-    export function motorBias(motor: Motors, motorFactor: number): void {
+    //% blockId=kitronik_move_motor_motor_balance
+    //% weight=90 blockGap=8
+    //% block="balance motor by %balance"
+    //% balance.min=-10 balance.max=10
+    export function motorBalance(balance: number): void {
         if (initalised == false) {
             setup()
         }
-        if (motor == Motors.MotorRight){
-            rightMotorBias = 1 - (motorFactor / 10)
+        if (balance < 0){
+            rightMotorBias = Math.round((0 - balance)*1.75)
         }
-        else if (motor == Motors.MotorLeft){
-            leftMotorBias = 1 - (motorFactor / 10)
+        else if (balance > 0){
+            leftMotorBias = Math.round(balance*1.75)
+        }
+        else{
+            rightMotorBias = 0
+            leftMotorBias = 0
         }
     }
 
