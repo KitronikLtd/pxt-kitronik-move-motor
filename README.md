@@ -1,3 +1,12 @@
+# Kitronik blocks for micro:bit
+
+# pxt-kitronik-move-motor
+
+Blocks that support [Kitronik accessories for the micro:bit](https://www.kitronik.co.uk/microbit.html)
+This package is for the [Kitronik :MOVE Motor](https://www.kitronik.co.uk/5683)
+
+
+
 > Open this page at [https://kitronikltd.github.io/pxt-kitronik-move-motor/](https://kitronikltd.github.io/pxt-kitronik-move-motor/)
 
 ## Use this extension

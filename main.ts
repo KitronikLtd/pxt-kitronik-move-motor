@@ -1,5 +1,5 @@
 /**
- * Blocks for driving the Kitronik MOVE Motor Board
+ * Blocks for driving the Kitronik MOVE Motor Buggy
  */
 //% weight=100 color=#00A654 icon="\uf1b9" block="Move Motor"
 //% groups='["Lights", "Sensors", "Motors", "Sound"]'
@@ -62,7 +62,25 @@ namespace Kitronik_Move_Motor {
         //% block="Reverse"
         Reverse
     }
-
+    // directions the :MOVE motor can drive. Implicit moving forward in the turns 
+    export enum DriveDirections {
+        Forward,
+        Reverse,
+        Left,
+        Right
+    }
+    //directions the :MOVE motor can spin on the spot. 
+    export enum SpinDirections {
+        Left,
+        Right
+    }
+    
+    export enum TurnRadii {
+        Tight,
+        Standard,
+        Wide
+    }
+    
     /*ULTRASONIC*/
     // Units for ultrasonic sensors to measure
     export enum Units {
@@ -75,10 +93,10 @@ namespace Kitronik_Move_Motor {
     /*LINE FOLLOWING*/
     // Selection of line following sensor
     export enum LfSensor {
-        //% block="left"
-        left,
-        //% block="right"
-        right
+        //% block="Left"
+        Left,
+        //% block="Right"
+        Right
     }
     //Light level detection mode selection
     export enum LightSelection {
@@ -99,21 +117,23 @@ namespace Kitronik_Move_Motor {
         High
     }
 
-    let initalised = false //a flag to allow us to initialise without explicitly calling the secret incantation
-    //Motor global variables
+    let initalised = false //a flag to allow us to initialise without the user having to explicitly call the initialisation routine
+    //Motor global variables to allow user to 'bias' the motors to drive the :MOVE motor in a straight line
     let rightMotorBias = 0
     let leftMotorBias = 0
+    let turnTightness = 4
     //Sound global variables
     let sirenOn = false
     //Ultrasonic global variables
     let triggerPin = DigitalPin.P13
     let echoPin = DigitalPin.P14
+    let units = Units.Centimeters
     //Line following sensors global variables
     let detectionLevel = 245
 
 
 	/*
-		This secret incantation sets up the PCA9632 I2C driver chip to be running 
+		This sets up the PCA9632 I2C driver chip for controlling the motors
     */
     function setup(): void {
         let buf = pins.createBuffer(2)
@@ -136,23 +156,6 @@ namespace Kitronik_Move_Motor {
     //  LIGHTS  //
     //////////////
 
-    /**
-    * Turns on and off the tail light.
-    * @param illuminate which selects the LED to turn on or off
-    */
-    //% subcategory="Lights"
-    //% group="Tail Light"
-    //% blockId=kitronik_move_motor_tail_light
-    //% weight=100 blockGap=8
-    //% block="turn tail light %illuminate"
-    export function shineTailLight(illuminate: OnOffSelection): void {
-        if (illuminate == OnOffSelection.On) {
-            pins.digitalWritePin(DigitalPin.P12, 1);
-        }
-        else {
-            pins.digitalWritePin(DigitalPin.P12, 0);
-        }
-    }
 
     export class MoveMotorZIP {
         buf: Buffer;
@@ -519,10 +522,24 @@ namespace Kitronik_Move_Motor {
      */
     //% subcategory="Sensors"
     //% group="Ultrasonic"
-    //% blockId=kitronik_move_motor_ultrasonic_measure
-    //% block="measure distances in |unit %unit"
+    //% blockId=kitronik_move_motor_ultrasonic_units
+    //% block="measure distances in %unit"
     //% weight=90 blockGap=8
-    export function measure(unit: Units, maxCmDistance = 500): number {
+    export function setUltrasonicUnits(unit: Units): void {
+        units = unit
+    }
+    
+    /**
+     * Measure the echo time (after trigger) and converts to cm or inches and returns as an int
+     * @param unit desired conversion unit
+     * @param maxCmDistance maximum distance in centimeters (default is 500)
+     */
+    //% subcategory="Sensors"
+    //% group="Ultrasonic"
+    //% blockId=kitronik_move_motor_ultrasonic_measure
+    //% block="measure distance"
+    //% weight=90 blockGap=8
+    export function measure(maxCmDistance = 500): number {
         // send pulse
         pins.setPull(triggerPin, PinPullMode.PullNone);
         pins.digitalWritePin(triggerPin, 0);
@@ -536,12 +553,13 @@ namespace Kitronik_Move_Motor {
         //From the HC-SR04 datasheet the formula for calculating distance is "microSecs of pulse"/58 for cm or "microSecs of pulse"/148 for inches.
         //When measured actual distance compared to calculated distanceis not the same.  There must be an timing measurement with the pulse.
         //values have been changed to match the correct measured distances so 58 changed to 39 and 148 changed to 98
-        switch (unit) {
+        switch (units) {
             case Units.Centimeters: return Math.idiv(pulse, 39);
             case Units.Inches: return Math.idiv(pulse, 98);
             default: return 0;
         }
     }
+    
 
 
     /**
@@ -573,7 +591,8 @@ namespace Kitronik_Move_Motor {
     }
 
     // not a block, but here in case someone advanced in the java world want sto set the value directly.
-    // No checking of 'goodness' of value - it should be analog in (0-1023)
+    // No checking of 'goodness' of value as if your here you should know what you are doing.
+    // It should be analog in (0-1023)
     export function setSensorDetectionLevel(value:number)
     {
         detectionLevel = value
@@ -586,15 +605,15 @@ namespace Kitronik_Move_Motor {
     //% subcategory="Sensors"
     //% group="Line Following"
     //% blockId=kitronik_move_motor_line_follower_read_sensor
-    //% block="read %pinSelected| line following sensor"
+    //% block="%pinSelected| line following sensor value"
     //% weight=90 blockGap=8
     export function readSensor(sensorSelected: LfSensor) {
         let value = 0
 
-        if (sensorSelected == LfSensor.left) {
+        if (sensorSelected == LfSensor.Left) {
             value = pins.analogReadPin(AnalogPin.P2)
         }
-        else if (sensorSelected == LfSensor.right) {
+        else if (sensorSelected == LfSensor.Right) {
             value = pins.analogReadPin(AnalogPin.P1)
         }
         return value;
@@ -644,8 +663,152 @@ namespace Kitronik_Move_Motor {
     //////////////
     //  MOTORS  //
     //////////////
+    /**
+     * Drives the :MOVE motor in the specified direction. Turns have a small amount of forward motion.
+     * @param motor which motor to turn off
+     */
+    //% subcategory=Motors
+    //% group="Drive"
+    //% blockId=kitronik_move_motor_drive
+    //% weight=100 blockGap=8
+    //% block="move %direction|at speed %speed"
+    //% speed.min=0, speed.max=100
+    export function move(direction: DriveDirections, speed: number): void {
+         if (initalised == false) {
+            setup()
+        }
+        switch (direction)
+        {
+            case DriveDirections.Forward:
+                 motorOn(Motors.MotorLeft, MotorDirection.Forward, speed)
+                 motorOn(Motors.MotorRight,MotorDirection.Forward, speed)
+            break
+            case DriveDirections.Reverse:
+                 motorOn(Motors.MotorLeft, MotorDirection.Reverse, speed)
+                 motorOn(Motors.MotorRight,MotorDirection.Reverse, speed)
+            break
+            case DriveDirections.Left:
+                 motorOn(Motors.MotorLeft, MotorDirection.Forward, speed)
+                 motorOn(Motors.MotorRight,MotorDirection.Forward, (speed/turnTightness))
+            break
+            case DriveDirections.Right:
+                 motorOn(Motors.MotorLeft, MotorDirection.Forward, (speed/turnTightness))
+                 motorOn(Motors.MotorRight,MotorDirection.Forward, speed)
+            break
+            default: //just in case. Should never get here
+                motorOff(Motors.MotorLeft)
+                motorOff(Motors.MotorRight)
+            break
+        }
+            
+        
+        
+    }
 
     /**
+     * Tunrs on the spot in the direction requested.
+     * @param motor which motor to turn off
+     */
+    //% subcategory=Motors
+    //% group="Drive"
+    //% blockId=kitronik_move_motor_spin
+    //% weight=95 blockGap=8
+    //% block="spin %direction|at speed %speed"
+    //% speed.min=0, speed.max=100
+    export function spin(direction: SpinDirections, speed: number): void {
+         if (initalised == false) {
+            setup()
+        }
+        switch (direction)
+        {
+            case SpinDirections.Left:
+                 motorOn(Motors.MotorLeft, MotorDirection.Reverse, speed)
+                 motorOn(Motors.MotorRight,MotorDirection.Forward, speed)
+            break
+            case SpinDirections.Right:
+                 motorOn(Motors.MotorLeft, MotorDirection.Forward, speed)
+                 motorOn(Motors.MotorRight,MotorDirection.Reverse, speed)
+            break
+            default: //just in case. Should never get here
+                motorOff(Motors.MotorLeft)
+                motorOff(Motors.MotorRight)
+            break
+        }
+    }
+    
+    /**
+     * Stops the :MOVE motor
+     * @param motor which motor to turn off
+     */
+    //% subcategory=Motors
+    //% group="Drive"
+    //% blockId=kitronik_move_motor_stop
+    //% weight=90 blockGap=8
+    //% block="stop"
+    export function stop(): void {
+         if (initalised == false) {
+            setup()
+        }
+        motorOff(Motors.MotorLeft)
+        motorOff(Motors.MotorRight)
+    }
+
+    /**
+     * TO help the MOVE motor drive in a straight line you can bias the motors.
+     * @param balance number between 0 and 10 to help balance the motor speeds eg: 0
+     */
+    //% subcategory=Motors
+    //% group="Adjustment"
+    //% blockId=kitronik_move_motor_motor_balance
+    //% weight=90 blockGap=8
+    //% block="bias to %direction by %balance"
+    //% balance.min=0 balance.max=10
+    export function motorBalance(direction: SpinDirections, balance: number): void {
+        leftMotorBias = 0
+        rightMotorBias = 0
+        switch (direction)
+        {
+            case SpinDirections.Left:
+            leftMotorBias = Math.round(balance*1.75)
+            break
+            case SpinDirections.Right:
+            rightMotorBias = Math.round(balance*1.75)
+        }
+    }
+    
+        /**
+     * Move the slider to the direction the MOVE Motor drives when not balanced. This will make the adjustment so it drives in a straight line.
+     * @param balance number between -10 and 10 to help balance the motor speeds eg: 0
+     */
+    //% subcategory=Motors
+    //% group="Adjustment"
+    //% blockId=kitronik_move_motor_motor_turn_radius
+    //% weight=90 blockGap=8
+    //% block="set turn radius %radius"
+    export function turnRadius(radius:TurnRadii): void {
+        switch (radius)
+        {
+            case TurnRadii.Tight:
+                turnTightness = 8
+            break
+            case TurnRadii.Wide:
+                turnTightness= 1.6
+            break
+            case TurnRadii.Standard: 
+                turnTightness = 3
+            break
+        }
+    }
+    
+    //Here for the more advanced user - this function sets the divider for the speed of the slower wheel in a turn.
+    //setting it to 2 will result in the inner wheel of the turn runnign at 1/2 the speed of the outer wheel.
+    // No checking of what the value is - If you are using this it is expected you know what you are doing
+    export function setTurnRadius(radiusDivider:number)
+    {
+        turnTightness = radiusDivider
+    }
+    
+        /**
      * Sets the requested motor running in chosen direction at a set speed.
      * if the PCA has not yet been initialised calls the initialisation routine.
      * @param motor which motor to turn on
@@ -653,24 +816,21 @@ namespace Kitronik_Move_Motor {
      * @param speed how fast to spin the motor
      */
     //% subcategory=Motors
-    //% group="Drive"
+    //% group="Motor Control"
     //% blockId=kitronik_move_motor_motor_on
     //% block="turn %motor|motor on direction %dir|speed %speed"
-    //% weight=100 blockGap=8
+    //% weight=80 blockGap=8
     //% speed.min=0 speed.max=100
     export function motorOn(motor: Motors, dir: MotorDirection, speed: number): void {
         if (initalised == false) {
             setup()
         }
-
         /*convert 0-100 to 0-255 by a simple multiple by 2.55*/
         let outputVal = Math.round(speed*2.55)
         if (outputVal > 255){ 
             outputVal = 255 
         }
-
         let motorOnbuf = pins.createBuffer(2)
-        
         if (motor == Motors.MotorRight){
             switch (dir) {
                 case MotorDirection.Forward:
@@ -679,13 +839,11 @@ namespace Kitronik_Move_Motor {
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
                     motorOnbuf[1] = outputVal  - rightMotorBias
-                    //motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     break
                 case MotorDirection.Reverse:
                     motorOnbuf[0] = motor
                     motorOnbuf[1] = outputVal - rightMotorBias
-                    //motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
                     motorOnbuf[1] = 0x00
@@ -698,7 +856,6 @@ namespace Kitronik_Move_Motor {
                 case MotorDirection.Forward:
                     motorOnbuf[0] = motor
                     motorOnbuf[1] = outputVal - leftMotorBias
-                    //motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
                     motorOnbuf[1] = 0x00
@@ -710,7 +867,6 @@ namespace Kitronik_Move_Motor {
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     motorOnbuf[0] = motor + 1
                     motorOnbuf[1] = outputVal - leftMotorBias
-                    //motorOnbuf[1] = outputVal
                     pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
                     break
             }
@@ -722,15 +878,14 @@ namespace Kitronik_Move_Motor {
      * @param motor which motor to turn off
      */
     //% subcategory=Motors
-    //% group="Drive"
+    //% group="Motor Control"
     //% blockId=kitronik_move_motor_motor_off
-    //% weight=95 blockGap=8
+    //% weight=75 blockGap=8
     //% block="turn off %motor| motor"
     export function motorOff(motor: Motors): void {
         if (initalised == false) {
             setup()
         }
-
         let motorOffbuf = pins.createBuffer(2)
         motorOffbuf[0] = motor
         motorOffbuf[1] = 0x00
@@ -740,50 +895,20 @@ namespace Kitronik_Move_Motor {
         pins.i2cWriteBuffer(CHIP_ADDR, motorOffbuf, false)
     }
 
-    /**
-     * Move the slider to the direction the MOVE Motor drives when not balanced. This will make the adjustment so it drives in a straight line.
-     * @param balance number between -10 and 10 to help balance the motor speeds eg: 0
-     */
-    //% subcategory=Motors
-    //% group="Adjustment"
-    //% blockId=kitronik_move_motor_motor_balance
-    //% weight=90 blockGap=8
-    //% block="balance motor by %balance"
-    //% balance.min=-10 balance.max=10
-    export function motorBalance(balance: number): void {
-        if (initalised == false) {
-            setup()
-        }
-        if (balance < 0){
-            rightMotorBias = Math.round((0 - balance)*1.75)
-        }
-        else if (balance > 0){
-            leftMotorBias = Math.round(balance*1.75)
-        }
-        else{
-            rightMotorBias = 0
-            leftMotorBias = 0
-        }
-    }
-
     //////////////
     //  SOUNDS  //
     //////////////
 
     /**
-     * Sound the beep horn with a selected number of times.
-     * @param hornTimes is the number of times the beep loops and sounds eg: 2
+     * Beep horn 
      */
     //% subcategory=Sounds
     //% blockId=kitronik_move_motor_horn
     //% weight=95 blockGap=8
-    //%block="beep the horn %hornTimes"
-    //% hornTimes.min = 1 hornTimes.max = 5
-    export function beepHorn(hornTimes: number): void {
-        for (let repeat = 1; repeat <= hornTimes; repeat++) {
+    //%block="beep the horn"
+    export function beepHorn(): void {
             music.playTone(185, music.beat(BeatFraction.Quarter))
             basic.pause(75)
-        }
     }
 
     /**
