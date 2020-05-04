@@ -2,7 +2,7 @@
  * Blocks for driving the Kitronik MOVE Motor Buggy
  */
 //% weight=100 color=#00A654 icon="\uf1b9" block="Move Motor"
-//% groups='["Lights", "Sensors", "Motors", "Sound"]'
+//% groups='["Ultrasonic","Line Following","Drive", "Setup", "Motor Control"]'
 namespace Kitronik_Move_Motor {
     //Constants 
     let CHIP_ADDR = 0x62 // CHIP_ADDR is the standard chip address for the PCA9632, datasheet refers to LED control but chip is used for PWM to motor driver
@@ -171,7 +171,6 @@ namespace Kitronik_Move_Motor {
          * @param endHue the end hue value for the rainbow, eg: 360
          */
         //% subcategory="Lights"
-        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_rainbow"
         //% block="%moveMotorZIP|show rainbow from %startHue|to %endHue"
         //% weight=94 blockGap=8
@@ -238,7 +237,6 @@ namespace Kitronik_Move_Motor {
          * @param length number of LEDs in the range. eg: 4
          */
         //% subcategory="Lights"
-        //% group="ZIP LEDs"
         //% weight=89 blockGap=8
         //% blockId="kitronik_move_motor_range" 
         //% block="%moveMotorZIP|range from %start|with %length|leds"
@@ -260,7 +258,6 @@ namespace Kitronik_Move_Motor {
          * @param offset number of ZIP LEDs to rotate forward, eg: 1
          */
         //% subcategory="Lights"
-        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_rotate" 
         //% block="%moveMotorZIP|rotate ZIP LEDs by %offset" 
         //% weight=97 blockGap=8
@@ -272,7 +269,6 @@ namespace Kitronik_Move_Motor {
          * @param rgb RGB color of the LED
          */
         //% subcategory="Lights"
-        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_only_set_strip_color" 
         //% block="%moveMotorZIP|set color %rgb=kitronik_move_motor_colors"
         //% weight=99 blockGap=8
@@ -285,7 +281,6 @@ namespace Kitronik_Move_Motor {
          * @param rgb RGB color of the LED
          */
         //% subcategory="Lights"
-        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_set_strip_color" 
         //% block="%moveMotorZIP|show color %rgb=kitronik_move_motor_colors"
         //% weight=93 blockGap=8
@@ -302,7 +297,6 @@ namespace Kitronik_Move_Motor {
          * @param rgb RGB color of the ZIP LED
          */
         //% subcategory="Lights"
-        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_set_zip_color" 
         //% block="%moveMotorZIP|set ZIP LED %zipLedNum|to %rgb=kitronik_move_motor_colors"
         //% weight=98 blockGap=8
@@ -314,7 +308,6 @@ namespace Kitronik_Move_Motor {
          * Send all the changes to the Move Motor ZIP LEDs.
          */
         //% subcategory="Lights"
-        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_show" 
         //% block="%moveMotorZIP|show" blockGap=8
         //% weight=95
@@ -328,7 +321,6 @@ namespace Kitronik_Move_Motor {
          * You need to call ``show`` to make the changes visible.
          */
         //% subcategory="Lights"
-        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motor_display_clear"
         //% block="%moveMotorZIP|clear"
         //% weight=96 blockGap=8
@@ -341,7 +333,6 @@ namespace Kitronik_Move_Motor {
          * @param brightness a measure of LED brightness in 0-255. eg: 255
          */
         //% subcategory="Lights"
-        //% group="ZIP LEDs"
         //% blockId="kitronik_move_motordisplay_set_brightness"
         //% block="%moveMotorZIP|set brightness %brightness" 
         //% weight=97 blockGap=8
@@ -398,7 +389,6 @@ namespace Kitronik_Move_Motor {
 	 * @param numZips number of leds in the strip, eg: 4
      */
     //% subcategory="Lights"
-    //% group="ZIP LEDs"
     //% blockId="kitronik_move_motor_ZIP_LED_create" 
     //% block="to MOVE Motor with %numZips|ZIP LEDs"
     //% weight=100 blockGap=8
@@ -426,7 +416,6 @@ namespace Kitronik_Move_Motor {
      * @param blue value of the blue channel between 0 and 255. eg: 255
      */
     //% subcategory="Lights"
-    //% group="ZIP LEDs"
     //% weight=1 blockGap=8
     //% blockId="kitronik_move_motor_rgb" block="red %red|green %green|blue %blue"
     export function rgb(red: number, green: number, blue: number): number {
@@ -437,7 +426,6 @@ namespace Kitronik_Move_Motor {
      * Gets the RGB value of a known color
     */
     //% subcategory="Lights"
-    //% group="ZIP LEDs"
     //% weight=2 blockGap=8
     //% blockId="kitronik_move_motor_colors" block="%color"
     export function colors(color: ZipLedColors): number {
@@ -524,7 +512,7 @@ namespace Kitronik_Move_Motor {
     //% group="Ultrasonic"
     //% blockId=kitronik_move_motor_ultrasonic_units
     //% block="measure distances in %unit"
-    //% weight=90 blockGap=8
+    //% weight=100 blockGap=8
     export function setUltrasonicUnits(unit: Units): void {
         units = unit
     }
@@ -538,7 +526,7 @@ namespace Kitronik_Move_Motor {
     //% group="Ultrasonic"
     //% blockId=kitronik_move_motor_ultrasonic_measure
     //% block="measure distance"
-    //% weight=90 blockGap=8
+    //% weight=95 blockGap=8
     export function measure(maxCmDistance = 500): number {
         // send pulse
         pins.setPull(triggerPin, PinPullMode.PullNone);
@@ -573,7 +561,7 @@ namespace Kitronik_Move_Motor {
     //% group="Line Following"
     //% blockId=kitronik_move_motor_line_follower_setup
     //% block="set sensors to %setupSelected| sensitivity"
-    //% weight=85 blockGap=8
+    //% weight=80 blockGap=8
     export function sensorSetup(setupSelected: DetectorSensitivity) 
     {
         switch(setupSelected)
@@ -606,7 +594,7 @@ namespace Kitronik_Move_Motor {
     //% group="Line Following"
     //% blockId=kitronik_move_motor_line_follower_read_sensor
     //% block="%pinSelected| line following sensor value"
-    //% weight=90 blockGap=8
+    //% weight=85 blockGap=8
     export function readSensor(sensorSelected: LfSensor) {
         let value = 0
 
@@ -628,7 +616,7 @@ namespace Kitronik_Move_Motor {
     //% group="Line Following"
     //% blockId=kitronik_move_motor_line_follower_digital_sensor
     //% block="%sensorSelected| line following sensor detects %LightSelection"
-    //% weight=95 blockGap=8
+    //% weight=90 blockGap=8
     export function sensorDigitalDetection(sensorSelected: LfSensor, lightLevel: LightSelection): boolean {
         let value = 0
         let result = false
@@ -758,9 +746,9 @@ namespace Kitronik_Move_Motor {
      * @param balance number between 0 and 10 to help balance the motor speeds eg: 0
      */
     //% subcategory=Motors
-    //% group="Adjustment"
+    //% group="Setup"
     //% blockId=kitronik_move_motor_motor_balance
-    //% weight=90 blockGap=8
+    //% weight=85 blockGap=8
     //% block="bias to %direction by %balance"
     //% balance.min=0 balance.max=10
     export function motorBalance(direction: SpinDirections, balance: number): void {
@@ -781,9 +769,9 @@ namespace Kitronik_Move_Motor {
      * @param balance number between -10 and 10 to help balance the motor speeds eg: 0
      */
     //% subcategory=Motors
-    //% group="Adjustment"
+    //% group="Setup"
     //% blockId=kitronik_move_motor_motor_turn_radius
-    //% weight=90 blockGap=8
+    //% weight=80 blockGap=8
     //% block="set turn radius %radius"
     export function turnRadius(radius:TurnRadii): void {
         switch (radius)
@@ -819,7 +807,7 @@ namespace Kitronik_Move_Motor {
     //% group="Motor Control"
     //% blockId=kitronik_move_motor_motor_on
     //% block="turn %motor|motor on direction %dir|speed %speed"
-    //% weight=80 blockGap=8
+    //% weight=75 blockGap=8
     //% speed.min=0 speed.max=100
     export function motorOn(motor: Motors, dir: MotorDirection, speed: number): void {
         if (initalised == false) {
@@ -880,7 +868,7 @@ namespace Kitronik_Move_Motor {
     //% subcategory=Motors
     //% group="Motor Control"
     //% blockId=kitronik_move_motor_motor_off
-    //% weight=75 blockGap=8
+    //% weight=70 blockGap=8
     //% block="turn off %motor| motor"
     export function motorOff(motor: Motors): void {
         if (initalised == false) {
