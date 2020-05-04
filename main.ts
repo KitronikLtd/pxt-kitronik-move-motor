@@ -1,7 +1,7 @@
 /**
  * Blocks for driving the Kitronik MOVE Motor Buggy
  */
-//% weight=100 color=#00A654 icon="\uf1b9" block="Move Motor"
+//% weight=100 color=#00A654 icon="\uf1b9" block="MOVE Motor"
 //% groups='["Ultrasonic","Line Following","Drive", "Setup", "Motor Control"]'
 namespace Kitronik_Move_Motor {
     //Constants 
