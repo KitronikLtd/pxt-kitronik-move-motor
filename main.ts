@@ -668,20 +668,20 @@ namespace Kitronik_Move_Motor {
         switch (direction)
         {
             case DriveDirections.Forward:
-                 motorOn(Motors.MotorLeft, MotorDirection.Forward, speed)
-                 motorOn(Motors.MotorRight,MotorDirection.Forward, speed)
+                motorOn(Motors.MotorLeft, MotorDirection.Forward, speed)
+                motorOn(Motors.MotorRight,MotorDirection.Forward, speed)
             break
             case DriveDirections.Reverse:
-                 motorOn(Motors.MotorLeft, MotorDirection.Reverse, speed)
-                 motorOn(Motors.MotorRight,MotorDirection.Reverse, speed)
+                motorOn(Motors.MotorLeft, MotorDirection.Reverse, speed)
+                motorOn(Motors.MotorRight,MotorDirection.Reverse, speed)
             break
             case DriveDirections.Left:
-                 motorOn(Motors.MotorLeft, MotorDirection.Forward, speed)
-                 motorOn(Motors.MotorRight,MotorDirection.Forward, (speed/turnTightness))
+                motorOn(Motors.MotorLeft,MotorDirection.Forward, (speed/turnTightness))
+                motorOn(Motors.MotorRight, MotorDirection.Forward, speed)
             break
             case DriveDirections.Right:
-                 motorOn(Motors.MotorLeft, MotorDirection.Forward, (speed/turnTightness))
-                 motorOn(Motors.MotorRight,MotorDirection.Forward, speed)
+                motorOn(Motors.MotorLeft,MotorDirection.Forward, speed)
+                motorOn(Motors.MotorRight, MotorDirection.Forward, (speed/turnTightness))
             break
             default: //just in case. Should never get here
                 motorOff(Motors.MotorLeft)
