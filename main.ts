@@ -504,9 +504,8 @@ namespace Kitronik_Move_Motor {
     //  SENSORS //
     //////////////
     /**
-     * Measure the echo time (after trigger) and converts to cm or inches and returns as an int
+     * Set the distance measurement units to cm or inches (cm is default)
      * @param unit desired conversion unit
-     * @param maxCmDistance maximum distance in centimeters (default is 500)
      */
     //% subcategory="Sensors"
     //% group="Ultrasonic"
@@ -519,7 +518,6 @@ namespace Kitronik_Move_Motor {
     
     /**
      * Measure the echo time (after trigger) and converts to cm or inches and returns as an int
-     * @param unit desired conversion unit
      * @param maxCmDistance maximum distance in centimeters (default is 500)
      */
     //% subcategory="Sensors"

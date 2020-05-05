@@ -9,7 +9,8 @@
     },
     "files": [
         "main.ts",
-        "README.md"
+        "README.md",
+        "1-UsingUltrasonic.md"
     ],
     "testFiles": [
         "test.ts"
