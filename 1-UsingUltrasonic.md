@@ -5,14 +5,14 @@
 
 ## Introduction
 ### Introduction Step @unplugged
-Learn how to use the :MOVE motors Ultrasonic distance sensor to detect objects and stay a certain distance from them.
+Learn how to use the :MOVE Motor's Ultrasonic Distance Sensor to detect objects and stay a certain distance from them.
 
-![Ticking Halo HD Clock animation](https://AlasdairAtKitronik.github.io/pxt-kitronik-halohd/assets/Ticking-Clock-Animation.gif)
+![:MOVE Motor front view](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/move-motor-front.jpg)
 
 ### Step 1
 First, let's use the sensor to display the distance to an object.
 Start by creating a variable called ``||variables:distance||`` and place the ``||variables:set distance to||`` block in the ``||basic:forever||`` loop.
-Make ``||variables:distance||`` equal to ``||Kitronik_Move_Motor.measure distance||`` by dropping the block inside (this can be found in the ``||Kitronik_Move_Motor.Sensors||`` of the ``||Kitronik_Move_Motor.MOVE Motor||`` category).
+Make ``||variables:distance||`` equal to ``||Kitronik_Move_Motor.measure distance||`` by dropping the block inside (this can be found in the ``||Kitronik_Move_Motor.Sensors||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||`` category).
 
 #### ~ tutorialhint
 ```blocks
@@ -40,88 +40,76 @@ If you have a @boardname@ connected, click ``|Download|`` to transfer your code.
 
 ## Follow the Object
 ### Follow the Object @unplugged
-Now we know the distance to the box, we can use that to drive the motors and make the buggy follow the box if it moves away.
+Now we know the distance to the box, we can use that to drive the motors and make the :MOVE Motor follow the box if it moves away.
 
 ### Step 1
-Add an if, using distance >10 as the test.
-inside the if turn on both motors in the forwards direction.
+Start by removing the ``||basic:show number||`` block, then add an ``||logic:if||`` statement, with ``||variables:distance||`` ``||logic:> 10||`` as the test condition.
+Inside the ``||logic:if||`` block, make the :MOVE Motor move forward if the condition is met.
+
+#### ~ tutorialhint
+```blocks
 let distance = 0
 basic.forever(function () {
-    distance = Kitronik_Move_Motor.measure(Kitronik_Move_Motor.Units.Centimeters)
-    basic.showNumber(distance)
+    distance = Kitronik_Move_Motor.measure()
     if (distance > 10) {
-        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, 100)
-        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorRight, Kitronik_Move_Motor.MotorDirection.Forward, 100)
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
     }
 })
+```
 
 ### Step 2
 If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
-Then move a box in front of the :MOVE motor and as you move it away see the MOVE motor follow. 
+Place a box in front of the :MOVE Motor and, as you move it away, see the :MOVE Motor follow. 
 But there is a problem. We only start the motors!
 
-
-
 ### Step 3
-This will mean the motors start as soon as the block is more than 10 cm away. 
-But they never stop, so the :MOVE motor will just keep going. 
+This means the motors start as soon as the box is more than 10cm away, but they never stop, so the :MOVE motor will just keep going. 
 We need to stop when we are closer to the object.
-So click the + and in the 'else' Place one of these ``||Kitronik_Move_Motor.motorOff||`` blocks for each motor  in the else
+So, click the ``||logic:+||`` icon to add an ``||logic:else||`` statement and place a ``||Kitronik_Move_Motor.stop||`` block inside.
 
 #### ~ tutorialhint
-```blocks
-let distance = 0
-basic.forever(function () {
-    distance = Kitronik_Move_Motor.measure(Kitronik_Move_Motor.Units.Centimeters)
-    basic.showNumber(distance)
-    if (distance > 10) {
-        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, 100)
-        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorRight, Kitronik_Move_Motor.MotorDirection.Forward, 100)
-    } else {
-        Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorLeft)
-        Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorRight)
-    }
-})
-```
+
+![Animation that shows how to add an else statement](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/add-else-statement-stop.gif)
 
 ```ghost
-~WHAT IS THIS???
+let distance = 0
+basic.forever(function () {
+    distance = Kitronik_Move_Motor.measure()
+    if (distance > 10) {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
+    } else {
+        Kitronik_Move_Motor.stop()
+    }
+})
+
 ```
 
-
-### Step 2
+### Step 4
 If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
-Then move a box in front of the :MOVE motor and as you move it away see the MOVE motor follow. 
-This time the MOVE motor stops when it get so 10cm from the box. 
+As before, place a box in front of the :MOVE Motor and see it follow as the box is moved away, but this time, it stops when it gets within 10cm. 
 
+### Step 5
+Currently, the code only allows the :MOVE Motor to follow the object if it moves away. If the object comes closer, we want to reverse the :MOVE Motor.
+To do this, we need another test condition to check whether the distance is less than 10cm. If it is, we reverse.
 
-
-### Step 3
-Currently, the code will only follwo the object if it moves away. If the object comes closer we want to reverse the MOVE motor.
-To do this we need another condition where if the distance is less than 10 we reverse.
-
-Click the + on the If-else and in the else if which appears add this condition - distance < 10.
-
+Click the ``||logic:+||`` icon on the ``||logic:if else||`` block to add ``||logic:else if||`` statement. 
+Put in ``||variables:distance||`` ``||logic:< 10||`` as the test condition, and make the :MOVE Motor reverse if the condition is met.
 
 #### ~ tutorialhint
 ```blocks
 let distance = 0
 basic.forever(function () {
-    distance = Kitronik_Move_Motor.measure(Kitronik_Move_Motor.Units.Centimeters)
-    basic.showNumber(distance)
+    distance = Kitronik_Move_Motor.measure()
     if (distance > 10) {
-        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, 100)
-        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorRight, Kitronik_Move_Motor.MotorDirection.Forward, 100)
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
     } else if (distance < 10) {
-        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Reverse, 100)
-        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorRight, Kitronik_Move_Motor.MotorDirection.Reverse, 100)
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Reverse, 100)
     } else {
-        Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorLeft)
-        Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorRight)
+        Kitronik_Move_Motor.stop()
     }
 })
 ```
 
-```ghost
-????
-```
+### Step 6
+CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
+Now try out making the the :MOVE Motor drive forwards and backwards as you move the box.
