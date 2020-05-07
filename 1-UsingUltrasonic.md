@@ -111,5 +111,76 @@ basic.forever(function () {
 ```
 
 ### Step 6
-CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
+If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
 Now try out making the :MOVE Motor drive forwards and backwards as you move the box.
+
+## Free Roaming
+### Free Roaming @unplugged
+Great! The :MOVE Motor can now move forwards and backwards, keeping the same distance from the box as you move it.
+But it can only move in a straight line. It would be much better if it could drive around by itself and not crash into things...
+
+### Step 1
+To turn :MOVE Motor into a free roaming robot, we just need to make a few changes to our code.
+Begin by moving the ``||Kitronik_Move_Motor.stop||`` block to the ``||logic:else if||`` section, above the ``||Kitronik_Move_Motor.reverse||`` block.
+Then, click the ``||logic:-||`` icon on the ``||logic:else||`` statement to remove it.
+
+#### ~ tutorialhint
+```blocks
+let distance = 0
+basic.forever(function () {
+    distance = Kitronik_Move_Motor.measure()
+    if (distance > 10) {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
+    } else if (distance < 10) {
+        Kitronik_Move_Motor.stop()
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Reverse, 100)
+    }
+})
+```
+
+### Step 2
+Next, add a 500ms ``||basic:pause||`` after the ``||Kitronik_Move_Motor.stop||``, and a 1 second ``||basic:pause||`` after the ``||Kitronik_Move_Motor.reverse||`` block.
+We also want to slow :MOVE Motor down a bit when it's avoiding obstacles, so change the ``||Kitronik_Move_Motor.reverse||`` speed to 50.
+
+#### ~ tutorialhint
+```blocks
+let distance = 0
+basic.forever(function () {
+    distance = Kitronik_Move_Motor.measure()
+    if (distance > 10) {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
+    } else if (distance < 10) {
+        Kitronik_Move_Motor.stop()
+        basic.pause(500)
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Reverse, 50)
+        basic.pause(1000)
+    }
+})
+```
+
+### Step 3
+Finally, we need to make :MOVE Motor turn away from the obstacle it has detected. 
+Add a ``||Kitronik_Move_Motor.spin left at speed 50||`` block, followed by another 500ms ``||basic:pause||`` and a ``||Kitronik_Move_Motor.stop||`` block.
+
+#### ~ tutorialhint
+```blocks
+let distance = 0
+basic.forever(function () {
+    distance = Kitronik_Move_Motor.measure()
+    if (distance > 10) {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
+    } else if (distance < 10) {
+        Kitronik_Move_Motor.stop()
+        basic.pause(500)
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Reverse, 50)
+        basic.pause(1000)
+        Kitronik_Move_Motor.spin(Kitronik_Move_Motor.SpinDirections.Left, 50)
+        basic.pause(500)
+        Kitronik_Move_Motor.stop()
+    }
+})
+```
+
+### Step 4
+CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
+Now put :MOVE Motor on the floor and watch it roam around avoiding obstacles.
