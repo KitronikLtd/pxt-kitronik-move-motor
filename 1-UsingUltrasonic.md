@@ -92,7 +92,7 @@ As before, place a box in front of the :MOVE Motor and see it follow as the box 
 Currently, the code only allows the :MOVE Motor to follow the object if it moves away. If the object comes closer, we want to reverse the :MOVE Motor.
 To do this, we need another test condition to check whether the distance is less than 10cm. If it is, we reverse.
 
-Click the ``||logic:+||`` icon on the ``||logic:if else||`` block to add ``||logic:else if||`` statement. 
+Click the ``||logic:+||`` icon on the ``||logic:if else||`` block to add an ``||logic:else if||`` statement. 
 Put in ``||variables:distance||`` ``||logic:< 10||`` as the test condition, and make the :MOVE Motor reverse if the condition is met.
 
 #### ~ tutorialhint
@@ -112,4 +112,4 @@ basic.forever(function () {
 
 ### Step 6
 CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
-Now try out making the the :MOVE Motor drive forwards and backwards as you move the box.
+Now try out making the :MOVE Motor drive forwards and backwards as you move the box.
