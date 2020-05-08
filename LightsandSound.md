@@ -112,3 +112,37 @@ basic.forever(function () {
 ### Step 9
 If you have a @boardname@ connected, click ``|Download|`` to transfer your code.
 Now as you vary the light levels, the :MOVE Motor lights will turn on and off.
+
+## Indicators
+### Introduction @unplugged
+Now that :MOVE Motor's headlights and rear lights are in place, let's move on to indicating when we turn.
+
+### Step 1
+When indicating, we're going to want to turn either left or right. This means we're going to need to use different ZIP LEDs for each action.
+However, because nearly everything else is the same, we can use a ``||functions:function||`` to make things easier.
+Click on ``Advanced`` to reveal more block categories, and then in the ``||functions:Functions||`` category, click ``||functions:Make a Function...||``.
+Add a ``Text`` paramenter and call it ``direction``, name the function ``indicate`` and click ``Done``. 
+
+#### ~ tutorialhint
+
+![Animation that shows how to create a function](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/create-function.gif)
+
+```ghost
+function indicate (direction: string) {
+	
+}
+let moveMotorZIP = Kitronik_Move_Motor.createMoveMotorZIPLED(4)
+let headlights = moveMotorZIP.range(0, 2)
+let rearlights = moveMotorZIP.range(2, 2)
+basic.forever(function () {
+    if (input.lightLevel() < 20) {
+        headlights.showColor(Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.White))
+        rearlights.showColor(Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.Red))
+    } else {
+        moveMotorZIP.clear()
+        moveMotorZIP.show()
+    }
+})
+```
+
+### Step 2
