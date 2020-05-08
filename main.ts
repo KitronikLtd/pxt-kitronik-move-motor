@@ -390,7 +390,7 @@ namespace Kitronik_Move_Motor {
      */
     //% subcategory="Lights"
     //% blockId="kitronik_move_motor_ZIP_LED_create" 
-    //% block="to MOVE Motor with %numZips|ZIP LEDs"
+    //% block="MOVE Motor with %numZips|ZIP LEDs"
     //% weight=100 blockGap=8
     //% trackArgs=0,2
     //% blockSetVariable=moveMotorZIP
