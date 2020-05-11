@@ -146,3 +146,168 @@ basic.forever(function () {
 ```
 
 ### Step 2
+Add an ``||logic:if||`` block to the function, then click the ``||logic:+||`` icon twice. This will add an extra ``||logic:else||`` and ``||logic:else if||`` section, but don't need the ``||logic:else||``, so click the ``||logic:-||`` icon to remove it. 
+Now we need some test conditions. In the ``||logic:if||`` statement, check if ``||variables:direction||`` ``||logic:= left||`` (drag ``||variables:direction||`` in from the ``||functions:function||`` block). Use the same test block in the ``||logic:else if||`` statement, but instead check for ``right``.
+**Note:** Make sure to use the text comparison block.
+
+#### ~ tutorialhint
+```blocks
+function indicate (direction: string) {
+    if (direction == "left") {
+    	
+    } else if (direction == "right") {
+    	
+    }
+}
+```
+
+### Step 3
+Next, we need to set up the left indicator. Put a ``||loops:repeat 4 times||`` loop into the ``||logic:if||`` statement, then inside, ``||Kitronik_Move_Motor.set ZIP LED||`` 0 and 3 to be orange. Follow this with a ``||Kitronik_Move_Motor.show||`` block.
+
+#### ~ tutorialhint
+```blocks
+let moveMotorZIP: Kitronik_Move_Motor.MoveMotorZIP = null
+function indicate (direction: string) {
+    if (direction == "left") {
+        for (let index = 0; index < 4; index++) {
+            moveMotorZIP.setZipLedColor(0, Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.Orange))
+            moveMotorZIP.setZipLedColor(3, Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.Orange))
+            moveMotorZIP.show()
+        }
+    } else if (direction == "right") {
+    	
+    }
+}
+```
+
+### Step 4
+If the function is called, the ZIP LEDs on the left side will now turn on. But indicators flash on and off, so we need to add some pauses and turn the LEDs off.
+After the ``||Kitronik_Move_Motor.show||`` add a 200ms ``||basic:pause||``, followed by a ``||Kitronik_Move_Motor.clear||`` and ``||Kitronik_Move_Motor.show||`` block, and finally another 200ms ``||basic:pause||``. The ``||loops:repeat||`` loop will make the indicators turn on and off 4 times.
+
+#### ~ tutorialhint
+```blocks
+let moveMotorZIP: Kitronik_Move_Motor.MoveMotorZIP = null
+function indicate (direction: string) {
+    if (direction == "left") {
+        for (let index = 0; index < 4; index++) {
+            moveMotorZIP.setZipLedColor(0, Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.Orange))
+            moveMotorZIP.setZipLedColor(3, Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.Orange))
+            moveMotorZIP.show()
+            basic.pause(200)
+            moveMotorZIP.clear()
+            moveMotorZIP.show()
+            basic.pause(200)
+        }
+    } else if (direction == "right") {
+    	
+    }
+}
+```
+
+### Step 5
+The code for the right indicator is almost identical to the left, so right click and duplicate the ``||loops:repeat||`` loop and everything inside, then put the new code in the ``||logic:else if||`` section. The only thing left to change is the LEDs. To use the right side lights, ``||Kitronik_Move_Motor.set ZIP LED||`` 1 and 2 to be orange. 
+
+#### ~ tutorialhint
+
+![Animation that shows how to duplicate sections of code](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/duplicate-blocks.gif)
+
+```ghost
+let moveMotorZIP: Kitronik_Move_Motor.MoveMotorZIP = null
+function indicate (direction: string) {
+    if (direction == "left") {
+        for (let index = 0; index < 4; index++) {
+            moveMotorZIP.setZipLedColor(0, Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.Orange))
+            moveMotorZIP.setZipLedColor(3, Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.Orange))
+            moveMotorZIP.show()
+            basic.pause(200)
+            moveMotorZIP.clear()
+            moveMotorZIP.show()
+            basic.pause(200)
+        }
+    } else if (direction == "right") {
+        for (let index = 0; index < 4; index++) {
+            moveMotorZIP.setZipLedColor(1, Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.Orange))
+            moveMotorZIP.setZipLedColor(2, Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.Orange))
+            moveMotorZIP.show()
+            basic.pause(200)
+            moveMotorZIP.clear()
+            moveMotorZIP.show()
+            basic.pause(200)
+        }
+    }
+}
+```
+
+### Step 6
+Now that we've completed the function, it's time to use it. Bring in an ``||input:on button A pressed||`` block and use the ``||Kitronik_Move_Motor.MOVE Motor||`` blocks make :MOVE Motor drive forward, turn left and then stop. Immediately after the ``||Kitronik_Move_Motor.move Left at speed||`` block, add the ``||functions:call indicate||`` block from the ``||functions:Function||`` category. Type ``left`` into the function call block.
+
+#### ~ tutorialhint
+```blocks
+let indicate: function indicate
+function indicate (direction: string) {} = null
+input.onButtonPressed(Button.A, function () {
+    Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 50)
+    basic.pause(2000)
+    Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Left, 40)
+    indicate("left")
+    Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 50)
+    basic.pause(1000)
+    Kitronik_Move_Motor.stop()
+})
+```
+
+### Step 7
+Duplicate the ``||input:button A||`` block. Then, change the drop-down to be ``||input:button B||``, change the ``||Kitronik_Move_Motor.move Left||`` to ``||Kitronik_Move_Motor.move Right||``, and the function call to ``right``.
+
+#### ~ tutorialhint
+```blocks
+input.onButtonPressed(Button.A, function () {
+    Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 50)
+    basic.pause(2000)
+    Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Left, 40)
+    indicate("left")
+    Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 50)
+    basic.pause(1000)
+    Kitronik_Move_Motor.stop()
+})
+input.onButtonPressed(Button.B, function () {
+    Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 50)
+    basic.pause(2000)
+    Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Right, 40)
+    indicate("right")
+    Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 50)
+    basic.pause(1000)
+    Kitronik_Move_Motor.stop()
+})
+```
+
+### Step 8
+If you have a @boardname@ connected, click ``|Download|`` to transfer your code.
+Press ``||input:button A||`` or ``||input:button B||`` and see :MOVE Motor turn and indicate. However, there might be some issues with our automatic headlights, so there's a couple more things we need to do...
+
+### Step 9
+To stop interference from the headlights, we need to temporarily stop the headlights functioning. Create a new variable called ``||variables:indicating||``, set it to be ``||logic:true||`` at the start of the ``||functions:indicate||`` function, and ``||logic:false||`` at the end. Finally, put everything in the ``||basic:forever||`` loop inside another ``||logic:if||`` statement checking ``||logic:if not||`` ``||variables:indicating||``. This will make sure that when :MOVE Motor is indicating, the headlights don't try and turn on at the same time.
+
+#### ~ tutorialhint
+```blocks
+let indicating = false
+let moveMotorZIP: Kitronik_Move_Motor.MoveMotorZIP = null
+moveMotorZIP = Kitronik_Move_Motor.createMoveMotorZIPLED(4)
+let headlights = moveMotorZIP.range(0, 2)
+let rearlights = moveMotorZIP.range(2, 2)
+basic.forever(function () {
+    if (!(indicating)) {
+        if (input.lightLevel() < 20) {
+            headlights.showColor(Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.White))
+            rearlights.showColor(Kitronik_Move_Motor.colors(Kitronik_Move_Motor.ZipLedColors.Red))
+        } else {
+            moveMotorZIP.clear()
+            moveMotorZIP.show()
+        }
+    }
+})
+```
+
+### Step 10
+If you have a @boardname@ connected, click ``|Download|`` to transfer your code.
+Try it out. Now there should be no problem with the headlights or the indicators.
