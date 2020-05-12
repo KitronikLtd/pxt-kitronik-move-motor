@@ -18,9 +18,10 @@ First, place the ``||variables:set moveMotorZIP to||`` ``||Kitronik_Move_Motor.M
 ```blocks
 let moveMotorZIP = Kitronik_Move_Motor.createMoveMotorZIPLED(4)
 ```
+
 ### Step 2
 As we're going to have front lights and back lights, we also need to create two variables, ``||variables:headlights||`` and ``||variables:rearlights||``.  
-Using the ``||variables:set variable to||`` block, make ``||variables:headlights||`` equal to a ``||Kitronik_Move_Motor.range from 0 with 2 leds||`` and ``||variables:rearlights||`` equal to ``||Kitronik_Move_Motor.range from 2 with 2 leds||``. The seperate ranges mean the two sets of lights can be controlled individually.
+Using the ``||variables:set variable to||`` block, make ``||variables:headlights||`` equal to a ``||Kitronik_Move_Motor.range from 0 with 2 leds||`` and ``||variables:rearlights||`` equal to a ``||Kitronik_Move_Motor.range from 2 with 2 leds||``. The seperate ranges mean the two sets of lights can be controlled individually.
 
 #### ~ tutorialhint
 ```blocks
@@ -239,7 +240,7 @@ function indicate (direction: string) {
 ```
 
 ### Step 6
-Now that we've completed the function, it's time to use it. Bring in an ``||input:on button A pressed||`` block and use the ``||Kitronik_Move_Motor.MOVE Motor||`` blocks make :MOVE Motor drive forward, turn left and then stop. Immediately after the ``||Kitronik_Move_Motor.move Left at speed||`` block, add the ``||functions:call indicate||`` block from the ``||functions:Function||`` category. Type ``left`` into the function call block.
+Now that we've completed the function, it's time to use it. Bring in an ``||input:on button A pressed||`` block and use the ``||Kitronik_Move_Motor.MOVE Motor||`` blocks to make :MOVE Motor drive forward, turn left and then stop. Immediately after the ``||Kitronik_Move_Motor.move Left at speed||`` block, add the ``||functions:call indicate||`` block from the ``||functions:Function||`` category. Type ``left`` into the function call block.
 
 #### ~ tutorialhint
 ```blocks
@@ -350,7 +351,7 @@ input.onButtonPressed(Button.AB, function () {
 ### Step 3
 Next, put in a 1 second ``||basic:pause||``, and then start :MOVE Motor moving forward at 100% speed.
 If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
-Press ``||input:buttons A + B||`` together and see :MOVE Motor drive away with siren going and red and blue lights.
+Press ``||input:buttons A+B||`` together and see :MOVE Motor drive away with siren going and red and blue lights.
 
 #### ~ tutorialhint
 ```blocks
@@ -419,8 +420,8 @@ input.onButtonPressed(Button.AB, function () {
 ```
 
 ### Step 6
-When you tested the police car lights and siren earlier, you may have noticed that the headlights and rearlights were causing problems again.
-Again, we need to temporarily stop the headlights functioning. Create a new variable called ``||variables:police||``, set it to be ``||logic:true||`` at the start of the ``||input:on button A+B pressed||`` block, and ``||logic:false||`` at the end. Finally, in the ``||basic:forever||`` loop first ``||logic:if||`` statement, change the check to be ``||logic:if not||`` ``||variables:indicating||`` ``||logic:and not||`` ``||variables:police||``. This will make sure that when :MOVE Motor is indicating or in police car mode, the headlights won't try and turn on at the same time.
+When you tested the police car lights and siren earlier, you may have noticed that the headlights and rearlights were causing problems again, so we need to temporarily stop the headlights functioning.  
+Create a new variable called ``||variables:police||``, set it to be ``||logic:true||`` at the start of the ``||input:on button A+B pressed||`` block, and ``||logic:false||`` at the end. Finally, in the ``||basic:forever||`` loop first ``||logic:if||`` statement, change the check to be ``||logic:if not||`` ``||variables:indicating||`` ``||logic:and not||`` ``||variables:police||``. This will make sure that when :MOVE Motor is indicating or in police car mode, the headlights won't try and turn on at the same time.
 
 #### ~ tutorialhint
 ```blocks
