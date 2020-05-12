@@ -129,7 +129,7 @@ namespace Kitronik_Move_Motor {
     let echoPin = DigitalPin.P14
     let units = Units.Centimeters
     //Line following sensors global variables
-    let detectionLevel = 245
+    let detectionLevel = 205
 
 
 	/*
