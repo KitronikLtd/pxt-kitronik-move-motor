@@ -11,7 +11,8 @@
         "main.ts",
         "README.md",
         "LightsandSound.md",
-        "UsingUltrasonic.md"
+        "UsingUltrasonic.md",
+        "AdvancedMotorAdjustment.md"
     ],
     "testFiles": [
         "test.ts"
