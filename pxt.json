@@ -12,7 +12,8 @@
         "README.md",
         "LightsandSound.md",
         "UsingUltrasonic.md",
-        "AdvancedMotorAdjustment.md"
+        "AdvancedMotorAdjustment.md",
+        "DrawingRobot.md"
     ],
     "testFiles": [
         "test.ts"
