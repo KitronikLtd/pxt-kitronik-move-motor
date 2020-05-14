@@ -36,7 +36,7 @@ basic.forever(function () {
 ```
 
 ### Step 3
-If you have a @boardname@ connected, click ``|Download|`` to transfer your code. Then move a box in front of the :MOVE Motor and see the micro:bit display show the distance to the box.
+If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor. Then move a box in front of the :MOVE Motor and see the micro:bit display show the distance to the box.
 
 ## Follow the Object
 ### Follow the Object @unplugged
@@ -44,7 +44,7 @@ Now we know the distance to the box, we can use that to drive the motors and mak
 
 ### Step 1
 Start by removing the ``||basic:show number||`` block, then add an ``||logic:if||`` statement, with ``||variables:distance||`` ``||logic:> 10||`` as the test condition.
-Inside the ``||logic:if||`` block, make the :MOVE Motor move forward if the condition is met.
+Inside the ``||logic:if||`` block, make the :MOVE Motor ``||Kitronik_Move_Motor.move forward||`` if the condition is met.
 
 #### ~ tutorialhint
 ```blocks
@@ -58,7 +58,7 @@ basic.forever(function () {
 ```
 
 ### Step 2
-If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
+If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor. 
 Place a box in front of the :MOVE Motor and, as you move it away, see the :MOVE Motor follow. 
 But there is a problem. We only start the motors!
 
@@ -85,7 +85,7 @@ basic.forever(function () {
 ```
 
 ### Step 4
-If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
+If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor. 
 As before, place a box in front of the :MOVE Motor and see it follow as the box is moved away, but this time, it stops when it gets within 10cm. 
 
 ### Step 5
@@ -93,7 +93,7 @@ Currently, the code only allows the :MOVE Motor to follow the object if it moves
 To do this, we need another test condition to check whether the distance is less than 10cm. If it is, we reverse.
 
 Click the ``||logic:+||`` icon on the ``||logic:if else||`` block to add an ``||logic:else if||`` statement. 
-Put in ``||variables:distance||`` ``||logic:< 10||`` as the test condition, and make the :MOVE Motor reverse if the condition is met.
+Put in ``||variables:distance||`` ``||logic:< 10||`` as the test condition, and make the :MOVE Motor ``||Kitronik_Move_Motor.reverse||`` if the condition is met.
 
 #### ~ tutorialhint
 ```blocks
@@ -111,7 +111,7 @@ basic.forever(function () {
 ```
 
 ### Step 6
-If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
+If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor. 
 Now try out making the :MOVE Motor drive forwards and backwards as you move the box.
 
 ## Free Roaming
@@ -160,7 +160,7 @@ basic.forever(function () {
 
 ### Step 3
 Finally, we need to make :MOVE Motor turn away from the obstacle it has detected. 
-Add a ``||Kitronik_Move_Motor.spin left at speed 50||`` block, followed by another 500ms ``||basic:pause||`` and a ``||Kitronik_Move_Motor.stop||`` block.
+Add a ``||Kitronik_Move_Motor.spin left at speed 50||`` block to the ``||logic:else if||`` section, followed by another 500ms ``||basic:pause||`` and a ``||Kitronik_Move_Motor.stop||`` block.
 
 #### ~ tutorialhint
 ```blocks
@@ -182,5 +182,5 @@ basic.forever(function () {
 ```
 
 ### Step 4
-CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code. 
+CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor. 
 Now put :MOVE Motor on the floor and watch it roam around avoiding obstacles.
