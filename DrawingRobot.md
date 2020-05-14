@@ -145,7 +145,7 @@ function square () {
 
 ### Step 3
 If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor. **Without** inserting a pen, press ``||input:button A||`` to make :MOVE Motor drive forward for the first side and spin left for the first corner.  
-We need to check whether :MOVE Motor spins 90 degrees - if it doesn't, adjust speed of the ``||Kitronik_Move_Motor.spin Left||`` block; increasing the speed if it was **less** than 90 degrees, decreasing the speed if it was **more** than 90 degrees. Keep downloading and testing your code until you're happy with the corner spin.
+We need to check whether :MOVE Motor spins 90 degrees - if it doesn't, adjust the speed of the ``||Kitronik_Move_Motor.spin Left||`` block; increasing the speed if it was **less** than 90 degrees, decreasing the speed if it was **more** than 90 degrees. Keep downloading and testing your code until you're happy with the corner spin.
 
 ### Step 4
 Now that the first side and corner are sorted, all we need to do is repeat that code 4 times and :MOVE Motor will be able to draw a square.  
