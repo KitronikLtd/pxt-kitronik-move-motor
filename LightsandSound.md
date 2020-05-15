@@ -12,7 +12,8 @@ Learn how to use the :MOVE Motor's lights to make headlights and indicators, and
 ## Headlights and Rear Lights
 ### Step 1
 To start with, let's make some headlights and rear lights for :MOVE Motor.  
-First, place the ``||variables:set moveMotorZIP to||`` ``||Kitronik_Move_Motor.MOVE Motor with 4 ZIP LEDs||`` block from the ``||Kitronik_Move_Motor.Lights||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||`` category into the ``||basic:on start||`` block. This sets up the ZIP LEDs on :MOVE Motor, ready to be used.
+First, place the ``||variables:set moveMotorZIP to||`` ``||Kitronik_Move_Motor.MOVE Motor with 4 ZIP LEDs||`` block from the ``||Kitronik_Move_Motor.Lights||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||`` category into the ``||basic:on start||`` block.  
+This sets up the ZIP LEDs on :MOVE Motor ready to be used.
 
 #### ~ tutorialhint
 ```blocks
@@ -21,7 +22,7 @@ let moveMotorZIP = Kitronik_Move_Motor.createMoveMotorZIPLED(4)
 
 ### Step 2
 As we're going to have front lights and back lights, we also need to create two variables, ``||variables:headlights||`` and ``||variables:rearlights||``.  
-Using the ``||variables:set variable to||`` block, make ``||variables:headlights||`` equal to a ``||Kitronik_Move_Motor.range from 0 with 2 leds||`` and ``||variables:rearlights||`` equal to a ``||Kitronik_Move_Motor.range from 2 with 2 leds||``. The seperate ranges mean the two sets of lights can be controlled individually.
+In the ``||basic:on start||`` block, use the ``||variables:set variable to||`` block to make ``||variables:headlights||`` equal to a ``||Kitronik_Move_Motor.range from 0 with 2 leds||`` and ``||variables:rearlights||`` equal to a ``||Kitronik_Move_Motor.range from 2 with 2 leds||``. The seperate ranges mean the two sets of lights can be controlled individually.
 
 #### ~ tutorialhint
 ```blocks
@@ -31,8 +32,8 @@ let rearlights = moveMotorZIP.range(2, 2)
 ```
 
 ### Step 3
-Now we need to set the lights to be their correct colours: white for headlights, red for rear lights.
-Use the ``||Kitronik_Move_Motor.show colour||`` block from the ``||Kitronik_Move_Motor.Lights||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||`` category, changing the drop-down to select the ``||variables:headlights||`` and ``||variables:rearlights||`` variables in the different blocks. Place these in the ``||basic:forever||`` loop.
+Now we need to set the lights to be their correct colours: **white** for headlights, **red** for rear lights.  
+In the ``||basic:forever||`` loop, use the ``||Kitronik_Move_Motor.show colour||`` block from the ``||Kitronik_Move_Motor.Lights||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||`` category to display the colours. Change the drop-down to select the ``||variables:headlights||`` and ``||variables:rearlights||`` variables in the different blocks.
 
 #### ~ tutorialhint
 ```blocks
@@ -121,8 +122,8 @@ Now that :MOVE Motor's headlights and rear lights are in place, let's move on to
 ### Step 1
 When indicating, we're going to want to turn either left or right. This means we're going to need to use different ZIP LEDs for each action.
 However, because nearly everything else is the same, we can use a ``||functions:function||`` to make things easier.  
-Click on ``Advanced`` to reveal more block categories, and then in the ``||functions:Functions||`` category, click ``||functions:Make a Function...||``.
-Add a ``Text`` paramenter and call it ``direction``, name the function ``indicate`` and click ``Done``. 
+Click on **``Advanced``** to reveal more block categories, and then in the ``||functions:Functions||`` category, click ``||functions:Make a Function...||``.
+Add a **``Text``** paramenter and call it **``direction``**, name the function **``indicate``** and click **``Done``**. 
 
 #### ~ tutorialhint
 
@@ -147,8 +148,8 @@ basic.forever(function () {
 ```
 
 ### Step 2
-Add an ``||logic:if||`` block to the function, then click the ``||logic:+||`` icon twice. This will add an extra ``||logic:else||`` and ``||logic:else if||`` section, but don't need the ``||logic:else||``, so click the ``||logic:-||`` icon to remove it. 
-Now we need some test conditions. In the ``||logic:if||`` statement, check if ``||variables:direction||`` ``||logic:= left||`` (drag ``||variables:direction||`` in from the ``||functions:function||`` block). Use the same test block in the ``||logic:else if||`` statement, but instead check for ``right``.
+Add an ``||logic:if||`` block to the function, then click the ``||logic:+||`` icon twice. This will add an extra ``||logic:else||`` and ``||logic:else if||`` section, but we don't need the ``||logic:else||``, so click the ``||logic:-||`` icon to remove it. 
+Now we need some test conditions. In the ``||logic:if||`` statement, check if ``||variables:direction||`` ``||logic:=||`` **``"left"``** (drag ``||variables:direction||`` in from the ``||functions:function||`` block). Use the same test block in the ``||logic:else if||`` statement, but instead check for **``"right"``**.
 **Note:** Make sure to use the text comparison block.
 
 #### ~ tutorialhint
@@ -163,7 +164,7 @@ function indicate (direction: string) {
 ```
 
 ### Step 3
-Next, we need to set up the left indicator. Put a ``||loops:repeat 4 times||`` loop into the ``||logic:if||`` statement, then inside, ``||Kitronik_Move_Motor.set ZIP LED||`` 0 and 3 to be orange. Follow this with a ``||Kitronik_Move_Motor.show||`` block.
+Next, we need to set up the left indicator. Put a ``||loops:repeat 4 times||`` loop into the ``||logic:if||`` statement checking for **``"left"``**, then inside, ``||Kitronik_Move_Motor.set ZIP LED||`` 0 and 3 to be orange. Follow this with a ``||Kitronik_Move_Motor.show||`` block.
 
 #### ~ tutorialhint
 ```blocks
@@ -240,7 +241,8 @@ function indicate (direction: string) {
 ```
 
 ### Step 6
-Now that we've completed the function, it's time to use it. Bring in an ``||input:on button A pressed||`` block and use the ``||Kitronik_Move_Motor.MOVE Motor||`` blocks to make :MOVE Motor drive forward, turn left and then stop. Immediately after the ``||Kitronik_Move_Motor.move Left at speed||`` block, add the ``||functions:call indicate||`` block from the ``||functions:Function||`` category. Type ``left`` into the function call block.
+Now that we've completed the function, it's time to use it. Bring in an ``||input:on button A pressed||`` block and use the ``||Kitronik_Move_Motor.MOVE Motor||`` blocks to make :MOVE Motor drive forward, turn left and then stop (you will need ``||basic:pauses||`` after the movement blocks to give :MOVE Motor time to actually move).  
+Immediately after the ``||Kitronik_Move_Motor.move Left at speed||`` block, add the ``||functions:call indicate||`` block from the ``||functions:Function||`` category. Type **``"left"``** into the function call block.
 
 #### ~ tutorialhint
 ```blocks
@@ -257,7 +259,7 @@ function indicate (direction: string) {}
 ```
 
 ### Step 7
-Duplicate the ``||input:button A||`` block. Then, change the drop-down to be ``||input:button B||``, change the ``||Kitronik_Move_Motor.move Left||`` to ``||Kitronik_Move_Motor.move Right||``, and the function call to ``right``.
+Duplicate the ``||input:button A||`` block. Then, change the drop-down to be ``||input:button B||``, change the ``||Kitronik_Move_Motor.move Left||`` to ``||Kitronik_Move_Motor.move Right||``, and the function call to **``"right"``**.
 
 #### ~ tutorialhint
 ```blocks
@@ -280,6 +282,11 @@ input.onButtonPressed(Button.B, function () {
     Kitronik_Move_Motor.stop()
 })
 function indicate (direction: string) {}
+```
+
+```ghost
+indicating = true
+indicating = false
 ```
 
 ### Step 8
@@ -328,7 +335,7 @@ input.onButtonPressed(Button.AB, function () {
 ```
 
 ### Step 2
-That's the sound sorted, now for some police style lights. Use 4 of the ``||Kitronik_Move_Motor.set ZIP LED # to colour||`` blocks to set:
+That's the sound sorted, now for some police style lights. Also in the ``||input:button A+B||`` block, use 4 of the ``||Kitronik_Move_Motor.set ZIP LED # to colour||`` blocks to set:
 * LED 0 to ``||variables:red||``
 * LED 1 to ``||basic:blue||``
 * LED 2 to ``||variables:red||``
@@ -369,10 +376,10 @@ input.onButtonPressed(Button.AB, function () {
 ```
 
 ### Flashing Lights @unplugged
-Now, that was ok, but lights on police cars are usually flashing, and you may have noticed that :MOVE Motor won't stop moving forward. There's a couple more bit to do to make the police car just right.
+Now, that was ok, but lights on police cars are usually flashing, and you may have noticed that :MOVE Motor won't stop moving forward. There's a couple more things to do to make the police car just right.
 
 ### Step 4
-Pull in another ``||loops:repeat 4 times||`` loop, but change the repeat number to be 30. Inside this loop add a ``||Kitronik_Move_Motor.rotate ZIP LEDs by 1||`` block, followed by a ``||Kitronik_Move_Motor.show||`` and then a 100ms ``||basic:pause||``. As the colours rotate around the 4 LEDs, this will make them look they're flashing between ``||variables:red||`` and ``||basic:blue||``.
+Pull in another ``||loops:repeat 4 times||`` loop and put it in the ``||input:on button A+B pressed||`` block after the ``||Kitronik_Move_Motor.move Forward||`` block, but change the repeat number to be 30. Inside this loop add a ``||Kitronik_Move_Motor.rotate ZIP LEDs by 1||`` block, followed by a ``||Kitronik_Move_Motor.show||`` and then a 100ms ``||basic:pause||``. As the colours rotate around the 4 LEDs, this will make them look they're flashing between ``||variables:red||`` and ``||basic:blue||``.
 
 #### ~ tutorialhint
 ```blocks
