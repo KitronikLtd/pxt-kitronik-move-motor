@@ -13,7 +13,8 @@
         "LightsandSound.md",
         "UsingUltrasonic.md",
         "AdvancedMotorAdjustment.md",
-        "DrawingRobot.md"
+        "DrawingRobot.md",
+        "LineFollowing.md"
     ],
     "testFiles": [
         "test.ts"
