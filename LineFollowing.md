@@ -41,7 +41,7 @@ basic.forever(function () {
 ```
 
 ### Step 3
-Next we need to make :MOVE Motor take action depending on the different test conditions in our ``||logic: if else||`` block.  
+Next we need to make :MOVE Motor take action depending on the different test conditions in our ``||logic:if else||`` block.  
 We'll start with the ``||logic:else||`` section, which will be the default action - make :MOVE Motor ``||Kitronik_Move_Motor.move Forward at speed 50||`` using the block from the ``||Kitronik_Move_Motor.Motors||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||`` category. 
 
 #### ~ tutorialhint
