@@ -132,8 +132,9 @@ namespace Kitronik_Move_Motor {
     let detectionLevel = 205
 
 
-	/*
-		This sets up the PCA9632 I2C driver chip for controlling the motors
+    /*
+	This sets up the PCA9632 I2C driver chip for controlling the motors
+	It is called from other blocks, so never needs calling directly.
     */
     function setup(): void {
         let buf = pins.createBuffer(2)
@@ -149,7 +150,7 @@ namespace Kitronik_Move_Motor {
         pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
         basic.pause(1)
 
-        initalised = true
+        initalised = true //we have setup, so dont come in here again.
     }
 
     //////////////
@@ -254,7 +255,7 @@ namespace Kitronik_Move_Motor {
 
         /**
          * Rotate LEDs forward.
-         * You need to call ``show`` to make the changes visible.
+         * You need to call show to make the changes visible.
          * @param offset number of ZIP LEDs to rotate forward, eg: 1
          */
         //% subcategory="Lights"
@@ -265,7 +266,8 @@ namespace Kitronik_Move_Motor {
             this.buf.rotate(-offset * 3, this.start * 3, this._length * 3)
         }
     	/**
-         * Sets whole Move Motor LEDs as a given color (range 0-255 for r, g, b). Call Show to make changes visible 
+         * Sets whole Move Motor LEDs as a given color (range 0-255 for r, g, b). 
+	 * You need to call show to make the changes visible.
          * @param rgb RGB color of the LED
          */
         //% subcategory="Lights"
@@ -292,7 +294,7 @@ namespace Kitronik_Move_Motor {
 
         /**
          * Set particular ZIP LED on the board to a given color. 
-         * You need to call ``show changes`` to make the changes visible.
+         * You need to call show to make the changes visible.
          * @param zipLedNum position of the ZIP LED in the string
          * @param rgb RGB color of the ZIP LED
          */
@@ -318,7 +320,7 @@ namespace Kitronik_Move_Motor {
 
         /**
          * Turn off all LEDs on the Move Motor ZIP LEDs.
-         * You need to call ``show`` to make the changes visible.
+         * You need to call show to make the changes visible.
          */
         //% subcategory="Lights"
         //% blockId="kitronik_move_motor_display_clear"
@@ -386,7 +388,7 @@ namespace Kitronik_Move_Motor {
 
     /**
      * Create a new ZIP LED driver for MOVE Motor board.
-	 * @param numZips number of leds in the strip, eg: 4
+     * @param numZips number of leds in the strip, eg: 4
      */
     //% subcategory="Lights"
     //% blockId="kitronik_move_motor_ZIP_LED_create" 
@@ -549,7 +551,7 @@ namespace Kitronik_Move_Motor {
 
 
     /**
-    * Set the sensor sensitivity value in case the sensors are not working well on different surfaces. 
+    * Simplified way to set the sensor sensitivity value in case the sensors are not working well on different surfaces. 
     * Low sensitivity is for more reflective surfaces / closer distances. 
     * High sensitivity is for less reflective surfaces / longer distances.
     * Medium is the default, and a reasonable balance for most surfaces.
@@ -576,7 +578,7 @@ namespace Kitronik_Move_Motor {
         }
     }
 
-    // not a block, but here in case someone advanced in the java world want sto set the value directly.
+    // not a block, but here in case someone advanced in the java world wants to set the value directly.
     // No checking of 'goodness' of value as if your here you should know what you are doing.
     // It should be analog in (0-1023)
     export function setSensorDetectionLevel(value:number)
@@ -606,7 +608,7 @@ namespace Kitronik_Move_Motor {
     }
 
     /**
-    * Sensor on pin detection returns a true or false when the sensor has detected
+    * Returns a true or false when the sensor has detected light or dark, depending on selection
     * @param sensorSelected is the selection of pin to read a particular sensor
     * @param lightSelection is the selection of the sensor detecting light or dark
     */
@@ -651,7 +653,8 @@ namespace Kitronik_Move_Motor {
     //////////////
     /**
      * Drives the :MOVE motor in the specified direction. Turns have a small amount of forward motion.
-     * @param motor which motor to turn off
+     * @param direction Direction to move in
+     * @param speed How fast to go (0-100)
      */
     //% subcategory=Motors
     //% group="Drive"
@@ -693,7 +696,8 @@ namespace Kitronik_Move_Motor {
 
     /**
      * Tunrs on the spot in the direction requested.
-     * @param motor which motor to turn off
+     * @param direction Direction to spin in
+     * @param speed How fast to go (0-100)
      */
     //% subcategory=Motors
     //% group="Drive"
@@ -723,8 +727,7 @@ namespace Kitronik_Move_Motor {
     }
     
     /**
-     * Stops the :MOVE motor
-     * @param motor which motor to turn off
+     * Stops the :MOVE motor driving
      */
     //% subcategory=Motors
     //% group="Drive"
@@ -740,8 +743,8 @@ namespace Kitronik_Move_Motor {
     }
 
     /**
-     * TO help the MOVE motor drive in a straight line you can bias the motors.
-     * @param balance number between 0 and 10 to help balance the motor speeds eg: 0
+     * To help the :MOVE motor drive in a straight line you can bias the motors.
+     * @param balance number between 0 and 10 to help balance the motor speed
      */
     //% subcategory=Motors
     //% group="Setup"
@@ -761,10 +764,10 @@ namespace Kitronik_Move_Motor {
             rightMotorBias = Math.round(balance*1.75)
         }
     }
-    
-        /**
-     * Move the slider to the direction the MOVE Motor drives when not balanced. This will make the adjustment so it drives in a straight line.
-     * @param balance number between -10 and 10 to help balance the motor speeds eg: 0
+
+     /**
+     * Changes how tight the :MOVE motor turns when move block is used with Left or Right
+     * @param radius the tightness of the turn
      */
     //% subcategory=Motors
     //% group="Setup"
@@ -787,14 +790,14 @@ namespace Kitronik_Move_Motor {
     }
     
     //Here for the more advanced user - this function sets the divider for the speed of the slower wheel in a turn.
-    //setting it to 2 will result in the inner wheel of the turn runnign at 1/2 the speed of the outer wheel.
+    //setting it to 2 will result in the inner wheel of the turn running at 1/2 the speed of the outer wheel.
     // No checking of what the value is - If you are using this it is expected you know what you are doing
     export function setTurnRadius(radiusDivider:number)
     {
         turnTightness = radiusDivider
     }
     
-        /**
+     /**
      * Sets the requested motor running in chosen direction at a set speed.
      * if the PCA has not yet been initialised calls the initialisation routine.
      * @param motor which motor to turn on
