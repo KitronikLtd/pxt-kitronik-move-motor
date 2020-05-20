@@ -15,7 +15,7 @@ This repository can be added as an **extension** in MakeCode.
 
 ## Lights
 The Lights section contains blocks to control the 4 ZIP LEDs on the :MOVE motor.
-Any block which does not have "show" in the name needs to be followed by a ``||Kitronik_Move_Motor.show||`` block to make the changes visible. 
+Any block which does not have "show" in the name needs to be followed by a ``"show"`` block to make the changes visible. 
 
 The first block sets up the ZIP LEDs attached to the :MOVE motor board as a variable, enabling them to be controlled in the program. The number of ZIP LEDs can be changed to match the number connected, but BBC micro:bit pin connection is automatically assigned:
 ```blocks
