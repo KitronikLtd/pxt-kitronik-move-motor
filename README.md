@@ -10,8 +10,7 @@ This repository can be added as an **extension** in MakeCode.
 * open [https://makecode.microbit.org/](https://makecode.microbit.org/)
 * click on **New Project**
 * click on **Extensions** under the gearwheel menu
-* search for **"move motor"** and import **or**
-* search for **https://github.com/kitronikltd/pxt-kitronik-move-motor** and import
+* search for **"move motor"** and import
 
 ## Lights
 The Lights section contains blocks to control the 4 ZIP LEDs on the :MOVE motor.
