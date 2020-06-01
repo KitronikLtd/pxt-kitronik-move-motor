@@ -106,4 +106,4 @@ input.onButtonPressed(Button.B, function () {
 ```
 
 ### Step 8
-CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code. You can now adjust the motor bias as before, but now you can't set it outside the limits and you can see what value it is by pressing ``||input:buttons A+B||``.
+CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code. You can now adjust the motor bias as before, but now you can't set it outside the limits and you can see what value it is by pressing ``||input:buttons A+B||``. Once you have this value, you can enter the value into the ``||Kitronik_Move_Motor.bias||`` blocks for any other code.
