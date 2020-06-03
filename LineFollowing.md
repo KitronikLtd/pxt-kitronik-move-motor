@@ -66,7 +66,7 @@ basic.forever(function () {
 ```
 
 ### Step 5
-We're going to do something very similar in another ``||logic:if else||`` section, but change the which sensor if detecting and which motor is being driven. You can right mouse click on the ``||logic:if else||`` just completed and select duplicate to recreate the code.  Place it after the code previous created.
+We're going to do something very similar in another ``||logic:if else||`` section, but change the which sensor if detecting and which motor is being driven. You can right mouse click on the ``||logic:if else||`` just completed and select duplicate to recreate the code.  Place it after the code previous created. Now changed the selection ofthe line following sensor block to Right and the motors to Left
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
