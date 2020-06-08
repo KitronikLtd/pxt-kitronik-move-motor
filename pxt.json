@@ -1,6 +1,6 @@
 {
     "name": "pxt-kitronik-move-motor",
-    "version": "0.1.16",
+    "version": "0.1.17",
     "description": "Blocks to simplify using Kitronik MOVE Motor board in PXT",
     "license": "MIT",
     "dependencies": {
