@@ -14,8 +14,8 @@
         "UsingUltrasonic.md",
         "AdvancedMotorAdjustment.md",
         "DrawingRobot.md",
-        "LineFollowing.md"
-        "RadioControlRx.md"
+        "LineFollowing.md",
+        "RadioControlRx.md",
         "RadioControlTx.md"
     ],
     "testFiles": [
