@@ -212,7 +212,7 @@ Let's pause the transmitter code so its ready to test with the :MOVE Motor. Next
 
 
 ### Step 19
-So the :MOVE Motor moves when the micro:bit is moved.  This can be a pain when you accidently move the micro:bit and did not mean to. This can be adjusted by adding in whats called a "dead man's switch". This type of switch is designed to be active or deactived if the operator has loss of consciousness.
+So the :MOVE Motor moves when the micro:bit is moved.  This can be frustrating when you accidently move the micro:bit and did not mean to. This can be adjusted by adding in whats called a "dead man's switch". This type of switch is designed to be active or deactived if the operator has loss of consciousness.
 In other words, it is only active when the button is being pressed. We can wrap the "if drive < 0" if statement inside another "if else" statement. 
 Add an ``||logic:if else||`` to below the ``||variables:set drive||``.
 #### ~ tutorialhint
@@ -298,6 +298,240 @@ basic.forever(function () {
 ### Step 23
 Click and ``|Download|`` the code to the controller micro:bit.  Lets test the code see if can only control the :MOVE Motor while button A is pressed.
 
-### Steering the buggy @unplugged
-Well done on the code so far. Next section will be adding another sensor input for the steering of the buggy.
+### Transmitter Code Done @unplugged
+Let's have a summary of what we have learnt so far. 
++ How to send and receive a radio message
++ Sending required messages to control motors
++ Reading sensory inputs for controls
++ Implementing a dead man's switch
+All this is just for going driving the :MOVE Motor forwards and backwards.  Now its time to see how we can steer our buggy with only two wheels.
 
+### Steering the buggy @unplugged
+Well done on the code so far. Steerling on the :MOVE Motor requires the motors to be driven at differnet speeds.  This will need to be blended with the forward and reverse inputs. This will give a full range of steerling and direction driving for the :MOVE Motor.
+Next section will be working towards adding another sensor input for the steering of the :MOVE Motor.
+
+### Step 24
+Previously we saw the pitch input from the sensors on the BBC micro:bit.  There is another input called "roll" which works the same way but on the Y-axis instead of the X-axis.
+Create a variable call "turn", now insert a ``||variables:set turn||`` underneath the ``||variables:set drive||`` block.
+#### ~ tutorialhint
+```blocks
+basic.forever(function () {
+    drive = input.rotation(Rotation.Pitch)
+    turn = 0
+    if (input.buttonIsPressed(Button.A)) {
+      if (drive < 0) {
+        mappedDrive = Math.map(drive, 0, -90, 0, 100)
+        radio.sendValue("Forward", mappedDrive)
+      } else if (drive > 0) {
+        mappedDrive = Math.map(drive, 0, 90, 0, 100)
+        radio.sendValue("Reverse", mappedDrive)
+      }
+    } 
+    else {
+       radio.sendValue("Stop", 0)
+    }  	
+})
+```
+
+### Step 25
+From the Input blocks in the more section insert the ``||input:rotation||`` into the ``||variables:set turn||`` block.
+Make sure the selection of the block is set to "roll" from the selection box.
+
+#### ~ tutorialhint
+```blocks
+basic.forever(function () {
+    drive = input.rotation(Rotation.Pitch)
+    turn = input.rotation(Rotation.Roll)
+    if (input.buttonIsPressed(Button.A)) {
+      if (drive < 0) {
+        mappedDrive = Math.map(drive, 0, -90, 0, 100)
+        radio.sendValue("Forward", mappedDrive)
+      } else if (drive > 0) {
+        mappedDrive = Math.map(drive, 0, 90, 0, 100)
+        radio.sendValue("Reverse", mappedDrive)
+      }
+    } 
+    else {
+       radio.sendValue("Stop", 0)
+    }  	
+})
+```
+### Blending sensor inputs
+We now have multiple directions of inputs from the controller. This will require to blend both inputs together to give one value to be sent for each motor.  From this how we send messages will change slightly.
+
+### Step 26
+To make sure both inputs are working on the same scale, let make sure the mapping of both are done before any maths is taken place.
+Duplicate one of the ``||variables:set mappedDrive||`` block and place after the button A if statement.  Change the mapped range 90 to -90, and -100 to 100
+
+#### ~ tutorialhint
+```blocks
+basic.forever(function () {
+    drive = input.rotation(Rotation.Pitch)
+    turn = input.rotation(Rotation.Roll)
+    if (input.buttonIsPressed(Button.A)) {
+        mappedDrive = Math.map(drive, 90, -90, -100, 100)
+      if (drive < 0) {
+        mappedDrive = Math.map(drive, 0, -90, 0, 100)
+        radio.sendValue("Forward", mappedDrive)
+      } else if (drive > 0) {
+        mappedDrive = Math.map(drive, 0, 90, 0, 100)
+        radio.sendValue("Reverse", mappedDrive)
+      }
+    } 
+    else {
+       radio.sendValue("Stop", 0)
+    }  	
+})
+```
+
+### Step 27
+Next we need to remove some code.  The if statement checking for the value of "drive" can be removed.  Click and drag the blocks over to the left side of the screen.  Use the hint screen if you are unsure what your code should look like after.
+
+#### ~ tutorialhint
+```blocks
+basic.forever(function () {
+    drive = input.rotation(Rotation.Pitch)
+    turn = input.rotation(Rotation.Roll)
+    if (input.buttonIsPressed(Button.A)) {
+        mappedDrive = Math.map(drive, 90, -90, -100, 100)
+    } 
+    else {
+       radio.sendValue("Stop", 0)
+    }  	
+})
+```
+
+### Step 28
+Create a new variable called "mappedTurn".  Create the same blocks as the "mappedDrive", but have the variables "mappedTurn" and "turn" in the correct place. The mapped range has to be -90 to 90 and -100 to 100.  This does not get switched  around (like the pitch mapping) as the values are in the correct sign required. 
+#### ~ tutorialhint
+```blocks
+basic.forever(function () {
+    drive = input.rotation(Rotation.Pitch)
+    turn = input.rotation(Rotation.Roll)
+    if (input.buttonIsPressed(Button.A)) {
+        mappedDrive = Math.map(drive, 90, -90, -100, 100)
+        mappedTurn = Math.map(turn, -90, 90, -100, 100)
+    } 
+    else {
+       radio.sendValue("Stop", 0)
+    }  	
+})
+```
+
+### Step 29
+Next we need some more variables.  These are for determining the turn value to help blend and the speed for the motors to be sent.  Create the following variables
+turnLeft, turnRight, leftMotorSpeed, rightMotorSpeed.
+
+### Step 30
+Now set turnLeft variable to mappedTurn.  With setting turnRight, this needs to be the opposite to turnLeftCreate a new variable called "mappedTurn".  Create the same blocks as the "mappedDrive", but have the variables "mappedTurn" and "turn" in the correct place. The mapped range has to be -90 to 90 and -100 to 100.  This does not get switched  around (like the pitch mapping) as the values are in the correct sign required. 
+#### ~ tutorialhint
+```blocks
+basic.forever(function () {
+    drive = input.rotation(Rotation.Pitch)
+    turn = input.rotation(Rotation.Roll)
+    if (input.buttonIsPressed(Button.A)) {
+        mappedDrive = Math.map(drive, 90, -90, -100, 100)
+        mappedTurn = Math.map(turn, -90, 90, -100, 100)
+        turnLeft = mappedTurn
+        turnRight = 0 - mappedTurn
+    } 
+    else {
+       radio.sendValue("Stop", 0)
+    }  	
+})
+```
+
+### Step 31
+We have our drive value in "mappedDrive" and out left and right turn value with "turnLeft" and "turnRight".  To combine them together they we be summed togther for each motor.
+Variable leftMotorSpeed will equal "mappedDrive" plus "turnLeft".  Using ``||variables:set leftMotorSpeed||`` insert the ``||math:add||``, then insert both variables "mappedDrive" and "turnLeft"
+#### ~ tutorialhint
+```blocks
+basic.forever(function () {
+    drive = input.rotation(Rotation.Pitch)
+    turn = input.rotation(Rotation.Roll)
+    if (input.buttonIsPressed(Button.A)) {
+        mappedDrive = Math.map(drive, 90, -90, -100, 100)
+        mappedTurn = Math.map(turn, -90, 90, -100, 100)
+        turnLeft = mappedTurn
+        turnRight = 0 - mappedTurn
+        leftMotorSpeed = mappedDrive + turnLeft
+    } 
+    else {
+       radio.sendValue("Stop", 0)
+    }  	
+})
+```
+
+### Step 32
+Let's repeat the same process for the right motor speed.
+Variable rightMotorSpeed will equal "mappedDrive" plus "turnRight".  Using ``||variables:set rightMotorSpeed||`` insert the ``||math:add||``, then insert both variables "mappedDrive" and "turnRight"
+#### ~ tutorialhint
+```blocks
+basic.forever(function () {
+    drive = input.rotation(Rotation.Pitch)
+    turn = input.rotation(Rotation.Roll)
+    if (input.buttonIsPressed(Button.A)) {
+        mappedDrive = Math.map(drive, 90, -90, -100, 100)
+        mappedTurn = Math.map(turn, -90, 90, -100, 100)
+        turnLeft = mappedTurn
+        turnRight = 0 - mappedTurn
+        leftMotorSpeed = mappedDrive + turnLeft
+        rightMotorSpeed = mappedDrive + turnRight
+    } 
+    else {
+       radio.sendValue("Stop", 0)
+    }  	
+})
+```
+
+### Step 33
+The two motor speed value now can be sent over the radio link.  From the radio section insert two ``||radio:send Value||`` after ``||variables:set rightMotorSpeed||``. The name we will send this time will not be forwards and reverse like previously.  Now we need to control each motor seperately. 
+Let's use the names "motorL" and "motorR". Add these names into the radio blocks that have been inserted.
+#### ~ tutorialhint
+```blocks
+basic.forever(function () {
+    drive = input.rotation(Rotation.Pitch)
+    turn = input.rotation(Rotation.Roll)
+    if (input.buttonIsPressed(Button.A)) {
+        mappedDrive = Math.map(drive, 90, -90, -100, 100)
+        mappedTurn = Math.map(turn, -90, 90, -100, 100)
+        turnLeft = mappedTurn
+        turnRight = 0 - mappedTurn
+        leftMotorSpeed = mappedDrive + turnLeft
+        rightMotorSpeed = mappedDrive + turnRight
+        radio.sendValue("motorL", 0)
+        radio.sendValue("motorR", 0)
+    } else {
+        radio.sendValue("Stop", 0)
+    }
+})
+```
+
+### Step 34
+The value we are going to be sending are the "leftMotorSpeed" and the "rightMotorSpeed".  See if you can insert these variables into the correct radio blocks.
+#### ~ tutorialhint
+```blocks
+basic.forever(function () {
+    drive = input.rotation(Rotation.Pitch)
+    turn = input.rotation(Rotation.Roll)
+    if (input.buttonIsPressed(Button.A)) {
+        mappedDrive = Math.map(drive, 90, -90, -100, 100)
+        mappedTurn = Math.map(turn, -90, 90, -100, 100)
+        turnLeft = mappedTurn
+        turnRight = 0 - mappedTurn
+        leftMotorSpeed = mappedDrive + turnLeft
+        rightMotorSpeed = mappedDrive + turnRight
+        radio.sendValue("motorL", leftMotorSpeed)
+        radio.sendValue("motorR", rightMotorSpeed)
+    } else {
+        radio.sendValue("Stop", 0)
+    }
+})
+```
+
+### Step 35
+Click and ``|Download|`` the code to the controller micro:bit. 
+
+### Transmitter Code Done @unplugged
+With having made some changes to the how the radio messages are sent, we now need to adjust the receiver code on the :MOVE Motor.  Let's now start making the adjustments. 
+![Right Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/right-arrow.jpg)
