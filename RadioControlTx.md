@@ -5,7 +5,7 @@
 
 ## Introduction
 ### Introduction @unplugged
-Learn how to use the :MOVE Motor with radio control's to drive your buggy around (this will require two BBC micro:bit's).  The code on the left editor will be for the controller (aka transmitter). The code on the right editor will be for the buggy (aka receiver).  This tutorial will take a step-by-step guide of both sides ofthe code.
+Learn how to use the :MOVE Motor with radio control's to drive your buggy around (this will require two BBC micro:bit's).  The code on the left editor will be for the controller (aka transmitter). The code on the right editor will be for the buggy (aka receiver).  This tutorial will take a step-by-step guide of both sides of the code.
 
 ![:MOVE Motor angled view with lights](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/move-motor-lights.jpg)
 
@@ -19,7 +19,7 @@ basic.showString("T")
 ```
 
 ### Step 2
-We need to set which radio group the two micro:bit's can talk to each other.  This is important so no there is no miscommunication.  
+micro:bit radio's talk in groups.We need to set the radio group the two micro:bit's are in, so that they wil communicate with each other.    
 First, from the radio section, place the ``||radio:set Group||`` into the ``||basic.onStart||`` block and set the group to 1.
 
 #### ~ tutorialhint
@@ -29,7 +29,7 @@ radio.setGroup(1)
 ```
 
 ### Step 3
-Next we want to send a radio message to the :MOVE Motor to drive forward on the button press. When sending any radio messages we will send a word (also known as name) and a value.
+Next we want to send a radio message to the :MOVE Motor to drive forward on the button press. When sending any radio messages we will send a word (also known as name) and a value. The name acts as a 'key', so the reciever knows which value it has received.
 Add ``||input:onButtonA||``. To send the message, from the radio section add ``||radio:send Value||`` this will let us send a name and value to the :MOVE Motor.  
 The name will be a direction and the value will be our speed. Set the name to "Forward" and the value to 100.
 #### ~ tutorialhint
@@ -40,14 +40,14 @@ input.onButtonPressed(Button.A, function () {
 ```
 
 ### Step 4
-Now we have a basic controller to send a message to the :MOVE Motor to drive forward.  Connect your BBC micro:bit and click ``|Download|``.  Once programmed, power the BBC micro:bit and see if a letter 'T' appears on the screen.
+Now we have a basic controller to send a message to the :MOVE Motor to drive forward.  Connect your BBC micro:bit and click ``|Download|``.  Once programmed, power the BBC micro:bit and check a letter 'T' appears on the screen.
 
 ### Transmitter Code Done @unplugged
 So, the transmitter code at this stage is complete.  Click the OK button on the right editor and start work on the receiver code.  Once that tutorial is complete, come back and click OK to get to the next stage.
 ![Right Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/right-arrow.jpg)
 
 ### Adjustable speed control @unplugged
-Now we got the :MOVE Motor driving forward, we can use the sensors on the BBC micro:bit to control the speed of the :MOVE Motor.
+Now we have the :MOVE Motor driving forward, we can use the sensors on the transmitter BBC micro:bit to control the speed of the :MOVE Motor.
 
 ### Step 5
 Let's create a variable called "drive", place a ``||variables:set drive||`` into the forever loop.
@@ -59,8 +59,8 @@ basic.forever(function () {
 ```
 
 ### Step 6
-Now we need to set the "drive" varaible to have a number from the accelemetre of the micro:bit. From the Input blocks in the more section insert the ``||input:rotation||`` into the ``||variables:set drive||`` block.
-Make sure the selection of the block is set to "pitch".  The variable will take a number from the micro:bit and this changes as you move the micro:bit
+Now we need to set the "drive" variable to have a number from the accelerometer of the micro:bit. From the Input blocks in the more section insert the ``||input:rotation||`` into the ``||variables:set drive||`` block.
+Make sure the selection of the block is set to "pitch".  The variable reads the accelerometer, and changes as you move the micro:bit
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -69,7 +69,7 @@ basic.forever(function () {
 ```
 
 ### Step 7
-The pitch gives a number from -90 to 90. This represents the number of degrees moved.  To drive forward let just look at the positive values.  Below the variable set, add in an ``||logic:if||`` to check if variable drive is greater than 0.
+The pitch gives a number from -90 to 90. This represents the number of degrees moved.  To drive forward we will take the positive values.  Below the variable set, add in an ``||logic:if||`` to check if variable drive is greater than 0.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -81,7 +81,7 @@ basic.forever(function () {
 ```
 
 ### Step 8
-As previously mentioned the pitch give us a number upto 90, however, the motor speed goes upto 100.  This is a great time to use a block called map.  This allows us to change the range of a number to a new scale.
+As previously mentioned the pitch give us a number upto 90, however, the motor speed goes upto 100.  This is a great time to use a block called map.  This allows us to map the range of a number to a new scale.
 Let's create a variable called "mappedDrive". Place a ``||variables:set mappedDrive||`` at the start of our ``||logic:if||`` bracket. From the Math section add the ``||math:map||`` into the ``||variables:set mappedDrive||`` block.
 #### ~ tutorialhint
 ```blocks
@@ -94,7 +94,7 @@ basic.forever(function () {
 ```
 
 ### Step 9
-Now we need to input the range of numbers that we want to change.  The first input needs to be the value we want to change, this will be "drive".  The next two number are the low and high numbers of the pitch, this is 0 and 90.
+Now we need to input the range of numbers that we want to change.  The first input needs to be the value we want to change, this will be "drive".  The next two number are the low and high numbers of the variable, this is 0 and 90.
 The last two entries will be the new scale we want our value to be changed to, this will match the motor speed range from 0 to 100.
 #### ~ tutorialhint
 ```blocks
