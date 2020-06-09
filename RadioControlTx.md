@@ -11,7 +11,7 @@ Learn how to use the :MOVE Motor with radio control's to drive your buggy around
 
 ## Basic Drive Forward
 ### Step 1
-To start with, to help know which micro:bit is which, we will display a letter on the screen so we know which is the transmitter and the receiver.  Add ``||basic.show String||`` and add the letter T into the ``||basic.onStart||``.  This will indicate this is the transmitter micro:bit.
+To start with, to help know which micro:bit is which, we will display a letter on the screen so we can identify which micro:bit is the transmitter and which the receiver.  Add ``||basic.show String||`` and add the letter T into the ``||basic.onStart||``.  This will indicate this is the transmitter micro:bit.
 
 #### ~ tutorialhint
 ```blocks
@@ -19,8 +19,8 @@ basic.showString("T")
 ```
 
 ### Step 2
-micro:bit radio's talk in groups.We need to set the radio group the two micro:bit's are in, so that they wil communicate with each other.    
-First, from the radio section, place the ``||radio:set Group||`` into the ``||basic.onStart||`` block and set the group to 1.
+micro:bit radio's talk in groups. We need to set the radio group the two micro:bit's are in, so that they wil communicate with each other. THe group can be any number 1-255, in this example we will use 1. If there are several micro:bit radio pairs then each pair should use a different number.     
+From the radio section, place the ``||radio:set Group||`` into the ``||basic.onStart||`` block and set the group to 1.
 
 #### ~ tutorialhint
 ```blocks
@@ -29,7 +29,7 @@ radio.setGroup(1)
 ```
 
 ### Step 3
-Next we want to send a radio message to the :MOVE Motor to drive forward on the button press. When sending any radio messages we will send a word (also known as name) and a value. The name acts as a 'key', so the reciever knows which value it has received.
+We want to send a radio message to the :MOVE Motor to do something, such as drive forward on a button press. When sending any radio messages we will send a name and a value. The name acts as a 'key', so the reciever knows which value it has received.
 Add ``||input:onButtonA||``. To send the message, from the radio section add ``||radio:send Value||`` this will let us send a name and value to the :MOVE Motor.  
 The name will be a direction and the value will be our speed. Set the name to "Forward" and the value to 100.
 #### ~ tutorialhint
@@ -43,7 +43,7 @@ input.onButtonPressed(Button.A, function () {
 Now we have a basic controller to send a message to the :MOVE Motor to drive forward.  Connect your BBC micro:bit and click ``|Download|``.  Once programmed, power the BBC micro:bit and check a letter 'T' appears on the screen.
 
 ### Transmitter Code Done @unplugged
-So, the transmitter code at this stage is complete.  Click the OK button on the right editor and start work on the receiver code.  Once that tutorial is complete, come back and click OK to get to the next stage.
+Now we have a basic transmitter.  Click the OK button on the right editor and start work on the receiver code.  Once that tutorial is complete, come back and click OK to get to the next stage.
 ![Right Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/right-arrow.jpg)
 
 ### Adjustable speed control @unplugged
@@ -59,7 +59,8 @@ basic.forever(function () {
 ```
 
 ### Step 6
-Now we need to set the "drive" variable to have a number from the accelerometer of the micro:bit. From the Input blocks in the more section insert the ``||input:rotation||`` into the ``||variables:set drive||`` block.
+Now we need to set the "drive" variable to get the its value from the micro:bit's accelerometer. 
+From the Input blocks in the "...more" section insert the ``||input:rotation||`` into the ``||variables:set drive||`` block.
 Make sure the selection of the block is set to "pitch".  The variable reads the accelerometer, and changes as you move the micro:bit
 #### ~ tutorialhint
 ```blocks
@@ -69,7 +70,7 @@ basic.forever(function () {
 ```
 
 ### Step 7
-The pitch gives a number from -90 to 90. This represents the number of degrees moved.  To drive forward we will take the positive values.  Below the variable set, add in an ``||logic:if||`` to check if variable drive is greater than 0.
+Pitch gives a number from -90 to 90. This represents angle of pitch of the micro:bit.  To drive forward we will take the positive values.  Below the variable set, add in an ``||logic:if||`` to check if variable drive is greater than 0.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -81,8 +82,8 @@ basic.forever(function () {
 ```
 
 ### Step 8
-As previously mentioned the pitch give us a number upto 90, however, the motor speed goes upto 100.  This is a great time to use a block called map.  This allows us to map the range of a number to a new scale.
-Let's create a variable called "mappedDrive". Place a ``||variables:set mappedDrive||`` at the start of our ``||logic:if||`` bracket. From the Math section add the ``||math:map||`` into the ``||variables:set mappedDrive||`` block.
+As previously mentioned the pitch gives us a number upto 90, however, the motor speed goes upto 100.  This is a great time to use a block called map.  This allows us to map the range of a number to a new scale.
+Create a new variable called "Speed". Place a ``||variables:set Speed||`` at the start of our ``||logic:if||`` bracket. From the Math section add the ``||math:map||`` into the ``||variables:set Speed||`` block.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
