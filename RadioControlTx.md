@@ -50,32 +50,32 @@ Now we have a basic transmitter.  Click the OK button on the right editor and st
 Now we have the :MOVE Motor driving forward, we can use the sensors on the transmitter BBC micro:bit to control the speed of the :MOVE Motor.
 
 ### Step 5
-Let's create a variable called "drive", place a ``||variables:set drive||`` into the forever loop.
+Let's create a variable called "pitch", place a ``||variables:set pitch||`` into the forever loop.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = 0
+    pitch = 0
 })
 ```
 
 ### Step 6
-Now we need to set the "drive" variable to get the its value from the micro:bit's accelerometer. 
-From the Input blocks in the "...more" section insert the ``||input:rotation||`` into the ``||variables:set drive||`` block.
+Now we need to set the "pitch" variable to get the its value from the micro:bit's accelerometer. 
+From the Input blocks in the "...more" section insert the ``||input:rotation||`` into the ``||variables:set pitch||`` block.
 Make sure the selection of the block is set to "pitch".  The variable reads the accelerometer, and changes as you move the micro:bit
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
+    pitch = input.rotation(Rotation.Pitch)
 })
 ```
 
 ### Step 7
-Pitch gives a number from -90 to 90. This represents angle of pitch of the micro:bit.  To drive forward we will take the positive values.  Below the variable set, add in an ``||logic:if||`` to check if variable drive is greater than 0.
+Pitch gives a number from -90 to 90. This represents angle of pitch of the micro:bit.  To drive forward we will take the positive values.  Below the variable set, add in an ``||logic:if||`` to check if variable pitch is greater than 0.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (drive > 0) {
+    pitch = input.rotation(Rotation.Pitch)
+    if (pitch > 0) {
     	
     }
 })
@@ -87,15 +87,15 @@ Create a new variable called "Speed". Place a ``||variables:set Speed||`` at the
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (drive > 0) {
+    pitch = input.rotation(Rotation.Pitch)
+    if (pitch > 0) {
         mappedDrive = Math.map(0, 0, 1023, 0, 4)
     }
 })
 ```
 
 ### Step 9
-Now we need to input the range of numbers that we want to change.  The first input needs to be the value we want to change, this will be "drive".  The next two number are the low and high numbers of the variable, this is 0 and 90.
+Now we need to input the range of numbers that we want to change.  The first input needs to be the value we want to change, this will be "pitch".  The next two number are the low and high numbers of the variable, this is 0 and 90.
 The last two entries will be the new scale we want our value to be changed to, this will match the motor speed range from 0 to 100.
 #### ~ tutorialhint
 ```blocks
