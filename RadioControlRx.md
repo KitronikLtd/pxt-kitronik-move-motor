@@ -44,7 +44,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 4
-Next, within the if block, we need to tell the :MOVE Motor to drive forward.  There is a block in the ``||Kitronik_Move_Motor.move direction||`` into the if block and select "forward" from the selection of direction.
+Next, within the if block, we need to tell the :MOVE Motor to drive forward.  There is a block in the ``||Kitronik_Move_Motor.move direction||`` into the if block and select "Forward" from the selection of direction.
 Click and drag the "value" from the ``||radio:on Receive Value||`` block into a ``||Kitronik_Move_Motor.move direction||``.
 #### ~ tutorialhint
 ```blocks
@@ -67,7 +67,7 @@ Press Button A on your controller and see what the :MOVE Motor does. If your cod
 We have got some new radio messages to deal with from the changing of directions and stopping. Click the OK button and let's get started.
 
 ### Step 6
-Similar to the previsouly done on the if block, click the ||logic:+|| icon twice to add an ``||logic:if else||`` and ``||logic:else||`` statement. Create a copy of the if statement condition and place it in the 'else if' entry below.
+Similar to the previsouly done on the if block, click the ``||logic:+||`` icon twice to add an ``||logic:if else||`` and ``||logic:else||`` statement. Create a copy of the if statement condition and place it in the 'else if' entry below.
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
@@ -82,7 +82,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 7
-From the condition within the 'else if' statement, change the test from "Forward" to "Reverse".
+From the condition within the ``||logic:else if||`` statement, add a compare check (similar to the one above with checking the name is "Forward") that checks if the name is equal to "Reverse".
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
@@ -97,7 +97,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 8
-Now to add the blocks for driving the motors in 'else if' and 'else' brackets. Add two ``||Kitronik_Move_Motor.move direction||`` block in the 'else if' bracket. 
+Now to add the blocks for driving the motors in ``||logic:else if||`` and ``||logic:else||`` brackets. Add a ``||Kitronik_Move_Motor.move direction||`` block in the ``||logic:else if||`` bracket. 
 Place the variable "value" into the speed entry same as below (Click and drag the word "value" from the top of the ``||radio:on Receive Value||`` block. 
 The motor direction to be "Reverse".  Select this from the drop down in the block.
 #### ~ tutorialhint
@@ -114,7 +114,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 9
-The final condition we want is to stop the motors if it does not receive the name "Forward" or "Reverse". From the :MOVE Motor section in motors add a ``||Kitronik_Move_Motor.stop||`` block to within the 'else' bracket.
+The final condition we want is to stop the motors if it does not receive the name "Forward" or "Reverse". From the :MOVE Motor section in motors add a ``||Kitronik_Move_Motor.stop||`` block to within the ``||logic:else||`` bracket.
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
@@ -188,7 +188,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 14
-Add the compare in the new "if" statement block, to check if "value >= 0".  This is to check if the value that has been sent is a positive number.
+Add the compare in the new ``||logic:if||`` statement block, to check if "value >= 0".  This is to check if the value that has been sent is a positive number.
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {

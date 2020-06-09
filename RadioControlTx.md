@@ -82,7 +82,7 @@ basic.forever(function () {
 
 ### Step 8
 As previously mentioned the pitch give us a number upto 90, however, the motor speed goes upto 100.  This is a great time to use a block called map.  This allows us to change the range of a number to a new scale.
-Let's create a variable called "mappedDrive". Place a ``||variables:set mappedDrive||`` atthe start of our if bracket. From the Math section add the ``||math:map||`` into the "set mappedDrive" block.
+Let's create a variable called "mappedDrive". Place a ``||variables:set mappedDrive||`` at the start of our ``||logic:if||`` bracket. From the Math section add the ``||math:map||`` into the ``||variables:set mappedDrive||`` block.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -107,7 +107,7 @@ basic.forever(function () {
 ```
 
 ### Step 10
-Move the ``||radio:send Value||`` from ``||input:onButtonA||`` to after the setting of "mappedDrive". Change the variable from "drive" to "mappedDrive".
+Move the ``||radio:send Value||`` from ``||input:onButtonA||`` to after the setting of "mappedDrive". Insert the variable "mappedDrive" into the `||radio:send Value||`` where the speed (currently 100) is sent.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -124,7 +124,8 @@ Connect your transmitter BBC micro:bit and click ``|Download|``. Let's try the c
 
 ### Step 12
 Did the :MOVE Motor only drive when the micro:bit was tilted backwards? Let's change this so that when the micro:bit is tilted forwards, the :MOVE Motor drives forwards.  This is where we need to check if the variable "drive" is a negative number.
-Change the 'if' condition from greater than ">" to less than "<".
+Change the ``||logic:if||`` condition from greater than ``||logic:>||`` to less than ``||logic:<||``.
+#### ~ tutorialhint
 ```blocks
 basic.forever(function () {
     drive = input.rotation(Rotation.Pitch)
@@ -155,8 +156,8 @@ Click and ``|Download|`` the code to the controller micro:bit and see if control
 The controller can change the speed moving forward.  Time to look at making the :MOVE Motor to respond to driving in reverse.
 
 ### Step 15
-Currently we are looking if the value of "drive" is less than '0'. Now we need to look for it being greater than '0'.  So, click the ||logic:+|| icon twice to add an ||logic:if else|| click on the ||logic:-|| next to the ||logic:if else||.
-In the "else if" condition, check for drive greater than '0'.
+Currently we are looking if the value of "drive" is less than '0'. Now we need to look for it being greater than '0'.  So, click the ``||logic:+||`` icon twice to add an ``||logic:if else||`` click on the ``||logic:-||`` next to the ``||logic:if else||``.
+In the ``||logic:else if||`` condition, check for drive greater than '0'.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -275,7 +276,7 @@ basic.forever(function () {
 ```
 
 ### Step 22
-When button A is not pressed, we want the :MOVE Motor to stop. Add another ``||radio:send Value||`` into the ``||logic:lse||`` bracket with the text "Stop" and number '0'. 
+When button A is not pressed, we want the :MOVE Motor to stop. Add another ``||radio:send Value||`` into the ``||logic:else||`` bracket with the text "Stop" and number '0'. 
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -304,7 +305,8 @@ Let's have a summary of what we have learnt so far.
 + Sending required messages to control motors
 + Reading sensory inputs for controls
 + Implementing a dead man's switch
-All this is just for going driving the :MOVE Motor forwards and backwards.  Now its time to see how we can steer our buggy with only two wheels.
+
+- All this is just for going driving the :MOVE Motor forwards and backwards.  Now its time to see how we can steer our buggy with only two wheels.
 
 ### Steering the buggy @unplugged
 Well done on the code so far. Steerling on the :MOVE Motor requires the motors to be driven at differnet speeds.  This will need to be blended with the forward and reverse inputs. This will give a full range of steerling and direction driving for the :MOVE Motor.
@@ -385,7 +387,7 @@ basic.forever(function () {
 ```
 
 ### Step 27
-Next we need to remove some code.  The if statement checking for the value of "drive" can be removed.  Click and drag the blocks over to the left side of the screen.  Use the hint screen if you are unsure what your code should look like after.
+Next we need to remove some code.  The ``||logic:if||`` statement checking for the value of "drive" can be removed.  Click and drag the blocks over to the left side of the screen.  Use the hint screen if you are unsure what your code should look like after.
 
 #### ~ tutorialhint
 ```blocks
@@ -420,10 +422,11 @@ basic.forever(function () {
 
 ### Step 29
 Next we need some more variables.  These are for determining the turn value to help blend and the speed for the motors to be sent.  Create the following variables
-turnLeft, turnRight, leftMotorSpeed, rightMotorSpeed.
+"turnLeft", "turnRight", "leftMotorSpeed", "rightMotorSpeed".
 
 ### Step 30
-Now set turnLeft variable to mappedTurn.  With setting turnRight, this needs to be the opposite to turnLeftCreate a new variable called "mappedTurn".  Create the same blocks as the "mappedDrive", but have the variables "mappedTurn" and "turn" in the correct place. The mapped range has to be -90 to 90 and -100 to 100.  This does not get switched  around (like the pitch mapping) as the values are in the correct sign required. 
+Now ``||variables:set turnLeft||`` variable to "mappedTurn".  With setting "turnRight", this needs to be the opposite to "turnLeft". 
+Create a new variable called "mappedTurn".  Create the same blocks as the "mappedDrive", but have the variables "mappedTurn" and "turn" in the correct place. The mapped range has to be -90 to 90 and -100 to 100.  This does not get switched  around (like the pitch mapping) as the values are in the correct sign required. 
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -443,7 +446,7 @@ basic.forever(function () {
 
 ### Step 31
 We have our drive value in "mappedDrive" and out left and right turn value with "turnLeft" and "turnRight".  To combine them together they we be summed togther for each motor.
-Variable leftMotorSpeed will equal "mappedDrive" plus "turnLeft".  Using ``||variables:set leftMotorSpeed||`` insert the ``||math:add||``, then insert both variables "mappedDrive" and "turnLeft"
+Variable "leftMotorSpeed" will equal "mappedDrive" plus "turnLeft".  Using ``||variables:set leftMotorSpeed||`` insert the ``||math:add||``, then insert both variables "mappedDrive" and "turnLeft"
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -464,7 +467,7 @@ basic.forever(function () {
 
 ### Step 32
 Let's repeat the same process for the right motor speed.
-Variable rightMotorSpeed will equal "mappedDrive" plus "turnRight".  Using ``||variables:set rightMotorSpeed||`` insert the ``||math:add||``, then insert both variables "mappedDrive" and "turnRight"
+Variable "rightMotorSpeed" will equal "mappedDrive" plus "turnRight".  Using ``||variables:set rightMotorSpeed||`` insert the ``||math:add||``, then insert both variables "mappedDrive" and "turnRight"
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
