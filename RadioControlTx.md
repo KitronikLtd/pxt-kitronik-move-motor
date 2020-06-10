@@ -89,7 +89,7 @@ Create a new variable called "Speed". Place a ``||variables:set Speed||`` at the
 basic.forever(function () {
     pitch = input.rotation(Rotation.Pitch)
     if (pitch > 0) {
-        mappedDrive = Math.map(0, 0, 1023, 0, 4)
+        SPeed = Math.map(0, 0, 1023, 0, 4)
     }
 })
 ```
@@ -100,22 +100,22 @@ The last two entries will be the new scale we want our value to be changed to, t
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (drive > 0) {
-        mappedDrive = Math.map(drive, 0, 90, 0, 100)
+    pitch = input.rotation(Rotation.Pitch)
+    if (pitch > 0) {
+        Speed = Math.map(drive, 0, 90, 0, 100)
     }
 })
 ```
 
 ### Step 10
-Move the ``||radio:send Value||`` from ``||input:onButtonA||`` to after the setting of "mappedDrive". Insert the variable "mappedDrive" into the `||radio:send Value||`` where the speed (currently 100) is sent.
+Move the ``||radio:send Value||`` from ``||input:onButtonA||`` to after the setting of "Speed". Insert the variable "Speed" into the `||radio:send Value||`` where the speed (currently 100) is sent.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (drive > 0) {
-        mappedDrive = Math.map(drive, 0, 90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
+    pitch = input.rotation(Rotation.Pitch)
+    if (pitch > 0) {
+        Speed = Math.map(drive, 0, 90, 0, 100)
+        radio.sendValue("Forward", Speed)
     }
 })
 ```
@@ -124,14 +124,14 @@ basic.forever(function () {
 Connect your transmitter BBC micro:bit and click ``|Download|``. Let's try the code and see how it controls the speed on the :MOVE Motor.
 
 ### Step 12
-Did the :MOVE Motor only drive when the micro:bit was tilted backwards? Let's change this so that when the micro:bit is tilted forwards, the :MOVE Motor drives forwards.  This is where we need to check if the variable "drive" is a negative number.
+Did the :MOVE Motor only drive when the micro:bit was tilted backwards? Let's change this so that when the micro:bit is tilted forwards, the :MOVE Motor drives forwards.  This is where we need to check if the variable "pitch" is a negative number.
 Change the ``||logic:if||`` condition from greater than ``||logic:>||`` to less than ``||logic:<||``.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (drive < 0) {
-        mappedDrive = Math.map(drive, 0, 90, 0, 100)
+    pitch = input.rotation(Rotation.Pitch)
+    if (pitch < 0) {
+        Speed = Math.map(drive, 0, 90, 0, 100)
         radio.sendValue("Forward", mappedDrive)
     }
 })
@@ -142,10 +142,10 @@ The speed values that we have been sending were positive numbers each time. Now 
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (drive < 0) {
-        mappedDrive = Math.map(drive, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
+    pitch = input.rotation(Rotation.Pitch)
+    if (pitch < 0) {
+        Speed = Math.map(pitch, 0, -90, 0, 100)
+        radio.sendValue("Forward", Speed)
     }
 })
 ```
@@ -157,32 +157,32 @@ Click and ``|Download|`` the code to the controller micro:bit and see if control
 The controller can change the speed moving forward.  Time to look at making the :MOVE Motor to respond to driving in reverse.
 
 ### Step 15
-Currently we are looking if the value of "drive" is less than '0'. Now we need to look for it being greater than '0'.  So, click the ``||logic:+||`` icon twice to add an ``||logic:if else||`` click on the ``||logic:-||`` next to the ``||logic:if else||``.
-In the ``||logic:else if||`` condition, check for drive greater than '0'.
+Currently we are looking if the value of "pitch" is less than '0'. Now we need to look for it being greater than '0'.  So, click the ``||logic:+||`` icon twice to add an ``||logic:if else||`` click on the ``||logic:-||`` next to the ``||logic:if else||``.
+In the ``||logic:else if||`` condition, check for pitch greater than '0'.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (drive < 0) {
-        mappedDrive = Math.map(drive, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
-    } else if (drive > 0) {
+    pitch = input.rotation(Rotation.Pitch)
+    if (pitch < 0) {
+        Speed = Math.map(drive, 0, -90, 0, 100)
+        radio.sendValue("Forward", Speed)
+    } else if (pitch > 0) {
     	
     } 
 })
 ```
 
 ### Step 16
-Duplicate the ``||variables:set mappedDrive||`` block and place into the bracket below. Duplicate the ``||radio:send Value||`` and place below the newely copied ``||variables:set mappedDrive||`` block
+Duplicate the ``||variables:set Speed||`` block and place into the bracket below. Duplicate the ``||radio:send Value||`` and place below the newely copied ``||variables:set mappedDrive||`` block
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (drive < 0) {
-        mappedDrive = Math.map(drive, 0, -90, 0, 100)
+    pitch = input.rotation(Rotation.Pitch)
+    if (pitch < 0) {
+        Speed = Math.map(pitch, 0, -90, 0, 100)
         radio.sendValue("Forward", mappedDrive)
-    } else if (drive > 0) {
-    	mappedDrive = Math.map(drive, 0, -90, 0, 100)
+    } else if (pitcj > 0) {
+    	Speed = Math.map(pitch, 0, -90, 0, 100)
         radio.sendValue("Forward", mappedDrive)
     }
 })
@@ -194,13 +194,13 @@ Previously we had the :MOVE Motor driving, when tilting the micro:bit backwards.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (drive < 0) {
-        mappedDrive = Math.map(drive, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
-    } else if (drive > 0) {
-    	mappedDrive = Math.map(drive, 0, 90, 0, 100)
-        radio.sendValue("Reverse", mappedDrive)
+    pitch = input.rotation(Rotation.Pitch)
+    if (pitch < 0) {
+        Speed = Math.map(drive, 0, -90, 0, 100)
+        radio.sendValue("Forward", Speed)
+    } else if (pitch > 0) {
+    	Speed = Math.map(drive, 0, 90, 0, 100)
+        radio.sendValue("Reverse", Speed)
     } 
 })
 ```
@@ -209,7 +209,7 @@ basic.forever(function () {
 Click and ``|Download|`` the code to the controller micro:bit.
 
 ### Transmitter Code Pause @unplugged
-Let's pause the transmitter code so its ready to test with the :MOVE Motor. Next we need to adjust the reciever micro:bit code to accept the new commands sent over the radio.  Click the OK button on the right editor and start work on the receiver code.  Once that tutorial is complete, come back and click OK to get to the next stage.
+We now have Transmitter code which can command forward and reverse. Next we need to adjust the reciever micro:bit code to accept the new commands sent over the radio.  Click the OK button on the right editor and start work on the receiver code.  Once that tutorial is complete, come back and click OK to get to the next stage.
 ![Right Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/right-arrow.jpg)
 
 
