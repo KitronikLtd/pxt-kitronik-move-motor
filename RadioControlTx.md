@@ -293,24 +293,27 @@ Let's have a summary of what we have learnt so far.
 - All this is just for going driving the :MOVE Motor forwards and backwards.  Now its time to see how we can steer our buggy with only two wheels.
 
 ### Steering the buggy @unplugged
-Well done on the code so far. Steerling on the :MOVE Motor requires the motors to be driven at differnet speeds.  This will need to be blended with the forward and reverse inputs. This will give a full range of steerling and direction driving for the :MOVE Motor.
-Next section will be working towards adding another sensor input for the steering of the :MOVE Motor.
+Well done on the code so far. Steering on the :MOVE Motor requires the motors to be driven at different speeds.  
+To allow smooth steering the left right inputs will need to be combined with the forward and reverse inputs. This is known as blending.
+Done correctly blending will give a full range of steerling and direction driving for the :MOVE Motor.
 
-### Step 24
-Previously we saw the pitch input from the sensors on the BBC micro:bit.  There is another input called "roll" which works the same way but on the Y-axis instead of the X-axis.
-Create a variable call "turn", now insert a ``||variables:set turn||`` underneath the ``||variables:set drive||`` block.
+Next section will add another sensor input to control the steering of the :MOVE Motor.
+
+### Step 23
+Previously we used the pitch input from the sensors on the BBC micro:bit.  There is another input called "roll" which works the same way but on the Y-axis instead of the X-axis.
+Create a variable call "roll", now insert a ``||variables:set roll||`` underneath the ``||variables:set pitch||`` block.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
+    pitch = input.rotation(Rotation.Pitch)
     turn = 0
     if (input.buttonIsPressed(Button.A)) {
-      if (drive < 0) {
-        mappedDrive = Math.map(drive, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
-      } else if (drive > 0) {
-        mappedDrive = Math.map(drive, 0, 90, 0, 100)
-        radio.sendValue("Reverse", mappedDrive)
+      if (pitch < 0) {
+        Speed = Math.map(drive, 0, -90, 0, 100)
+        radio.sendValue("Forward", Speed)
+      } else if (pitch > 0) {
+        Speed = Math.map(drive, 0, 90, 0, 100)
+        radio.sendValue("Reverse", Speed)
       }
     } 
     else {
@@ -319,22 +322,22 @@ basic.forever(function () {
 })
 ```
 
-### Step 25
-From the Input blocks in the more section insert the ``||input:rotation||`` into the ``||variables:set turn||`` block.
+### Step 24
+From the Input blocks in the ...more section insert the ``||input:rotation||`` into the ``||variables:set turn||`` block.
 Make sure the selection of the block is set to "roll" from the selection box.
 
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    turn = input.rotation(Rotation.Roll)
+    pitch = input.rotation(Rotation.Pitch)
+    roll = input.rotation(Rotation.Roll)
     if (input.buttonIsPressed(Button.A)) {
-      if (drive < 0) {
-        mappedDrive = Math.map(drive, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
-      } else if (drive > 0) {
-        mappedDrive = Math.map(drive, 0, 90, 0, 100)
-        radio.sendValue("Reverse", mappedDrive)
+      if (pitch < 0) {
+        Speed = Math.map(pitch, 0, -90, 0, 100)
+        radio.sendValue("Forward", Speed)
+      } else if (pitch > 0) {
+        Speed = Math.map(pitch, 0, 90, 0, 100)
+        radio.sendValue("Reverse", Speed)
       }
     } 
     else {
@@ -342,10 +345,10 @@ basic.forever(function () {
     }  	
 })
 ```
-### Blending sensor inputs
-We now have multiple directions of inputs from the controller. This will require to blend both inputs together to give one value to be sent for each motor.  From this how we send messages will change slightly.
+### Blending sensor inputs @unplugged
+We now have 2 inputs from the controller. We wil blend these together to give the different speeds for the motors. We will then need send 2 messages, one for each motor speed, rather than a simple "Forwards" or "Reverse" command. 
 
-### Step 26
+### Step 25
 To make sure both inputs are working on the same scale, let make sure the mapping of both are done before any maths is taken place.
 Duplicate one of the ``||variables:set mappedDrive||`` block and place after the button A if statement.  Change the mapped range 90 to -90, and -100 to 100
 
