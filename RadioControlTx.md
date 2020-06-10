@@ -212,43 +212,45 @@ Click and ``|Download|`` the code to the controller micro:bit.
 We now have Transmitter code which can command forward and reverse. Next we need to adjust the reciever micro:bit code to accept the new commands sent over the radio.  Click the OK button on the right editor and start work on the receiver code.  Once that tutorial is complete, come back and click OK to get to the next stage.
 ![Right Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/right-arrow.jpg)
 
+### Transmitter Code Pause @unplugged
+The :MOVE Motor moves when the micro:bit is moved.  This can be frustrating when you accidently move the micro:bit and did not mean to. We can prevent this by adding what is called a "dead man's switch". 
+This type of switch is designed to require the user to press it, or the what ever is being controled stops. They are often found on trains.
 
 ### Step 19
-So the :MOVE Motor moves when the micro:bit is moved.  This can be frustrating when you accidently move the micro:bit and did not mean to. This can be adjusted by adding in whats called a "dead man's switch". This type of switch is designed to be active or deactived if the operator has loss of consciousness.
-In other words, it is only active when the button is being pressed. We can wrap the "if drive < 0" if statement inside another "if else" statement. 
-Add an ``||logic:if else||`` to below the ``||variables:set drive||``.
+For the :MOVE motor we can wrap the "if pitch < 0" if statement inside another "if else" statement so that it is only active if the dead mans switch is activated.
+Add an ``||logic:if else||`` to below the ``||variables:set pitch||``, and move the previous ``||logic:if else||`` into the top ``||logic:if||`` bracket.
+
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
+    pitch = input.rotation(Rotation.Pitch)
     if (true) {
-    	
-    } else {
-    	
-    }
-    if (drive < 0) {
-        mappedDrive = Math.map(drive, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
-    } else if (drive > 0) {
-        mappedDrive = Math.map(drive, 0, 90, 0, 100)
-        radio.sendValue("Reverse", mappedDrive)
-    }
+      if (pitch < 0) {
+        Speed = Math.map(drive, 0, -90, 0, 100)
+        radio.sendValue("Forward", Speed)
+      } else if (pitch > 0) {
+        Speed = Math.map(pitch, 0, 90, 0, 100)
+        radio.sendValue("Reverse", Speed)
+    } 
+    else {
+
+    }  	
 })
 ```
 
 ### Step 20
-Now move the previous ``||logic:if else||`` into the top ``||logic:if||`` bracket.
+Add ``||input:button A pressed||`` to the top of the newly inserted if statement.  Button A will become our Dead mans switch, and we will only send movement messages when button A is pressed.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (true) {
-      if (drive < 0) {
-        mappedDrive = Math.map(drive, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
-      } else if (drive > 0) {
-        mappedDrive = Math.map(drive, 0, 90, 0, 100)
-        radio.sendValue("Reverse", mappedDrive)
+    pitch = input.rotation(Rotation.Pitch)
+    if (input.buttonIsPressed(Button.A)) {
+      if (pitch < 0) {
+        Speed = Math.map(pitch, 0, -90, 0, 100)
+        radio.sendValue("Forward", Speed)
+      } else if (pitch > 0) {
+        Speed = Math.map(pitch, 0, 90, 0, 100)
+        radio.sendValue("Reverse", Speed)
     } 
     else {
 
@@ -257,38 +259,18 @@ basic.forever(function () {
 ```
 
 ### Step 21
-Add ``||input:button A pressed||`` to the top of the newely inserted if statement.  The code inside the bracket will only work when button A is pressed.
+When button A is not pressed, we want the :MOVE Motor to stop. Add another ``||radio:send Value||`` into the ``||logic:else||`` bracket To send the message "Stop" with a number '0'. 
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
+    pitch = input.rotation(Rotation.Pitch)
     if (input.buttonIsPressed(Button.A)) {
-      if (drive < 0) {
+      if (pitch < 0) {
         mappedDrive = Math.map(drive, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
-      } else if (drive > 0) {
+        radio.sendValue("Forward", Speed)
+      } else if (pitch > 0) {
         mappedDrive = Math.map(drive, 0, 90, 0, 100)
-        radio.sendValue("Reverse", mappedDrive)
-    } 
-    else {
-
-    }  	
-})
-```
-
-### Step 22
-When button A is not pressed, we want the :MOVE Motor to stop. Add another ``||radio:send Value||`` into the ``||logic:else||`` bracket with the text "Stop" and number '0'. 
-#### ~ tutorialhint
-```blocks
-basic.forever(function () {
-    drive = input.rotation(Rotation.Pitch)
-    if (input.buttonIsPressed(Button.A)) {
-      if (drive < 0) {
-        mappedDrive = Math.map(drive, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
-      } else if (drive > 0) {
-        mappedDrive = Math.map(drive, 0, 90, 0, 100)
-        radio.sendValue("Reverse", mappedDrive)
+        radio.sendValue("Reverse", Speed)
       }
     } 
     else {
@@ -297,12 +279,13 @@ basic.forever(function () {
 })
 ```
 
-### Step 23
-Click and ``|Download|`` the code to the controller micro:bit.  Lets test the code see if can only control the :MOVE Motor while button A is pressed.
+### Step 22
+Click and ``|Download|`` the code to the controller micro:bit.  Lets test the code see if can only control the :MOVE Motor while button A is pressed. This will work because previously we added a default handler for messages we dont know, and this has the same safe characteristic of stoping the :MOVE motor.
 
 ### Transmitter Code Done @unplugged
 Let's have a summary of what we have learnt so far. 
 + How to send and receive a radio message
++ That a received message can be 'handled', and we can have a default handler for messages we dont know about.
 + Sending required messages to control motors
 + Reading sensory inputs for controls
 + Implementing a dead man's switch
