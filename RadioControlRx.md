@@ -32,7 +32,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 3
-Within the ``||radio:on Receive Value||``, we need to check the received message is what we are expecting.  
+Within the ``||radio:on Receive Value||``, we need to check the received message is what we are expecting. IF the message is something we know about we can handle it - we call the code that does soemthing a handler. 
 Add ``||logic:if||`` into the function, and compare the name equals "Forward".
 Place an ``||logic:equals||`` compare block into the ``||logic:if||``. From the ``||radio:on Receive Value||``, click and drag the "name" variable into the start of the ``||logic:equals||`` block.  Now add a ``||text:text||`` block and type in "Forward".
 The word "Forward" needs to be spelt the same as the transmitter code and is case sensitive.
@@ -116,7 +116,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 9
-The final condition we want is to stop the motors if  we receive the a message that isnt "Forward" or "Reverse". From the :MOVE Motor section in motors add a ``||Kitronik_Move_Motor.stop||`` block to within the ``||logic:else||`` bracket.
+The final condition we want is to stop the motors if  we receive the a message that isnt "Forward" or "Reverse". This is a default handler, and will provides a safe way to catch unknown messages.  From the :MOVE Motor section in motors add a ``||Kitronik_Move_Motor.stop||`` block to within the ``||logic:else||`` bracket.
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
