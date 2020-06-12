@@ -354,11 +354,11 @@ basic.forever(function () {
 ```
 
 ### Blending sensor inputs @unplugged
-We now have 2 inputs from the controller. We wil blend these together to give the different speeds for the motors. We will then need send 2 messages, one for each motor speed, rather than a simple "Forwards" or "Reverse" command. 
+We now have 2 inputs from the controller. We wil blend these together to give the different speeds for the motors. We will then need to send 2 messages, one for each motor speed, rather than a simple "Forwards" or "Reverse" command. 
 
 ### Step 26
 Previously we inverted the pitch value in the mapping to the motor range. Here we will invert it before we blend the inputs.
-Add a ``||Math:0-0||`` block and take the pitch value from 0.
+Add a ``||Math:0-0||`` block from the ``||Math:Math||`` section and take the pitch value from 0.
 
 #### ~ tutorialhint
 ```blocks
