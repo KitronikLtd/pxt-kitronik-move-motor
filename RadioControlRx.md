@@ -9,7 +9,8 @@ Please read the introduction on the left editor and follow the instructions.  Wh
 
 ![Left Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/left-arrow.jpg)
 
-## Basic Drive Forward
+## Basic Drive Forward Receiver
+
 ### Step 1
 Now the transmitter tutorial code is done, lets start on the receiver code.  We wil need to program this into the second micro:bit.
 Like at the start of the Transmitter code we need to indicate which BBC micro:bit this is and set the radio group.
@@ -32,7 +33,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 3
-Within the ``||radio:on Receive Value||``, we need to check the received message is what we are expecting. IF the message is something we know about we can handle it - we call the code that does soemthing a handler. 
+Within the ``||radio:on Receive Value||``, we need to check the received message is what we are expecting. If the message is something we know about we can handle it - we call the code that does soemthing a handler. 
 Add ``||logic:if||`` into the function, and compare the name equals "Forward".
 Place an ``||logic:equals||`` compare block into the ``||logic:if||``. From the ``||radio:on Receive Value||``, click and drag the "name" variable into the start of the ``||logic:equals||`` block.  Now add a ``||text:text||`` block and type in "Forward".
 The word "Forward" needs to be spelt the same as the transmitter code and is case sensitive.
@@ -64,6 +65,8 @@ Click ``|Download|`` to transfer your code, to your other BBC micro:bit. Plug it
 We now have two micro:bit's coded.  If not done so, plug the receiver micro:bit into the :MOVE motor. Apply power to the transmitter micro:bit (you can use the USB lead from your computer for this).  
 Press Button A on your controller and see what the :MOVE Motor does. If your code doesnt work, check your radio group number and how you spelt "Forward" in both tutorials.  When you are ready, lets go back to the Transmitter tutorial for the next stage.
 ![Left Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/left-arrow.jpg)
+
+## Changing Directions
 
 ### Changing Directions @unplugged
 We are going to receive some new radio messages to deal with from the changing of directions and stopping. Click the OK button and let's get started.
@@ -136,17 +139,19 @@ Connect the BBC micro:bit in the :MOVE Motor and click ``|Download|`` to transfe
 So the :MOVE Motor is driving in two directions, awesome!.  However, it will be better if we have a method of steering as it drives.  Let's go back to the transmitter code and see what we can do.  The transmitter tutorial will inform you of when we need to adjust the receiver code.
 ![Left Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/left-arrow.jpg)
 
+## Adding Steering 
+
 ### Radio receive adjustments
 Once again we have got some new radio messages to deal with: The messages will be for each motor and checking is the value is a positive or negative number.  This check will determine which direction the motors will be turning.
 
 ### Step 11
-Firstly, lets change the name we check for when receiving a message.  Change "Forward" to "motorL" and change "Reverse" to "motorR".
+Firstly, lets change the name we check for when receiving a message.  Change "Forward" to "leftMotor" and change "Reverse" to "rightMotor".
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
-    if (name == "motorL") {
+    if (name == "leftMotor") {
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, value)
-    } else if (name == "motorR") {
+    } else if (name == "rightMotor") {
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Reverse, value)   	
     } else {
     	Kitronik_Move_Motor.stop()
@@ -160,9 +165,9 @@ Let's remove the two motor driving blocks,
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
-    if (name == "motorL") {
+    if (name == "leftMotor") {
         
-    } else if (name == "motorR") {
+    } else if (name == "rightMotor") {
         
     } else {
     	Kitronik_Move_Motor.stop()
@@ -171,17 +176,17 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 13
-Once we have checked which motor the radio message is for, the next check is to see if its a positive or negative number. Add an ``||logic:if else||`` inside the "if name = motorL".
+Once we have checked which motor the radio message is for, the next check is to see if its a positive or negative number. Add an ``||logic:if else||`` inside the "if name = leftMotor".
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
-    if (name == "motorL") {
+    if (name == "leftMotor") {
         if (true) {
 
         } else {
         
         }
-    } else if (name == "motorR") {
+    } else if (name == "rightMotor") {
 
     } else {
         Kitronik_Move_Motor.stop()
@@ -194,13 +199,13 @@ Add the compare in the new ``||logic:if||`` statement block, to check if "value 
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
-    if (name == "motorL") {
+    if (name == "leftMotor") {
         if (value >= 0) {
 
         } else {
         
         }
-    } else if (name == "motorR") {
+    } else if (name == "rightMotor") {
 
     } else {
         Kitronik_Move_Motor.stop()
@@ -214,13 +219,13 @@ Select the "Left" motor and have the variable "value" inserted into the speed of
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
-    if (name == "motorL") {
+    if (name == "leftMotor") {
         if (value >= 0) {
             Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, value)
         } else {
         
         }
-    } else if (name == "motorR") {
+    } else if (name == "rightMotor") {
 
     } else {
         Kitronik_Move_Motor.stop()
@@ -233,13 +238,13 @@ Now we need to deal with if the value received is a negative number.  Add anothe
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
-    if (name == "motorL") {
+    if (name == "leftMotor") {
         if (value >= 0) {
             Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, value)
         } else {
             Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Reverse, 0)
         }
-    } else if (name == "motorR") {
+    } else if (name == "rightMotor") {
 
     } else {
         Kitronik_Move_Motor.stop()
@@ -253,13 +258,13 @@ Insert this into the ``||Kitronik_Move_Motor.move motor||`` then the variable va
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
-    if (name == "motorL") {
+    if (name == "leftMotor") {
         if (value >= 0) {
             Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, value)
         } else {
             Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Reverse, Math.abs(value))
         }
-    } else if (name == "motorR") {
+    } else if (name == "rightMotor") {
 
     } else {
         Kitronik_Move_Motor.stop()
@@ -272,13 +277,13 @@ The left motor code is complete, this same code needs to be done for the right m
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
-    if (name == "motorL") {
+    if (name == "leftMotor") {
         if (value >= 0) {
             Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, value)
         } else {
             Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Reverse, Math.abs(value))
         }
-    } else if (name == "motorR") {
+    } else if (name == "rightMotor") {
         if (value >= 0) {
             Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorRight, Kitronik_Move_Motor.MotorDirection.Forward, value)
         } else {
