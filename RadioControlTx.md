@@ -111,7 +111,7 @@ basic.forever(function () {
 ```
 
 ### Step 10
-Move the ``||radio:send Value||`` from ``||input:onButtonA||`` to after the setting of "speed". Insert the variable "speed" into the `||radio:send Value||`` where the speed (currently 100) is sent.
+Move the ``||radio:send Value||`` from ``||input:onButtonA||`` to after the setting of "speed". Insert the variable "speed" into the ``||radio:send Value||`` where the speed (currently 100) is sent.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -127,7 +127,7 @@ basic.forever(function () {
 Connect your transmitter BBC micro:bit and click ``|Download|``. Let's try the code and see how it controls the speed on the :MOVE Motor.
 
 ### Step 12
-Did the :MOVE Motor only drive when the micro:bit was tilted backwards? Let's change this so that when the micro:bit is tilted forwards, the :MOVE Motor drives forwards.  This is where we need to check if the variable "pitch" is a negative number.
+Did the :MOVE Motor only drive when the micro:bit was tilted backwards? Let's change this so that when the micro:bit is tilted forwards, the :MOVE Motor drives forwards.  To do this we need to check if the variable "pitch" is a negative number.
 Change the ``||logic:if||`` condition from greater than ``||logic:>||`` to less than ``||logic:<||``.
 #### ~ tutorialhint
 ```blocks
@@ -157,10 +157,10 @@ basic.forever(function () {
 Click and ``|Download|`` the code to the controller micro:bit and see if controls have reversed. When your code is working, let's move to the next section.
 
 ### Changing Directions @unplugged
-The controller can change the speed moving forward.  Time to look at making the :MOVE Motor to respond to driving in reverse.
+The controller can change the speed moving forward.  Time to make the :MOVE Motor respond to driving in reverse.
 
 ### Step 15
-Currently we are looking if the value of "pitch" is less than '0'. Now we need to look for it being greater than '0'.  So, click the ``||logic:+||`` icon twice to add an ``||logic:if else||`` click on the ``||logic:-||`` next to the ``||logic:if else||``.
+Currently we are looking if the value of "pitch" is less than '0'. Now we need to look for it being greater than '0'.  So, click the ``||logic:+||`` icon twice to add an ``||logic:if else||`` click on the ``||logic:-||`` next to the ``||logic:else||`` to remove the else condition.
 In the ``||logic:else if||`` condition, check for pitch greater than '0'.
 #### ~ tutorialhint
 ```blocks
@@ -184,7 +184,7 @@ basic.forever(function () {
     if (pitch < 0) {
         speed = Math.map(pitch, 0, -90, 0, 100)
         radio.sendValue("Forward", mappedDrive)
-    } else if (pitcj > 0) {
+    } else if (pitch > 0) {
     	speed = Math.map(pitch, 0, -90, 0, 100)
         radio.sendValue("Forward", mappedDrive)
     }
@@ -192,8 +192,7 @@ basic.forever(function () {
 ```
 
 ### Step 17
-The values in these duplicate blocks are slightly wrong. Let's adjust these so they work when try to drive in reverse.  Firstly change the text in the ``||radio:send Value||`` from "Forward" to "Reverse".
-Previously we had the :MOVE Motor driving, when tilting the micro:bit backwards.  This was with the pitch being a positive number. Change the newly copied map block from -90 to 90.
+The values in these duplicate blocks are slightly wrong. Let's adjust these so they work to drive in reverse.  Firstly change the text in the ``||radio:send Value||`` from "Forward" to "Reverse". As the pitch for reverse is a positive number change the newly copied map block from -90 to 90.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -215,13 +214,16 @@ Click and ``|Download|`` the code to the controller micro:bit.
 We now have Transmitter code which can command forward and reverse. Next we need to adjust the reciever micro:bit code to accept the new commands sent over the radio.  Click the OK button on the right editor and start work on the receiver code.  Once that tutorial is complete, come back and click OK to get to the next stage.
 ![Right Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/right-arrow.jpg)
 
+
+## Adding a safety switch 
+
 ### Transmitter Code Pause @unplugged
 The :MOVE Motor moves when the micro:bit is moved.  This can be frustrating when you accidentally move the micro:bit and did not mean to. We can prevent this by adding what is called a "dead man's switch". 
-This type of switch is designed to require the user to press it, or the what ever is being controlled stops. They are often found on trains.
+This type of switch is designed to require the user to press it, or what ever is being controlled stops. They are often found on trains.
 
 ### Step 19
 For the :MOVE motor we can wrap the "if pitch < 0" if statement inside another "if else" statement so that it is only active if the dead mans switch is activated.
-Add an ``||logic:if else||`` to below the ``||variables:set pitch||``, and move the previous ``||logic:if else||`` into the top ``||logic:if||`` bracket.
+Add an ``||logic:if||`` to below the ``||variables:set pitch||``, and move the previous ``||logic:if else||`` into the top ``||logic:if||`` bracket.
 
 #### ~ tutorialhint
 ```blocks
@@ -256,7 +258,7 @@ basic.forever(function () {
 ```
 
 ### Step 21
-When button A is not pressed, we want the :MOVE Motor to stop. Add another ``||radio:send Value||`` into the ``||logic:else||`` bracket To send the message "Stop" with a number '0'. 
+When button A is not pressed, we want the :MOVE Motor to stop. Press the ``||logic:+||`` to add an else, then add another ``||radio:send Value||`` into the ``||logic:else||`` bracket To send the message "Stop" with a number '0'. 
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -277,7 +279,7 @@ basic.forever(function () {
 ```
 
 ### Step 22
-Click and ``|Download|`` the code to the controller micro:bit.  Lets test the code see if can only control the :MOVE Motor while button A is pressed. This will work because previously we added a default handler for messages we dont know, and this has the same safe characteristic of stoping the :MOVE motor.
+Click and ``|Download|`` the code to the controller micro:bit.  Lets test the code see if can only control the :MOVE Motor while button A is pressed. This will work because previously we added a default handler for messages we don't know, and this has the same safe characteristic of stopping the :MOVE motor.
 
 ### Transmitter Code Done @unplugged
 Let's have a summary of what we have learnt so far. 
@@ -287,13 +289,14 @@ Let's have a summary of what we have learnt so far.
 + Sending required messages to control motors
 + Implementing a dead man's switch
 
-All this is just for going driving the :MOVE Motor forwards and backwards.  Now its time to see how we can steer our buggy with only two wheels.
+All this is just for going driving the :MOVE Motor forwards and backwards.
+Now its time to see how we can steer our buggy with only two wheels.
 
 ## Adding steering 
 
 ### Steering the buggy @unplugged
 Well done on the code so far. Steering on the :MOVE Motor requires the motors to be driven at different speeds.  
-To allow smooth steering the left right inputs will need to be combined with the forward and reverse inputs. This is known as blending.
+To allow smooth steering the left / right input will need to be combined with the forward / reverse input. This is known as blending.
 Done correctly blending will give a full range of steering and direction driving for the :MOVE Motor.
 
 Next section will add another sensor input to control the steering of the :MOVE Motor.
@@ -320,7 +323,7 @@ basic.forever(function () {
 ### Step 24
 Previously we used the pitch input from the sensors on the BBC micro:bit. 
 There is another input called "roll" which works the same way but on the Y-axis instead of the X-axis.
-Create a variable call "roll", now insert a ``||variables:set roll||`` underneath the ``||variables:set pitch||`` block.
+Create a variable call "roll", and insert a ``||variables:set roll||`` underneath the ``||variables:set pitch||`` block.
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
@@ -336,8 +339,8 @@ basic.forever(function () {
 ```
 
 ### Step 25
-From the Input blocks in the ...more section insert the ``||input:rotation||`` into the ``||variables:set roll||`` block.
-Make sure the selection of the block is set to "roll" from the selection box.
+From the Input blocks in the ``||input:...more||`` section insert the ``||input:rotation||`` into the ``||variables:set roll||`` block.
+Make sure the block is set to "roll" from the selection box.
 
 #### ~ tutorialhint
 ```blocks
@@ -354,7 +357,7 @@ basic.forever(function () {
 ```
 
 ### Blending sensor inputs @unplugged
-We now have 2 inputs from the controller. We wil blend these together to give the different speeds for the motors. We will then need to send 2 messages, one for each motor speed, rather than a simple "Forwards" or "Reverse" command. 
+We now have 2 inputs from the controller. We will blend these together to give the different speeds for the motors. We will then need to send 2 messages, one for each motor speed, rather than a simple "Forwards" or "Reverse" command. 
 
 ### Step 26
 Previously we inverted the pitch value in the mapping to the motor range. Here we will invert it before we blend the inputs.
@@ -377,7 +380,7 @@ To blend the pitch and roll values we think about how the motor speeds should va
 To turn left we want to roll the micro:bit to the left. This gives a negative roll value.
 When turning left the left motor is on the inside, and so turns slower. 
 If we add the roll value to the motor value (from the pitch) this is what happens.
-The Right motor needs to turn faster, so we take the roll value from the motor value (take away a negative number is equivalent to adding it)
+The right motor needs to turn faster, so we take the roll value from the motor value (take away a negative number is equivalent to adding it)
 Make 2 variables, one each for the Left and Right values, and blend the pitch and roll into them using the ``||math:+||`` and ``||math:-||`` blocks
 
 #### ~ tutorialhint
@@ -397,7 +400,7 @@ basic.forever(function () {
 
 ### Step 28 
 Now we have blended the inputs we can map them to the motor range. 
-We have input ranges from -90 to +90 and the motors take a speed from -100 to +100
+We have input ranges from -90 to +90 and the motors take a speed from -100 to +100.
 Create 2 variables for the motor speeds and use the ``||math:map||`` block 
 
 
@@ -421,7 +424,7 @@ basic.forever(function () {
 ### Step 29
 
 The two motor speed value now can be sent over the radio link.  From the radio section insert two ``||radio:send Value||`` after ``||variables:set rightMotorSpeed||``.  
-We could use leftMotor and rightMotor to identify the messages, but the radio link only allows 8 letters for the name, so let's use the names "lMotor" and "rMotor". Add these names into the radio blocks that have been inserted.
+We could use leftMotor and rightMotor to identify the messages, but the radio link only allows 8 letters for the name, so let's use the names "LMotor" and "RMotor". Add these names into the radio blocks that have been inserted.
 
 #### ~ tutorialhint
 ```blocks
@@ -433,8 +436,8 @@ basic.forever(function () {
         Right = pitch - roll
         leftMotorSpeed = Math.map(Left, -90, 90, -100, 100)
         rightMotorSpeed = Math.map(Right, -90, 90, -100, 100)
-        radio.sendValue("lMotor", 0)
-        radio.sendValue("rMotor",0)
+        radio.sendValue("LMotor", 0)
+        radio.sendValue("RMotor",0)
     } else {
         radio.sendValue("Stop", 0)
     }
@@ -465,5 +468,5 @@ basic.forever(function () {
 Click and ``|Download|`` the code to the controller micro:bit. 
 
 ### Transmitter Code Done @unplugged
-With having made some changes to the how the radio messages are sent, we now need to adjust the receiver code on the :MOVE Motor.  Let's now start making the adjustments. 
+We have changed the radio messages quite a lot, so we now need to adjust the receiver code on the :MOVE Motor.  Let's start making the adjustments. 
 ![Right Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/right-arrow.jpg)
