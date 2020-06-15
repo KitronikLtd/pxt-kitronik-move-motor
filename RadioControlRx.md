@@ -74,7 +74,7 @@ When you are ready, lets go back to the Transmitter tutorial for the next stage.
 We are going to receive some new radio messages to deal with from the changing of directions and stopping. Click the OK button and let's get started.
 
 ### Step 6
-On the if block, click the ``||logic:+||`` icon twice to add an ``||logic:if else||`` and ``||logic:else||`` statement. Create a copy of the if statement condition and place it in the 'else if' entry below.
+On the if block, click the ``||logic:+||`` icon twice to add an ``||logic:if else||`` and ``||logic:else||`` statement. Create a copy of the ``||logic:if||`` statement condition and place it in the ``||logic:else if||`` entry below.
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
@@ -138,7 +138,8 @@ radio.onReceivedValue(function (name, value) {
 Connect the BBC micro:bit in the :MOVE Motor and click ``|Download|`` to transfer your code.  Time to test your code to see if we can drive forward and reverse.
 
 ### Receiver Code Done @unplugged
-So the :MOVE Motor is driving in two directions, awesome! However, it will be better if we have a method of steering as it drives.  Let's go back to the transmitter code and see what we can do.  The transmitter tutorial will inform you of when we need to adjust the receiver code.
+So the :MOVE Motor is driving in two directions, awesome! However, the :MOVE Motor drives whenever you put the transmitter down or just knock it.  
+Let's go back to the transmitter code and see what we can do.  The transmitter tutorial will inform you of when we need to adjust the receiver code.
 ![Left Arrow](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/left-arrow.jpg)
 
 ## Adding Steering 

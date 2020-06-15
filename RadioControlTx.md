@@ -135,7 +135,7 @@ basic.forever(function () {
     pitch = input.rotation(Rotation.Pitch)
     if (pitch < 0) {
         speed = Math.map(pitch, 0, 90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
+        radio.sendValue("Forward", speed)
     }
 })
 ```
@@ -176,17 +176,17 @@ basic.forever(function () {
 ```
 
 ### Step 16
-Duplicate the ``||variables:set speed||`` block and place into the bracket below. Duplicate the ``||radio:send Value||`` and place below the newely copied ``||variables:set mappedDrive||`` block
+Duplicate the ``||variables:set speed||`` block and place into the bracket below. Duplicate the ``||radio:send Value||`` and place below the newly copied ``||variables:set speed||`` block
 #### ~ tutorialhint
 ```blocks
 basic.forever(function () {
     pitch = input.rotation(Rotation.Pitch)
     if (pitch < 0) {
         speed = Math.map(pitch, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
+        radio.sendValue("Forward", speed)
     } else if (pitch > 0) {
     	speed = Math.map(pitch, 0, -90, 0, 100)
-        radio.sendValue("Forward", mappedDrive)
+        radio.sendValue("Forward", speed)
     }
 })
 ```
@@ -381,7 +381,7 @@ To turn left we want to roll the micro:bit to the left. This gives a negative ro
 When turning left the left motor is on the inside, and so turns slower. 
 If we add the roll value to the motor value (from the pitch) this is what happens.
 The right motor needs to turn faster, so we take the roll value from the motor value (take away a negative number is equivalent to adding it)
-Make 2 variables, one each for the Left and Right values, and blend the pitch and roll into them using the ``||math:+||`` and ``||math:-||`` blocks
+Create 2 variables, caled "left" and "right" for the blended values which will control each motor, then blend the pitch and roll into them using the ``||math:+||`` and ``||math:-||`` blocks
 
 #### ~ tutorialhint
 ```blocks
@@ -401,7 +401,7 @@ basic.forever(function () {
 ### Step 28 
 Now we have blended the inputs we can map them to the motor range. 
 We have input ranges from -90 to +90 and the motors take a speed from -100 to +100.
-Create 2 variables for the motor speeds and use the ``||math:map||`` block 
+Create 2 variables for the motor speeds called "leftMotorSpeed" and "rightMotorSpeed" and use the ``||math:map||`` block
 
 
 #### ~ tutorialhint
@@ -412,8 +412,8 @@ basic.forever(function () {
     if (input.buttonIsPressed(Button.A)) {
         left = pitch + roll
         right = pitch - roll
-        leftMotorSpeed = Math.map(Left, -90, 90, -100, 100)
-        rightMotorSpeed = Math.map(Right, -90, 90, -100, 100)
+        leftMotorSpeed = Math.map(left, -90, 90, -100, 100)
+        rightMotorSpeed = Math.map(right, -90, 90, -100, 100)
 
     } else {
         radio.sendValue("Stop", 0)
@@ -424,7 +424,7 @@ basic.forever(function () {
 ### Step 29
 
 The two motor speed value now can be sent over the radio link.  From the radio section insert two ``||radio:send Value||`` after ``||variables:set rightMotorSpeed||``.  
-We could use leftMotor and rightMotor to identify the messages, but the radio link only allows 8 letters for the name, so let's use the names "LMotor" and "RMotor". Add these names into the radio blocks that have been inserted.
+We could use LeftMotor and RightMotor to identify the messages, but the radio link only allows 8 letters for the name, so let's use the names "LMotor" and "RMotor". Add these names into the radio blocks that have been inserted.
 
 #### ~ tutorialhint
 ```blocks
@@ -432,10 +432,10 @@ basic.forever(function () {
     pitch = 0 - input.rotation(Rotation.Pitch)
     roll = input.rotation(Rotation.Roll)
     if (input.buttonIsPressed(Button.A)) {
-        Left = pitch + roll
-        Right = pitch - roll
-        leftMotorSpeed = Math.map(Left, -90, 90, -100, 100)
-        rightMotorSpeed = Math.map(Right, -90, 90, -100, 100)
+        left = pitch + roll
+        right = pitch - roll
+        leftMotorSpeed = Math.map(left, -90, 90, -100, 100)
+        rightMotorSpeed = Math.map(right, -90, 90, -100, 100)
         radio.sendValue("LMotor", 0)
         radio.sendValue("RMotor",0)
     } else {
@@ -452,10 +452,10 @@ basic.forever(function () {
     pitch = 0 - input.rotation(Rotation.Pitch)
     roll = input.rotation(Rotation.Roll)
     if (input.buttonIsPressed(Button.A)) {
-        Left = pitch + roll
-        Right = pitch - roll
-        leftMotorSpeed = Math.map(Left, -90, 90, -100, 100)
-        rightMotorSpeed = Math.map(Right, -90, 90, -100, 100)
+        left = pitch + roll
+        right = pitch - roll
+        leftMotorSpeed = Math.map(left, -90, 90, -100, 100)
+        rightMotorSpeed = Math.map(right, -90, 90, -100, 100)
         radio.sendValue("lMotor", leftMotorSpeed)
         radio.sendValue("rMotor", rightMotorSpeed)
     } else {
