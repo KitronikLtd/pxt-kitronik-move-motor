@@ -234,7 +234,7 @@ If the value is positive we know that the right sensor is on the line, and the l
 In the previous code we do this check seperatly, but we can save a small amount of computaion by combining it. 
 Software can often be improved by iteration, which is what we are about to do in the next section.
 
-### Step 1
+### Step 11
 We are going to use the sign value to decide which motors to turn on and off. Start by removing the ``||math:Absolute||`` block, so we just take ``||variable:rightSensor||`` from ``||leftSensor||``
 #### ~ tutorialhint
 ```blocks
@@ -256,7 +256,7 @@ basic.forever(function () {
     }
 })
 ```
-###Step 2
+###Step 12
 Now ``||variable:sensorDifference||`` is a signed value, so we need to check if it is postive or negative. Our ``||logic:if||`` statement already checks it if it > 10. press the ``||logic:+||`` on the outer ``||logic:if||`` to add a  ``||logic:else if||`` section. Duplicate the ``||logic:if(sensorDifference>10)||`` condition and place it in the ``||logic:else if||``, changing the ``||logic:>||`` to a ``||logic:>||``, and the 10 to a -10.
 
 #### ~ tutorialhint
@@ -281,6 +281,7 @@ basic.forever(function () {
     }
 })
 ```
+
 
 
 
