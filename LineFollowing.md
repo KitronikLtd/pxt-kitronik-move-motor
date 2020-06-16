@@ -9,14 +9,14 @@ We will use a dark line on a light surface. Black insulation tape works well for
 ![:MOVE Motor front view](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/move-motor-front.jpg)
 
 ### Step 1
-The :MOVE Motorhas 2 sensors underneath to allow it to follow a line of contrasting colour to the background. 
-We will start by reading the sensor values. Create 2 variables, called ``||variables:leftSensor||`` and ``||variables:rightSensor||``
+The :MOVE Motor has 2 sensors underneath to allow it to follow a line of contrasting colour to the background. 
+We will start by reading the sensor values. 
+Create 2 variables, called ``||variables:leftSensor||`` and ``||variables:rightSensor||``
 place a ``||variables:set leftSensor||`` and a  ``||variables:set rightSensor||`` into the forever loop.
 
 #### ~ tutorialhint
 ```blocks
-basic.forever(function () {
-  let rightSensor = 0
+let rightSensor = 0
 let leftSensor = 0
 basic.forever(function () {
     rightSensor = 0
@@ -26,7 +26,7 @@ basic.forever(function () {
 ```
 
 ### Step 2
-Now we need to read the sensors conditions. From the ``||Kitronik_Move_Motor.Sensors||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||`` category, drag in a ``||Kitronik_Move_Motor. Left line following sensor value||`` block and put it into the ``||variables:set leftSensor||``  statement. Do the same for the ``||variables:set rightSensor||``  but change the drop down to read the Right sensor value
+Now we need to read the sensors conditions. From the ``||Kitronik_Move_Motor.Sensors||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||`` category, drag in a ``||Kitronik_Move_Motor.Left line following sensor value||`` block and put it into the ``||variables:set leftSensor||``  statement. Do the same for the ``||variables:set rightSensor||``  but change the drop down to read the Right sensor value
 
 #### ~ tutorialhint
 ```blocks
@@ -39,11 +39,11 @@ basic.forever(function () {
 
 ### Line sensing @unplugged
 
-Because the sensors are analog their value changes depending on what the surface below them is. We know we are trying to follow a contrasting line, so if the 2 sensors are reading different values one must be on the line and one off. IF they read the same then either they are both on the line - if the line is wide, or they are both seeing the background - if the line is thin. Because we can compare the sensors against each other it doesn't matter what the sensing value is, only if there is a difference or not. 
+Because the sensors are analog their value changes depending on what the surface below them is. We know we are trying to follow a contrasting line, so if the 2 sensors are reading different values one must be on the line and one off. If they read the same then either they are both on the line - if the line is wide, or they are both seeing the background - if the line is thin. Because we can compare the sensors against each other it doesn't matter what the sensing value is, only if there is a difference or not. 
 
 ### Step 3
 Create a variable called sensorDifference for the difference in the sensor values.
-Because we only care if the values are different we can use the ``||math:Absolute`` block so we don't have to worry about a negative number. 
+Because we only care if the values are different we can use the ``||math:Absolute||`` block so we don't have to worry about a negative number. 
 
 #### ~ tutorialhint
 ```blocks
