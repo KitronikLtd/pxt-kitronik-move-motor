@@ -21,7 +21,6 @@ let leftSensor = 0
 basic.forever(function () {
     rightSensor = 0
     leftSensor = 0
-
 })
 ```
 
@@ -35,6 +34,7 @@ let leftSensor = 0
 basic.forever(function () {
     rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
     leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
+}
 ```
 
 ### Line sensing @unplugged
