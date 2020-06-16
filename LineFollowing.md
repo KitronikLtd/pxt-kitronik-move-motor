@@ -1,3 +1,4 @@
+### @activities true
 ### @explicitHints true
 
 # :MOVE Motor Line Following
@@ -231,10 +232,10 @@ If it doesnt then you might have the speed too high, or the batteries might be g
 The code so far is pretty small, but it can be made more elegant, and potentially run a little bit faster.
 By taking the absolute value of the sensor difference we make the code simpler to follow, but also throw away a small piece of information.
 If the value is positive we know that the right sensor is on the line, and the left is not.
-In the previous code we do this check seperatly, but we can save a small amount of computaion by combining it. 
+In the previous code we do this check seperatly, but we can save a small amount of computation by combining it. 
 Software can often be improved by iteration, which is what we are about to do in the next section.
 
-### Step 11
+### Step 1
 We are going to use the sign value to decide which motors to turn on and off. Start by removing the ``||math:Absolute||`` block, so we just take ``||variable:rightSensor||`` from ``||leftSensor||``
 #### ~ tutorialhint
 ```blocks
@@ -256,7 +257,8 @@ basic.forever(function () {
     }
 })
 ```
-###Step 12
+
+###Step 2
 Now ``||variable:sensorDifference||`` is a signed value, so we need to check if it is postive or negative. Our ``||logic:if||`` statement already checks it if it > 10. press the ``||logic:+||`` on the outer ``||logic:if||`` to add a  ``||logic:else if||`` section. Duplicate the ``||logic:if(sensorDifference>10)||`` condition and place it in the ``||logic:else if||``, changing the ``||logic:>||`` to a ``||logic:>||``, and the 10 to a -10.
 
 #### ~ tutorialhint
@@ -282,7 +284,86 @@ basic.forever(function () {
 })
 ```
 
+###Step 3
+The code in the inner ``||logic:if||`` statement can now be moved around. ``||logic:if(sensorDifference>10)||`` is equivalent to the ``||logic:if(leftSensor>rightSensor)||``, so move the motor control code out.  
+#### ~ tutorialhint
+```blocks
+let rightSensor = 0
+let leftSensor = 0
+let sensorDifference = 0
+basic.forever(function () {
+    sensorDifference = leftSensor - rightSensor
+    if ((sensorDifference > 10) ) {
+        Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorRight)
+        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, 30)
+        if ((leftSensor > rightSensor) ) {
+ 
+        } else {
+            Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorLeft)
+            Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorRight, Kitronik_Move_Motor.MotorDirection.Forward, 30)
+        }
+    } else if ((sensorDifference <-10) ) {
+    
+    } else {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 30)
+    }
+})
+```
 
+###Step 4
+The code in the inner ``||logic:else||`` statement is equivalent to the ``||logic:else if(sensorDifference<-10)||``, so move it into the ``||logic:else if||`` block. 
+#### ~ tutorialhint
+```blocks
+let rightSensor = 0
+let leftSensor = 0
+let sensorDifference = 0
+basic.forever(function () {
+    sensorDifference = leftSensor - rightSensor
+    if ((sensorDifference > 10) ) {
+        Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorRight)
+        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, 30)
+        if ((leftSensor > rightSensor) ) {
+ 
+        } else {
 
+        }
+    } else if ((sensorDifference <-10) ) {
+                Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorLeft)
+            Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorRight, Kitronik_Move_Motor.MotorDirection.Forward, 30)
+    } else {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 30)
+    }
+})
+```
 
+###Step 5
+You should now have an empty ``||logic:if else||`` statement. This is no longer needed, so delete it.
+#### ~ tutorialhint
+```blocks
+let rightSensor = 0
+let leftSensor = 0
+let sensorDifference = 0
+basic.forever(function () {
+    sensorDifference = leftSensor - rightSensor
+    if ((sensorDifference > 10) ) {
+        Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorRight)
+        Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, 30)
+    } else if ((sensorDifference <-10) ) {
+                Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorLeft)
+            Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorRight, Kitronik_Move_Motor.MotorDirection.Forward, 30)
+    } else {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 30)
+    }
+})
+```
 
+### Step 10
+CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code.
+Place your :MOVE MOtor on the line, and switch it on. It should still follow the line. 
+If it doesnt then you might have the speed too high, or the batteries might be going flat. 
+
+### Making the code more elegant @unplugged
+The code is now smaller, and more efficient. We only do a single sum to get the sensor difference, and from that we can determine how to control the :MOVE Motor.
+We have saved an ``||math:Absolute||`` operation, and an extra ``||logic:if else||`` test.
+One trade off is that although the code is smaller and more efficient it is slightly harder to follow. 
+In some cases ease of following the code is more important than ultimate efficiency. Often however efficient, elegant code is more readble as well.
