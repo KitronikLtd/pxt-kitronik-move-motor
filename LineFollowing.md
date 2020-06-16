@@ -3,6 +3,7 @@
 
 # :MOVE Motor Line Following
 
+## Introduction
 ### Introduction Step @unplugged
 Learn how to use the :MOVE Motor's Line Following Sensors to navigate around a marked out track.
 We will use a dark line on a light surface. Black insulation tape works well for a line on a smooth light coloured floor.
@@ -91,6 +92,8 @@ let rightSensor = 0
 let leftSensor = 0
 let sensorDifference = 0
 basic.forever(function () {
+    rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
+    leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
     sensorDifference = Math.abs(leftSensor - rightSensor)
     if ((sensorDifference > 10) ) {
         if (true) {
@@ -123,6 +126,8 @@ let rightSensor = 0
 let leftSensor = 0
 let sensorDifference = 0
 basic.forever(function () {
+    rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
+    leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
     sensorDifference = Math.abs(leftSensor - rightSensor)
     if ((sensorDifference > 10) ) {
         if ((leftSensor > rightSensor) ) {
@@ -171,6 +176,8 @@ let rightSensor = 0
 let leftSensor = 0
 let sensorDifference = 0
 basic.forever(function () {
+    rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
+    leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
     sensorDifference = Math.abs(leftSensor - rightSensor)
     if ((sensorDifference > 10) ) {
         if ((leftSensor > rightSensor) ) {
@@ -205,6 +212,8 @@ let rightSensor = 0
 let leftSensor = 0
 let sensorDifference = 0
 basic.forever(function () {
+    rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
+    leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
     sensorDifference = Math.abs(leftSensor - rightSensor)
     if ((sensorDifference > 10) ) {
         if ((leftSensor > rightSensor) ) {
@@ -232,17 +241,19 @@ If it doesnt then you might have the speed too high, or the batteries might be g
 The code so far is pretty small, but it can be made more elegant, and potentially run a little bit faster.
 By taking the absolute value of the sensor difference we make the code simpler to follow, but also throw away a small piece of information.
 If the value is positive we know that the right sensor is on the line, and the left is not.
-In the previous code we do this check seperatly, but we can save a small amount of computation by combining it. 
+In the previous code we do this check separately, but we can save a small amount of computation by combining the "are we on the line" check with the "which way to turn" check. 
 Software can often be improved by iteration, which is what we are about to do in the next section.
 
 ### Step 1
-We are going to use the sign value to decide which motors to turn on and off. Start by removing the ``||math:Absolute||`` block, so we just take ``||variable:rightSensor||`` from ``||leftSensor||``
+We are going to use the sign value of the sensor difference to decide which motors to turn on and off. Start by removing the ``||math:Absolute||`` block, so we just take ``||variable:rightSensor||`` from ``||leftSensor||``
 #### ~ tutorialhint
 ```blocks
 let rightSensor = 0
 let leftSensor = 0
 let sensorDifference = 0
 basic.forever(function () {
+    rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
+    leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
     sensorDifference = leftSensor - rightSensor
     if ((sensorDifference > 10) ) {
         if ((leftSensor > rightSensor) ) {
@@ -259,7 +270,7 @@ basic.forever(function () {
 ```
 
 ###Step 2
-Now ``||variable:sensorDifference||`` is a signed value, so we need to check if it is postive or negative. Our ``||logic:if||`` statement already checks it if it > 10. press the ``||logic:+||`` on the outer ``||logic:if||`` to add a  ``||logic:else if||`` section. Duplicate the ``||logic:if(sensorDifference>10)||`` condition and place it in the ``||logic:else if||``, changing the ``||logic:>||`` to a ``||logic:>||``, and the 10 to a -10.
+Now ``||variable:sensorDifference||`` is a signed value, so we need to check if it is positive or negative. Our ``||logic:if||`` statement already checks it if is > 10. press the ``||logic:+||`` on the outer ``||logic:if||`` to add a  ``||logic:else if||`` section. Duplicate the ``||logic:if(sensorDifference>10)||`` condition and place it in the ``||logic:else if||``, changing the ``||logic:>||`` to a ``||logic:<||``, and the 10 to a -10.
 
 #### ~ tutorialhint
 ```blocks
@@ -267,6 +278,8 @@ let rightSensor = 0
 let leftSensor = 0
 let sensorDifference = 0
 basic.forever(function () {
+    rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
+    leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
     sensorDifference = leftSensor - rightSensor
     if ((sensorDifference > 10) ) {
         if ((leftSensor > rightSensor) ) {
@@ -285,13 +298,15 @@ basic.forever(function () {
 ```
 
 ###Step 3
-The code in the inner ``||logic:if||`` statement can now be moved around. ``||logic:if(sensorDifference>10)||`` is equivalent to the ``||logic:if(leftSensor>rightSensor)||``, so move the motor control code out.  
+The code in the inner ``||logic:if||`` statement can now be moved around. ``||logic:if(sensorDifference>10)||`` is equivalent to the ``||logic:if(leftSensor>rightSensor)||``, so move the motor control code out of the inner ``||logic:if||``.  
 #### ~ tutorialhint
 ```blocks
 let rightSensor = 0
 let leftSensor = 0
 let sensorDifference = 0
 basic.forever(function () {
+    rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
+    leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
     sensorDifference = leftSensor - rightSensor
     if ((sensorDifference > 10) ) {
         Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorRight)
@@ -318,6 +333,8 @@ let rightSensor = 0
 let leftSensor = 0
 let sensorDifference = 0
 basic.forever(function () {
+    rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
+    leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
     sensorDifference = leftSensor - rightSensor
     if ((sensorDifference > 10) ) {
         Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorRight)
@@ -344,6 +361,8 @@ let rightSensor = 0
 let leftSensor = 0
 let sensorDifference = 0
 basic.forever(function () {
+    rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
+    leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
     sensorDifference = leftSensor - rightSensor
     if ((sensorDifference > 10) ) {
         Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorRight)
