@@ -551,42 +551,6 @@ namespace Kitronik_Move_Motor {
 
 
     /**
-    * Simplified way to set the sensor sensitivity value in case the sensors are not working well on different surfaces. 
-    * Low sensitivity is for more reflective surfaces / closer distances. 
-    * High sensitivity is for less reflective surfaces / longer distances.
-    * Medium is the default, and a reasonable balance for most surfaces.
-    * @param setupSelected is the selection of preset sensor sensitivity
-    */
-    //% subcategory="Sensors"
-    //% group="Line Following"
-    //% blockId=kitronik_move_motor_line_follower_setup
-    //% block="set sensors to %setupSelected| sensitivity"
-    //% weight=80 blockGap=8
-    export function sensorSetup(setupSelected: DetectorSensitivity) 
-    {
-        switch(setupSelected)
-        {
-            case DetectorSensitivity.Low: 
-            detectionLevel =250
-            break
-            case DetectorSensitivity.Medium: 
-            detectionLevel =205
-            break
-            case DetectorSensitivity.High: 
-            detectionLevel =180
-            break
-        }
-    }
-
-    // not a block, but here in case someone advanced in the java world wants to set the value directly.
-    // No checking of 'goodness' of value as if your here you should know what you are doing.
-    // It should be analog in (0-1023)
-    export function setSensorDetectionLevel(value:number)
-    {
-        detectionLevel = value
-    }
-
-    /**
     * Read sensor block allows user to read the value of the sensor (returns value in range 0-1023)
     * @param pinSelected is the selection of pin to read a particular sensor
     */
@@ -597,7 +561,6 @@ namespace Kitronik_Move_Motor {
     //% weight=85 blockGap=8
     export function readSensor(sensorSelected: LfSensor) {
         let value = 0
-
         if (sensorSelected == LfSensor.Left) {
             value = pins.analogReadPin(AnalogPin.P2)
         }
@@ -607,46 +570,6 @@ namespace Kitronik_Move_Motor {
         return value;
     }
 
-    /**
-    * Returns a true or false when the sensor has detected light or dark, depending on selection
-    * @param sensorSelected is the selection of pin to read a particular sensor
-    * @param lightSelection is the selection of the sensor detecting light or dark
-    */
-    //% subcategory="Sensors"
-    //% group="Line Following"
-    //% blockId=kitronik_move_motor_line_follower_digital_sensor
-    //% block="%sensorSelected| line following sensor detects %LightSelection"
-    //% weight=90 blockGap=8
-    export function sensorDigitalDetection(sensorSelected: LfSensor, lightLevel: LightSelection): boolean {
-        let value = 0
-        let result = false
-        value = readSensor(sensorSelected)
-        switch (lightLevel)
-        {
-            case LightSelection.Light:  //Light and Object are the same - but called out differently for ease of use.
-            {
-                if (value >= detectionLevel){
-                    result = true
-                }
-                else { 
-                    result = false
-                }
-            }
-            break
-            case LightSelection.Dark:
-            {
-                if (value <= detectionLevel)
-                {
-                    result = true
-                }
-                else { 
-                    result = false
-                }
-            }
-            break
-        }
-        return result;
-    }
 
     //////////////
     //  MOTORS  //
