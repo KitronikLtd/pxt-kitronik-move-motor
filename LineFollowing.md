@@ -18,10 +18,7 @@ place a ``||variables:set leftSensor||`` and a  ``||variables:set rightSensor||`
 ```blocks
 let rightSensor = 0
 let leftSensor = 0
-basic.forever(function () {
-    rightSensor = 0
-    leftSensor = 0
-})
+
 ```
 
 ### Step 2
