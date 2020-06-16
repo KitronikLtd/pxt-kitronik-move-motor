@@ -44,11 +44,19 @@ Because we only care if the values are different we can use the ``||math:Absolut
 
 #### ~ tutorialhint
 ```blocks
-   let difference = Math.abs(leftSensor - rightSensor)
+let rightSensor = 0
+let leftSensor = 0
+let difference =0
+basic.forever(function () {
+    rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
+    leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
+    difference = Math.abs(leftSensor - rightSensor)
+}
+
 ```
 
 ### Step 4
-If the sensors are different then we must be heading off the line, but if they are the same we are still following it. Add a ``||logic:if else||`` block. The ``||logic:else||`` section will be if we are still on the line. Add a ``||basic:show LEDS||`` block into is and draw a straight up arrow to indicate we are going forward.
+If the sensors are different then we must be heading off the line, but if they are the same we are still following it. Add a ``||logic:if else||`` block. The ``||logic:else||`` section will be if we are still on the line. Add a ``||basic:show LEDS||`` block into the else and draw a straight up arrow to indicate we are going forward.
 
 #### ~ tutorialhint
 ```blocks
@@ -59,7 +67,7 @@ basic.forever(function () {
     rightSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Right)
     leftSensor = Kitronik_Move_Motor.readSensor(Kitronik_Move_Motor.LfSensor.Left)
     sensorDifference = Math.abs(leftSensor - rightSensor)
-    if () {
+    if (true) {
 
     } else {
 basic.showLeds(`
@@ -74,13 +82,13 @@ basic.showLeds(`
 ```
 
 ### Step 5
-If we are leaving the line we will need to decide which way, and take corrective action. Into the ``||logic:if||`` condition add a``||logic:>||`` check to see if ``||variables:difference||`` is greater than 10. Into this ``||logic:if||`` add a ``||logic:if else||``. We will use this to decide which way we need to turn to stay on the line.
+If we are leaving the line we will need to decide which way, and take corrective action. Into the ``||logic:if||`` condition add a ``||logic:>||`` check to see if ``||variables:sensorDifference||`` is greater than 10. Into this ``||logic:if||`` add a ``||logic:if else||``. We will use this to decide which way we need to turn to stay on the line.
 
 #### ~ tutorialhint
 ```blocks
     sensorDifference = Math.abs(leftSensor - rightSensor)
     if ((sensorDifference > 10) ) {
-        if () {
+        if (true) {
 
         } else {
         
@@ -135,5 +143,63 @@ basic.showLeds(`
 
 ### Step 7
 CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor.  
+### Check the Logic @unplugged
 Now, create a continuous track for :MOVE Motor to drive around and set it going. The line should be about 10-20mm wide ( black insulation tape is great for this).  
-If you find :MOVE Motor is struggling to follow the line, you could try slowing the speed :MOVE Motor is driving.
+We haven't yet put any motor driving commands into the code, but by moving the :MOVE Motor by hand across the line you should see the LED arrows showing which way the logic is going to turn.
+
+Next we will replace the arrows with the correct motor driving commands, so the :MOVE motor can drive itself.
+
+### Step 8
+The simplest arrow to replace is the straight on one. change this to a ``||Kitronik_Move_Motor.Motors:Drive Forwards||`` block, with the speed set to 30. 
+
+#### ~ tutorialhint
+```blocks
+    sensorDifference = Math.abs(leftSensor - rightSensor)
+    if ((sensorDifference > 10) ) {
+        if ((leftSensor > rightSensor) ) {
+basic.showLeds(`
+            . . # . .
+            . # . . .
+            # # # # #
+            . # . . .
+            . . # . .
+            `)
+        } else {
+            . . # . .
+            . . . # .
+            # # # # #
+            . . . # .
+            . . # . .
+        }
+    } else {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 30)
+    }
+```
+
+###Step 9 
+Now we need to deal with turning back onto the line. In the ``||logic:if(leftSensor>rightSensor)||`` we want to turn to the right. To do this we will stop the left motor and run the right motor. To do this replace the ``||basic:show LEDS||`` with a ``||Kitronik_Move_Motor.left motor off||`` using the block from the ``||Kitronik_Move_Motor.Motors||`` section. Add a ``||Kitronik_Move_Motor.turn Right motor on direction Forward speed 0||``, and set the speed to 30. Do a similar change to the ``||logic:else||`` section, but turning off the right motor and running the left motor at speed 30.
+
+#### ~ tutorialhint
+```blocks
+    sensorDifference = Math.abs(leftSensor - rightSensor)
+    if ((sensorDifference > 10) ) {
+        if ((leftSensor > rightSensor) ) {
+basic.showLeds(`
+            Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorLeft)
+            Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorRight, Kitronik_Move_Motor.MotorDirection.Forward, 30)
+            `)
+        } else {
+            Kitronik_Move_Motor.motorOff(Kitronik_Move_Motor.Motors.MotorRight)
+            Kitronik_Move_Motor.motorOn(Kitronik_Move_Motor.Motors.MotorLeft, Kitronik_Move_Motor.MotorDirection.Forward, 30)
+        }
+    } else {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 30)
+    }
+```
+
+
+### Step 7
+CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code.
+Place your :MOVE MOtor on the line, and switch it on. It should follow the line.
+
+
