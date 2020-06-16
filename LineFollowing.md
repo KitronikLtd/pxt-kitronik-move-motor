@@ -3,7 +3,7 @@
 
 # :MOVE Motor Line Following
 
-## Introduction
+## Introduction 
 ### Introduction Step @unplugged
 Learn how to use the :MOVE Motor's Line Following Sensors to navigate around a marked out track.
 We will use a dark line on a light surface. Black insulation tape works well for a line on a smooth light coloured floor.
@@ -161,13 +161,17 @@ basic.showLeds(`
 
 ### Step 7
 CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor.  
+
 ### Check the Logic @unplugged
 Now, create a continuous track for :MOVE Motor to drive around and set it on the line. The line should be about 10-20mm wide ( black insulation tape is great for this).  
 We haven't yet put any motor driving commands into the code, but by moving the :MOVE Motor by hand across the line you should see the LED arrows showing which way the logic is going to turn.
 
+## Drive the motors
+
+### Driving the motors @unplugged
 Next we will replace the arrows with the correct motor driving commands, so the :MOVE motor can drive itself.
 
-### Step 8
+### Step 1
 The simplest arrow to replace is the straight on one. change this to a ``||Kitronik_Move_Motor.Motors:Move Forwards||`` block, with the speed set to 30. 
 
 #### ~ tutorialhint
@@ -203,7 +207,7 @@ basic.showLeds(`
 })
 ```
 
-###Step 9 
+###Step 2 
 Now we need to deal with turning back onto the line. In the ``||logic:if(leftSensor>rightSensor)||`` we want to turn to the right. To do this we will stop the right motor and run the left motor. Replace the ``||basic:show LEDS||`` with a ``||Kitronik_Move_Motor.turn off Right motor||`` using the block from the ``||Kitronik_Move_Motor.Motors||`` section. Add a ``||Kitronik_Move_Motor.turn Left motor on direction Forward speed 0||``, and set the speed to 30. Do a similar change to the ``||logic:else||`` section, but turning off the left motor and running the Right motor at speed 30.
 
 #### ~ tutorialhint
@@ -230,7 +234,7 @@ basic.forever(function () {
 ```
 
 
-### Step 10
+### Step 3
 CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code.
 Place your :MOVE MOtor on the line, and switch it on. It should follow the line. 
 If it doesnt then you might have the speed too high, or the batteries might be going flat. 
@@ -246,6 +250,7 @@ Software can often be improved by iteration, which is what we are about to do in
 
 ### Step 1
 We are going to use the sign value of the sensor difference to decide which motors to turn on and off. Start by removing the ``||math:Absolute||`` block, so we just take ``||variable:rightSensor||`` from ``||leftSensor||``
+
 #### ~ tutorialhint
 ```blocks
 let rightSensor = 0
@@ -299,6 +304,7 @@ basic.forever(function () {
 
 ###Step 3
 The code in the inner ``||logic:if||`` statement can now be moved around. ``||logic:if(sensorDifference>10)||`` is equivalent to the ``||logic:if(leftSensor>rightSensor)||``, so move the motor control code out of the inner ``||logic:if||``.  
+
 #### ~ tutorialhint
 ```blocks
 let rightSensor = 0
@@ -327,6 +333,7 @@ basic.forever(function () {
 
 ###Step 4
 The code in the inner ``||logic:else||`` statement is equivalent to the ``||logic:else if(sensorDifference<-10)||``, so move it into the ``||logic:else if||`` block. 
+
 #### ~ tutorialhint
 ```blocks
 let rightSensor = 0
@@ -355,6 +362,7 @@ basic.forever(function () {
 
 ###Step 5
 You should now have an empty ``||logic:if else||`` statement. This is no longer needed, so delete it.
+
 #### ~ tutorialhint
 ```blocks
 let rightSensor = 0
@@ -376,7 +384,7 @@ basic.forever(function () {
 })
 ```
 
-### Step 10
+### Step 6
 CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code.
 Place your :MOVE MOtor on the line, and switch it on. It should still follow the line. 
 If it doesnt then you might have the speed too high, or the batteries might be going flat. 
