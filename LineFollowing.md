@@ -14,7 +14,7 @@ We will use a dark line on a light surface. Black insulation tape works well for
 The :MOVE Motor has 2 sensors underneath to allow it to follow a line of contrasting colour to the background. 
 We will start by reading the sensor values. 
 Create 2 variables, called ``||variables:leftSensor||`` and ``||variables:rightSensor||``
-place a ``||variables:set leftSensor||`` and a  ``||variables:set rightSensor||`` into the forever loop.
+place a ``||variables:set leftSensor||`` and a ``||variables:set rightSensor||`` into the forever loop.
 
 #### ~ tutorialhint
 ```blocks
@@ -87,7 +87,7 @@ basic.showLeds(`
 ```
 
 ### Step 5
-If we are leaving the line we will need to decide which way, and take corrective action. Into the ``||logic:if||`` condition add a ``||logic:>||`` check to see if ``||variables:sensorDifference||`` is greater than 10. We give the difference little range to allow for tolerance in the sensing. Into this ``||logic:if||`` add a ``||logic:if else||``. We will use this inner ``||logic:if else||`` to decide which way we need to turn to stay on the line.
+If we are leaving the line we will need to decide which way, and take corrective action. Into the ``||logic:if||`` condition add a ``||logic:>||`` check to see if ``||variables:sensorDifference||`` is greater than 10. We give the difference little range to allow for tolerance in the sensing. Into the first ``||logic:if||`` add a ``||logic:if else||``. We will use this inner ``||logic:if else||`` to decide which way we need to turn to stay on the line.
 
 #### ~ tutorialhint
 ```blocks
@@ -163,10 +163,10 @@ basic.showLeds(`
 ```
 
 ### Step 7
-That is the line following algorithm complete. If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor.  
+That is the line following algorithm complete. If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on the :MOVE Motor.  
 
 ## Check the Logic @unplugged
-Now we can check the logic is correct. Create a continuous track for :MOVE Motor to drive around and set it on the line. The line should be about 10-20mm wide (black insulation tape is great for this).  
+Now we can check the logic is correct. Create a continuous track for the :MOVE Motor to drive around and set it on the line. The line should be about 10-20mm wide (black insulation tape is great for this).  
 We haven't yet put any motor driving commands into the code, but by moving the :MOVE Motor by hand side to side across the line you should see the LED arrows showing which way the logic is going to turn.
 
 ## Drive the motors
@@ -175,7 +175,7 @@ We haven't yet put any motor driving commands into the code, but by moving the :
 Next we will replace the arrows with the correct motor driving commands, so the :MOVE motor can drive itself.
 
 ### Step 1
-The simplest arrow to replace is the straight ahead on one. Change this to a ``||Kitronik_Move_Motor:Move Forwards||`` block from the ``||Kitronik_Move_Motor.Motors||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||``. Set the speed set to 30. Don't forget to delete the ``||basic:Show LEDs||`` block. Displaying the LEDs at the same time as following the line can cause the code to run too slow to work correctly.
+The simplest arrow to replace is the straight ahead on one. Change this to a ``||Kitronik_Move_Motor:Move Forwards||`` block from the ``||Kitronik_Move_Motor.Motors||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||``. Set the speed to 30. Don't forget to delete the ``||basic:Show LEDs||`` block. Displaying the LEDs at the same time as following the line can cause the code to run too slow to work correctly.
 
 #### ~ tutorialhint
 ```blocks
