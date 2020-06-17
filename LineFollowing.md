@@ -87,7 +87,7 @@ basic.showLeds(`
 ```
 
 ### Step 5
-If we are leaving the line we will need to decide which way, and take corrective action. Into the ``||logic:if||`` condition add a ``||logic:>||`` check to see if ``||variables:sensorDifference||`` is greater than 10. We give the difference little range to allow for tolerence in the sensing. Into this ``||logic:if||`` add a ``||logic:if else||``. We will use this inner ``||logic:if else||`` to decide which way we need to turn to stay on the line.
+If we are leaving the line we will need to decide which way, and take corrective action. Into the ``||logic:if||`` condition add a ``||logic:>||`` check to see if ``||variables:sensorDifference||`` is greater than 10. We give the difference little range to allow for tolerance in the sensing. Into this ``||logic:if||`` add a ``||logic:if else||``. We will use this inner ``||logic:if else||`` to decide which way we need to turn to stay on the line.
 
 #### ~ tutorialhint
 ```blocks
@@ -120,7 +120,7 @@ The sensors on the :MOVE motor give a low value if the surface they are sensing 
 As we are looking for a dark line on a light background we know that if the left sensor is no longer over the line, but the right sensor is still over the line then the left sensor value will be larger than the right one. We can use this knowledge to work out we need to turn to the right to get back over the line.
 
 ### Step 6
-Into the inner ``||logic:if||`` condition add a``||logic:>||`` check to see if ``||variables:leftSensor||`` is greater than ``||variables:rightSensor||``. This means the left sensor is off the line and the right sensor is on the line. To get back on the line we need to turn to the right. Add a ``||basic:show LEDS||`` block into is and draw an arrow to indicate which way to turn. The ``||logic:else||`` needs to turn the other direction, so add the opposite arrow into there .
+Into the inner ``||logic:if||`` condition add a``||logic:>||`` check to see if ``||variables:leftSensor||`` is greater than ``||variables:rightSensor||``. This means the left sensor is off the line and the right sensor is on the line. To get back on the line we need to turn to the right. Add a ``||basic:show LEDS||`` block into it and draw an arrow to indicate which way to turn. The ``||logic:else||`` needs to turn the other direction, so add the opposite arrow into there .
 
 
 #### ~ tutorialhint
@@ -175,7 +175,7 @@ We haven't yet put any motor driving commands into the code, but by moving the :
 Next we will replace the arrows with the correct motor driving commands, so the :MOVE motor can drive itself.
 
 ### Step 1
-The simplest arrow to replace is the straight ahead on one. Change this to a ``||Kitronik_Move_Motor:Move Forwards||`` block from the ``||Kitronik_Move_Motor.Motors||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||``. Set the speed set to 30. Dont forget to delete the ``||basic:Show LEDs||`` block. Displaying the LEDs at the saem time as following the line can cause the code to run too slow to work correctly.
+The simplest arrow to replace is the straight ahead on one. Change this to a ``||Kitronik_Move_Motor:Move Forwards||`` block from the ``||Kitronik_Move_Motor.Motors||`` section of the ``||Kitronik_Move_Motor.MOVE Motor||``. Set the speed set to 30. Don't forget to delete the ``||basic:Show LEDs||`` block. Displaying the LEDs at the same time as following the line can cause the code to run too slow to work correctly.
 
 #### ~ tutorialhint
 ```blocks
@@ -239,8 +239,8 @@ basic.forever(function () {
 
 ### Step 3
 CODING COMPLETE! If you have a @boardname@ connected, click ``|Download|`` to transfer your code.
-Place your :MOVE MOtor on the line, and switch it on. It should follow the line. 
-If it doesnt then you might not have a dark enough line, the speed maybe too high, or the batteries might be going flat. 
+Place your :MOVE Motor on the line, and switch it on. It should follow the line. 
+If it doesn't then you might not have a dark enough line, the speed maybe too high, or the batteries might be going flat. 
 
 ## Iterating the Code
 
