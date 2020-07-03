@@ -253,7 +253,7 @@ In the previous code we do this check separately, but we can save a small amount
 Software can often be improved by iteration, which is what we are about to do in the next section.
 
 ### Step 1
-We are going to use the sign value of the sensor difference to decide which motors to turn on and off. Start by removing the ``||math:Absolute||`` block, so ``||variables:sensorDifference||`` becomes just ``||variables:leftSensor||````||math:-||````||variables:rightSensor||``
+We are going to use the sign value of the sensor difference to decide which motors to turn on and off. Start by removing the ``||math:Absolute||`` block, so ``||variables:sensorDifference||`` becomes just ``||variables:leftSensor||`` ``||math:-||`` ``||variables:rightSensor||``
 
 #### ~ tutorialhint
 ```blocks
