@@ -70,23 +70,23 @@ namespace Kitronik_Move_Motor {
         Reverse = 2,
         //% block="Left"
         Left = 3,
-        //% block = "Right"
+        //% block="Right"
         Right = 4
     }
     //directions the :MOVE motor can spin on the spot. 
     export enum SpinDirections {
-        //%block = "Left"
+        //%block="Left"
         Left = 3,
-        //%block = "Right"
+        //%block="Right"
         Right = 4
     }
     
     export enum TurnRadii {
-        //%block = "Tight"
+        //%block="Tight"
         Tight = 1,
-        //%block = "Standard"
+        //%block="Standard"
         Standard = 2,
-        //%block = "Wide"
+        //%block="Wide"
         Wide = 3
     }
     
