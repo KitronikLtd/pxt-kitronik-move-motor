@@ -17,8 +17,6 @@
         "LineFollowing.md",
         "RadioControlRx.md",
         "RadioControlTx.md",
-        "_locales/pxt-kitronik-move-motor-jsdoc-strings.json",
-        "_locales/pxt-kitronik-move-motor-strings.json",
         "_locales/fr/pxt-kitronik-move-motor-jsdoc-strings.json",
         "_locales/fr/pxt-kitronik-move-motor-strings.json",
         "_locales/fr/LightsandSound.md"
