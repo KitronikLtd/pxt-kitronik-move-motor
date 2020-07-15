@@ -16,10 +16,7 @@
         "DrawingRobot.md",
         "LineFollowing.md",
         "RadioControlRx.md",
-        "RadioControlTx.md",
-        "_locales/fr/pxt-kitronik-move-motor-jsdoc-strings.json",
-        "_locales/fr/pxt-kitronik-move-motor-strings.json",
-        "_locales/fr/LightsandSound.md"
+        "RadioControlTx.md"
     ],
     "testFiles": [
         "test.ts"
