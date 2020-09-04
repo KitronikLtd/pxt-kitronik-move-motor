@@ -126,6 +126,15 @@ namespace Kitronik_Move_Motor {
         High
     }
 
+    //Pin selection from expansion pins
+    export enum PinSelection
+    {
+        //% block="P15"
+        P15,
+        //% block="P16"
+        P16
+    }
+
     let initalised = false //a flag to allow us to initialise without the user having to explicitly call the initialisation routine
     //Motor global variables to allow user to 'bias' the motors to drive the :MOVE motor in a straight line
     let rightMotorBias = 0
@@ -856,6 +865,81 @@ namespace Kitronik_Move_Motor {
         else {
             sirenOn = false
             music.stopMelody(MelodyStopOptions.Background)
+        }
+    }
+    
+    
+    ////////////////////
+    //  SERVO & PINS  //
+    ////////////////////
+    /**
+    * Read the digital value of the pin selected.
+    * @param PinSelection is the list of pins avaible to choose from.
+    */
+    //% subcategory=Pins
+    //% blockId=kitronik_move_motor_digital_read
+    //% weight=90 blockGap=8
+    //% block="digital read pin %pin"
+    export function readDigitalPin(pin: PinSelection): number {
+        if (pin == PinSelection.P15) {
+            return pins.digitalReadPin(DigitalPin.P15)
+        }
+        else{
+            return pins.digitalReadPin(DigitalPin.P16)
+        }
+    }
+    
+    /**
+    * Write the digital value of the pin selected.
+    * @param PinSelection is the list of pins avaible to choose from.
+    */
+    //% subcategory=Pins
+    //% blockId=kitronik_move_motor_digital_write
+    //% weight=90 blockGap=8
+    //% block="digital write pin %pin to %value"
+    //% value.min=0 value.max=1
+    export function writeDigitalPin(pin: PinSelection, value: number): void {
+        if (pin == PinSelection.P15) {
+            pins.digitalWritePin(DigitalPin.P15, value)
+        }
+        else{
+            pins.digitalWritePin(DigitalPin.P16, value)
+        }
+    }
+
+    /**
+    * Write the analog value of the pin selected.
+    * @param PinSelection is the list of pins avaible to choose from.
+    */
+    //% subcategory=Pins
+    //% blockId=kitronik_move_motor_analog_write
+    //% weight=90 blockGap=8
+    //% block="analog write pin %pin to %value"
+    //% value.min=0 value.max=1023
+    export function writeAnalogPin(pin: PinSelection, value: number): void {
+        if (pin == PinSelection.P15) {
+            pins.analogWritePin(AnalogPin.P15, value)
+        }
+        else{
+            pins.analogWritePin(AnalogPin.P16, value)
+        }
+    }
+
+    /**
+    * Write the servo angle of the pin selected for driving a servo.
+    * @param PinSelection is the list of pins avaible to choose from.
+    */
+    //% subcategory=Pins
+    //% blockId=kitronik_move_motor_servo_write
+    //% weight=90 blockGap=8
+    //% block="servo write pin %pin to %angle"
+    //% angle.min=0 angle.max=180
+    export function writeServoPin(pin: PinSelection, angle: number): void {
+        if (pin == PinSelection.P15) {
+            pins.servoWritePin(AnalogPin.P15, angle)
+        }
+        else{
+            pins.servoWritePin(AnalogPin.P16, angle)
         }
     }
 }
