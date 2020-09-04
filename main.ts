@@ -135,6 +135,15 @@ namespace Kitronik_Move_Motor {
         P16
     }
 
+    //Pin selection from expansion pins
+    export enum ServoSelection
+    {
+        //% block="servo 1"
+        servo1,
+        //% block="servo 2"
+        servo2
+    }
+
     let initalised = false //a flag to allow us to initialise without the user having to explicitly call the initialisation routine
     //Motor global variables to allow user to 'bias' the motors to drive the :MOVE motor in a straight line
     let rightMotorBias = 0
@@ -932,10 +941,10 @@ namespace Kitronik_Move_Motor {
     //% subcategory=Pins
     //% blockId=kitronik_move_motor_servo_write
     //% weight=90 blockGap=8
-    //% block="servo write pin %pin to %angle"
+    //% block="write %servo to %angle"
     //% angle.min=0 angle.max=180
-    export function writeServoPin(pin: PinSelection, angle: number): void {
-        if (pin == PinSelection.P15) {
+    export function writeServoPin(servo: ServoSelection, angle: number): void {
+        if (servo == ServoSelection.servo1) {
             pins.servoWritePin(AnalogPin.P15, angle)
         }
         else{
