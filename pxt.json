@@ -20,7 +20,9 @@
         "Klaw.md",
         "_locales/fr/pxt-kitronik-move-motor-jsodc-strings.json",
         "_locales/fr/pxt-kitronik-move-motor-strings.json",
-        "_locales/fr/LightsandSound.md"
+        "_locales/fr/LightsandSound.md",
+        "_locales/nl/pxt-kitronik-move-motor-jsodc-strings.json",
+        "_locales/nl/pxt-kitronik-move-motor-strings.json"
     ],
     "testFiles": [
         "test.ts"
