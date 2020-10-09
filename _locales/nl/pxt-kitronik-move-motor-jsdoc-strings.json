@@ -50,5 +50,9 @@
   "Kitronik_Move_Motor.spin|param|speed": "Kies de snelheid (0-100)",
   "Kitronik_Move_Motor.stop": "Laat de MOVE motor stoppen met rijden",
   "Kitronik_Move_Motor.turnRadius": "Verandert hoe scherp de Move motor draait wanneer links of rechts is gekozen in het ga-blok",
-  "Kitronik_Move_Motor.turnRadius|param|radius": "hoe scherp de MOVE motor draait"
+  "Kitronik_Move_Motor.turnRadius|param|radius": "hoe scherp de MOVE motor draait",
+  "Kitronik_Move_Motor.readDigitalPin": "Leest de digitale waarde van de geselecteerde pin.",
+  "Kitronik_Move_Motor.writeAnalogPin": "Schrijft een analoge waarde naar de geselecteerde pin.",
+  "Kitronik_Move_Motor.writeDigitalPin": "Schrijft een digitale waarde naar de geselecteerde pin.",
+  "Kitronik_Move_Motor.writeServoPin": "Bepaalt de stand van de servomotor van de geselecteerde pin, varieërend van 0 tot 180 graden."
 }
