@@ -24,6 +24,7 @@
   "Kitronik_Move_Motor.colors": "Gets the RGB value of a known color",
   "Kitronik_Move_Motor.createMoveMotorZIPLED": "Create a new ZIP LED driver for MOVE Motor board.",
   "Kitronik_Move_Motor.createMoveMotorZIPLED|param|numZips": "number of leds in the strip, eg: 4",
+  "Kitronik_Move_Motor.equaliseSensorOffsets": "This function allows us to read the difference in the sensor outputs. \r\nIt assumes that both are over a similar surface, and hence any offset is a fixed offset caused by component tolerances.\r\nIf the sensors are over different surfaces it will reuslt in a false offset reading,and pants perfomance.\r\nWe do this to help hide the complexity of tolerance and similar from novice users, \r\nbut if you are an expert reading this comment then feel free to play with this functionand see what it does.",
   "Kitronik_Move_Motor.measure": "Measure the echo time (after trigger) and converts to cm or inches and returns as an int",
   "Kitronik_Move_Motor.measure|param|maxCmDistance": "maximum distance in centimeters (default is 500)",
   "Kitronik_Move_Motor.motorBalance": "To help the :MOVE motor drive in a straight line you can bias the motors.",

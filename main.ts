@@ -11,7 +11,7 @@ namespace Kitronik_Move_Motor {
     let MOTOR_OUT_ADDR = 0x08  //MOTOR output register address
 
     let MODE_1_REG_VALUE = 0x00 //setup to normal mode and not to respond to sub address
-    let MODE_2_REG_VALUE = 0x04  //Setup to make changes on ACK, outputs set to open-drain
+    let MODE_2_REG_VALUE = 0x0D  //Setup to make changes on ACK, outputs set to Totem poled to drive the motor driver chip
     let MOTOR_OUT_VALUE = 0xAA  //Outputs set to be controled PWM registers
 
     /*GENERAL*/
@@ -48,7 +48,7 @@ namespace Kitronik_Move_Motor {
     }
 
     /*MOTORS*/
-    // List of motors for the motor blocks to use. These represent register offsets in the PCA9832 driver IC.
+    // List of motors for the motor blocks to use. These correspond to the register offsets in the PCA9832 driver IC.
     export enum Motors {
         //% block="Left"
         MotorLeft = 0x04,
@@ -156,24 +156,26 @@ namespace Kitronik_Move_Motor {
     let echoPin = DigitalPin.P14
     let units = Units.Centimeters
     //Line following sensors global variables
-    let detectionLevel = 205
-
-
+    let rightLfOffset = 0
+    let leftLfOffset = 0
     /*
 	This sets up the PCA9632 I2C driver chip for controlling the motors
 	It is called from other blocks, so never needs calling directly.
     */
     function setup(): void {
-        let buf = pins.createBuffer(2)
 
-        buf[0] = MODE_1_REG_ADDR
-        buf[1] = MODE_1_REG_VALUE
-        pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+        let buf = pins.createBuffer(2)
+        //figure out the sensor offsets in case we have wide toleranced sensors. This improves the line following.
+        equaliseSensorOffsets()
+
         buf[0] = MODE_2_REG_ADDR
         buf[1] = MODE_2_REG_VALUE
         pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
         buf[0] = MOTOR_OUT_ADDR
         buf[1] = MOTOR_OUT_VALUE
+        pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+        buf[0] = MODE_1_REG_ADDR
+        buf[1] = MODE_1_REG_VALUE
         pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
         basic.pause(1)
 
@@ -532,6 +534,7 @@ namespace Kitronik_Move_Motor {
     //////////////
     //  SENSORS //
     //////////////
+
     /**
      * Set the distance measurement units to cm or inches (cm is default)
      * @param unit desired conversion unit
@@ -575,7 +578,31 @@ namespace Kitronik_Move_Motor {
         }
     }
     
-
+    
+    /**
+    This function allows us to read the difference in the sensor outputs. 
+    It assumes that both are over a similar surface, and hence any offset is a fixed offset caused by component tolerances.
+    If the sensors are over different surfaces it will reuslt in a false offset reading,and pants perfomance.
+    We do this to help hide the complexity of tolerance and similar from novice users, 
+    but if you are an expert reading this comment then feel free to play with this functionand see what it does.
+    **/
+    export function equaliseSensorOffsets(): void {
+        let rightLineSensor = pins.analogReadPin(AnalogPin.P1)
+        let leftLineSensor = pins.analogReadPin(AnalogPin.P2)
+        let Offset = ((Math.abs(rightLineSensor-leftLineSensor))/2)
+        if (leftLineSensor > rightLineSensor) {
+            leftLfOffset = -Offset
+            rightLfOffset = Offset
+        } else {
+        leftLfOffset = Offset
+            rightLfOffset = -Offset
+        }
+        /*if (leftLineSensor > rightLineSensor) {
+            rightLfOffset = leftLineSensor - rightLineSensor
+        } else if (leftLineSensor < rightLineSensor) {
+            leftLfOffset = rightLineSensor - leftLineSensor
+        }*/
+    }
 
     /**
     * Read sensor block allows user to read the value of the sensor (returns value in range 0-1023)
@@ -587,12 +614,15 @@ namespace Kitronik_Move_Motor {
     //% block="%pinSelected| line following sensor value"
     //% weight=85 blockGap=8
     export function readSensor(sensorSelected: LfSensor) {
+        if (initalised == false) {
+            setup()
+        }
         let value = 0
         if (sensorSelected == LfSensor.Left) {
-            value = pins.analogReadPin(AnalogPin.P2)
+            value = pins.analogReadPin(AnalogPin.P2) + leftLfOffset
         }
         else if (sensorSelected == LfSensor.Right) {
-            value = pins.analogReadPin(AnalogPin.P1)
+            value = pins.analogReadPin(AnalogPin.P1) + rightLfOffset
         }
         return value;
     }
@@ -601,6 +631,12 @@ namespace Kitronik_Move_Motor {
     //////////////
     //  MOTORS  //
     //////////////
+    // These variables hold the register values for the 4 PWM registers.
+    // Each pair of these controls a motor. We do it this way so we can do an auto increment write to the chip.
+    let PWMReg1 = 0
+    let PWMReg2 = 0
+    let PWMReg3 = 0
+    let PWMReg4 = 0
     /**
      * Drives the :MOVE motor in the specified direction. Turns have a small amount of forward motion.
      * @param direction Direction to move in
@@ -613,7 +649,7 @@ namespace Kitronik_Move_Motor {
     //% block="move %direction|at speed %speed"
     //% speed.min=0, speed.max=100
     export function move(direction: DriveDirections, speed: number): void {
-         if (initalised == false) {
+        if (initalised == false) {
             setup()
         }
         switch (direction)
@@ -760,7 +796,7 @@ namespace Kitronik_Move_Motor {
     //% block="turn %motor|motor on direction %dir|speed %speed"
     //% weight=75 blockGap=8
     //% speed.min=0 speed.max=100
-    export function motorOn(motor: Motors, dir: MotorDirection, speed: number): void {
+    export function motorOn(motor: Motors, dir: MotorDirection, speed: number): void { 
         if (initalised == false) {
             setup()
         }
@@ -769,48 +805,64 @@ namespace Kitronik_Move_Motor {
         if (outputVal > 255){ 
             outputVal = 255 
         }
-        let motorOnbuf = pins.createBuffer(2)
-        if (motor == Motors.MotorRight){
+        let motorOnbuf = pins.createBuffer(5)
+        motorOnbuf[0] = 0xA2
+        //The jerk message gives the motor a 'shove' at ful power to aid starting on lower pwm ratios
+        let motorJerkBuf = pins.createBuffer(5)
+        motorJerkBuf[0] = 0xA2
+        switch (motor) {
+            case Motors.MotorRight:
             switch (dir) {
                 case MotorDirection.Forward:
-                    motorOnbuf[0] = motor
-                    motorOnbuf[1] = 0x00
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
-                    motorOnbuf[0] = motor + 1
-                    motorOnbuf[1] = outputVal  - rightMotorBias
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
+                    PWMReg1 = 0
+                    PWMReg2 = outputVal  - rightMotorBias
+                    motorJerkBuf[1] = 0
+                    motorJerkBuf[2] = 0xFF
                     break
                 case MotorDirection.Reverse:
-                    motorOnbuf[0] = motor
-                    motorOnbuf[1] = outputVal - rightMotorBias
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
-                    motorOnbuf[0] = motor + 1
-                    motorOnbuf[1] = 0x00
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
+                    PWMReg1 =  outputVal  - rightMotorBias
+                    PWMReg2 = 0
+                    motorJerkBuf[1] = 0xFF
+                    motorJerkBuf[2] = 0
                     break
+            
             }
-        }
-        else if (motor == Motors.MotorLeft){
-            switch (dir) {
+            break
+            case Motors.MotorLeft:
+                        switch (dir) {
                 case MotorDirection.Forward:
-                    motorOnbuf[0] = motor
-                    motorOnbuf[1] = outputVal - leftMotorBias
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
-                    motorOnbuf[0] = motor + 1
-                    motorOnbuf[1] = 0x00
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
+                    PWMReg3 = outputVal  - leftMotorBias
+                    PWMReg4 = 0
+                    motorJerkBuf[3] = 0xFF
+                    motorJerkBuf[4] = 0x00
                     break
                 case MotorDirection.Reverse:
-                    motorOnbuf[0] = motor
-                    motorOnbuf[1] = 0x00
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
-                    motorOnbuf[0] = motor + 1
-                    motorOnbuf[1] = outputVal - leftMotorBias
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
+                    PWMReg3 = 0
+                    PWMReg4 = outputVal  - leftMotorBias
+                    motorJerkBuf[3] = 0x00
+                    motorJerkBuf[4] = 0xFF
                     break
+            
             }
+            break
+            default:
+            //Stop - something has gone wrong
+            
         }
+
+        motorOnbuf[1] = PWMReg1
+        motorOnbuf[2] = PWMReg2
+        motorOnbuf[3] = PWMReg3
+        motorOnbuf[4] = PWMReg4
+
+        //At this point we have updated the required PWM Registers, so write it to the Chip
+        pins.i2cWriteBuffer(CHIP_ADDR, motorJerkBuf, false)
+        basic.pause(1) //let the motor start before throttling them to the lower level
+        pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
+ 
     }
+
+
 
     /**
      * Turns off the specified motor.
@@ -825,13 +877,24 @@ namespace Kitronik_Move_Motor {
         if (initalised == false) {
             setup()
         }
-        let motorOffbuf = pins.createBuffer(2)
-        motorOffbuf[0] = motor
-        motorOffbuf[1] = 0x00
-        pins.i2cWriteBuffer(CHIP_ADDR, motorOffbuf, false)
-        motorOffbuf[0] = motor + 1
-        motorOffbuf[1] = 0x00
-        pins.i2cWriteBuffer(CHIP_ADDR, motorOffbuf, false)
+        let motorOnbuf = pins.createBuffer(5)
+        motorOnbuf[0] = 0xA2
+        switch (motor) {
+            case Motors.MotorRight:
+                    PWMReg1 = 0
+                    PWMReg2 = 0
+            break
+            case Motors.MotorLeft:
+                    PWMReg3 = 0
+                    PWMReg4 = 0
+            break
+        }
+        motorOnbuf[1] = PWMReg1
+        motorOnbuf[2] = PWMReg2
+        motorOnbuf[3] = PWMReg3
+        motorOnbuf[4] = PWMReg4
+        //At this point we have updated the required PWM Registers, so write it to the Chip
+        pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
     }
 
     //////////////
