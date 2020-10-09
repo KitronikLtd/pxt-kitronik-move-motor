@@ -50,7 +50,7 @@
   "Kitronik_Move_Motor.motorOff|block": "zet motor %motor| uit",
   "Kitronik_Move_Motor.motorOn|block": "zet motor %motor| aan met richting  %dir|snelheid %speed",
   "Kitronik_Move_Motor.move|block": "ga %direction|met snelheid %speed",
-  "Kitronik_Move_Motor.readSensor|block": "%pinSelected| waarde lijnvolgsensor",
+  "Kitronik_Move_Motor.readSensor|block": "waarde lijnvolgsensor %pinSelected",
   "Kitronik_Move_Motor.rgb|block": "rood %red|groen %green|blauw %blue",
   "Kitronik_Move_Motor.setUltrasonicUnits|block": "meet afstand in %unit",
   "Kitronik_Move_Motor.soundSiren|block": "zet sirene %siren",
@@ -67,5 +67,14 @@
   "{id:subcategory}Lights": "Lichten",
   "{id:subcategory}Motors": "Motoren",
   "{id:subcategory}Sensors": "Sensoren",
-  "{id:subcategory}Sounds": "Geluiden"
+  "{id:subcategory}Sounds": "Geluiden",
+  "{id:subcategory}Pins": "Pinnen",
+    "Kitronik_Move_Motor.PinSelection.P15|block": "P15",
+  "Kitronik_Move_Motor.PinSelection.P16|block": "P16",
+  "Kitronik_Move_Motor.ServoSelection.servo1|block": "servo 1",
+  "Kitronik_Move_Motor.ServoSelection.servo2|block": "servo 2",
+  "Kitronik_Move_Motor.readDigitalPin|block": "lees digitaal pin %pin",
+  "Kitronik_Move_Motor.writeAnalogPin|block": "schrijf analoog pin %pin naar %value",
+  "Kitronik_Move_Motor.writeDigitalPin|block": "schrijf digitaal pin %pin naar %value",
+  "Kitronik_Move_Motor.writeServoPin|block": "schrijf %servo naar waarde %angle"
 }
