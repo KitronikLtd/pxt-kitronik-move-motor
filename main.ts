@@ -344,7 +344,9 @@ namespace Kitronik_Move_Motor {
         //% weight=95
         show() {
             //use the Kitronik version which respects brightness for all 
-            ws2812b.sendBuffer(this.buf, this.pin, this.brightness);
+            //ws2812b.sendBuffer(this.buf, this.pin, this.brightness);
+            // Use the pxt-microbit core version which now respects brightness (10/2020)
+            light.sendWS2812BufferWithBrightness(this.buf, this.pin, this.brightness);
         }
 
         /**
