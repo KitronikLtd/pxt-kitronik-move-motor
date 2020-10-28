@@ -68,7 +68,7 @@ Het robotje moet stoppen als het weer dicht bij een voorwerp komt. Klik daarom o
 
 #### ~ tutorialhint
 
-![Animation that shows how to add an else statement](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/add-else-statement-stop.gif)
+![Animation that shows how to add an else statement](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/nl_add-else-statement-stop.gif)
 
 ```ghost
 let afstand = 0
