@@ -23,7 +23,7 @@ De eerste vorm is een grote cirkel (hierna doen we een kleine cirkel). Klik op *
 
 #### ~ tutorialhint
 
-![Create bigCircle function image](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/create-bigcircle-function.png)
+![Create bigCircle function image](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/nl_create-bigcircle-function.png)
 
 ### Stap 2
 
