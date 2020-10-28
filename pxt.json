@@ -22,7 +22,11 @@
         "_locales/fr/pxt-kitronik-move-motor-strings.json",
         "_locales/fr/LightsandSound.md",
         "_locales/nl/pxt-kitronik-move-motor-jsdoc-strings.json",
-        "_locales/nl/pxt-kitronik-move-motor-strings.json"
+        "_locales/nl/pxt-kitronik-move-motor-strings.json",
+        "_locales/nl/LightsandSound.md",
+        "_locales/nl/UsingUltrasonic.md",
+        "_locales/nl/DrawingRobot.md",
+        "_locales/nl/LineFollowing.md"
     ],
     "testFiles": [
         "test.ts"
