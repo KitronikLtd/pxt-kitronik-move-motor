@@ -1,7 +1,7 @@
 ### @activities true
 ### @explicitHints true
 
-# :MOVE Motor Lijnvolgen
+# :MOVE Motor Lijn volgen
 
 ## Introductie
 ### Introductie en voorbereiding @unplugged
@@ -41,7 +41,7 @@ basic.forever(function () {
 
 De analoge waarden die de sensoren doorgeven hangen af van de kleur van het oppervlak dat onder de sensoren zit. We proberen een donkere lijn op een lichte achtergrond te volgen. 
 
-Dus als de twee sensoren, die vlak naast elkaar zitten, een verschillende waarde doorgeven betekent dat dat de ene boven de lijn staat en de andere niet. Als ze allebei dezelfde waarde doorgeven staan ze C3f allebei op de lijn als die breed is, C3f ze zien juist allebei de achtergrond als de lijn dun is. 
+Dus als de twee sensoren, die vlak naast elkaar zitten, een verschillende waarde doorgeven betekent dat dat de ene boven de lijn staat en de andere niet. Als ze allebei dezelfde waarde doorgeven staan ze of allebei op de lijn als die breed is, of ze zien juist allebei de achtergrond als de lijn dun is. 
 
 Omdat we de waarden van twee sensoren vergelijken, maakt het niet uit hoe hoog de  waarden zijn die de sensoren doorgeven. Het enige wat belangrijk is, is of ze wel of niet verschillend zijn.
 
@@ -62,7 +62,7 @@ basic.forever(function () {
 ```
 
 ### Stap 4
-Als de sensorwaarden hetzelfde zijn, is de robot de lijn aan het volgen. Zoniet, dan is hij van de lijn af aan het gaan.  Plaats een ``||logic:als anders||`` blok onder het blok ``||variables:stel verschilSensoren in op||``. We gebruiken het ``||logic:anders||`` gedeelte voor als de robot nog op de lijn rijdt. Plaats een  ``||basic:toon lichtjes||`` blok in het`` ||logic:anders||`` blok en teken een pijl omhoog om aan te geven dat het robotje vooruit gaat.
+Als de sensorwaarden hetzelfde zijn, is de robot de lijn aan het volgen. Zoniet, dan is hij van de lijn af aan het gaan.  Plaats een ``||logic:als anders||`` blok onder het blok ``||variables:stel verschilSensoren in op||``. We gebruiken het ``||logic:anders||`` gedeelte voor als de robot nog op de lijn rijdt. Plaats een  ``||basic:toon lichtjes||`` blok in het ``||logic:anders||`` blok en teken een pijl omhoog om aan te geven dat het robotje vooruit gaat.
 
 #### ~ tutorialhint
 ```blocks

@@ -19,7 +19,7 @@ De :MOVE Motor heeft een penhouder. Die vind je tussen de beide wielen. Zoek een
 ### Stap 1
 Tijd om te programmeren. We gaan meerdere ``||functions:functies||``  gebruiken in deze les. Daarmee maken we het tekenen van verschillende vormen makkelijker.  
 
-De eerste vorm is een grote cirkel (hierna doen we een kleine cirkel). Klik op **Geavanceerd** om meer blokcategorieC+n zichtbaar te maken, selecteer de ``||functions:Functies||`` categorie en klik op ``||functions:Maak een Functie...||``.  Noem de functie **groteCirkel** en klik op **Klaar**. 
+De eerste vorm is een grote cirkel (hierna doen we een kleine cirkel). Klik op **Geavanceerd** om meer blokcategorie&euml;n zichtbaar te maken, selecteer de ``||functions:Functies||`` categorie en klik op ``||functions:Maak een Functie...||``.  Noem de functie **groteCirkel** en klik op **Klaar**. 
 
 #### ~ tutorialhint
 
@@ -51,7 +51,7 @@ function groteCirkel () {
 ```
 
 ### Stap 4
-Nu kunnen we de functie gebruiken door hem aan te roepen en kunnen we een cirkel tekenen. Pak een  ``||input:wanneer knop A wordt ingedrukt||`` blok en voeg daar het blok ``||functions:aanroep groteCirkel||`` uit de categorie``||functions:Functies||`` aan toe. Als je een @boardname@ hebt aangesloten, klik dan op ``|Download|`` om je code erop te zetten en zet de :MOVE Motor aan.  
+Nu kunnen we de functie gebruiken door hem aan te roepen en kunnen we een cirkel tekenen. Pak een  ``||input:wanneer knop A wordt ingedrukt||`` blok en voeg daar het blok ``||functions:aanroep groteCirkel||`` uit de categorie ``||functions:Functies||`` aan toe. Als je een @boardname@ hebt aangesloten, klik dan op ``|Download|`` om je code erop te zetten en zet de :MOVE Motor aan.  
 
 Zorg dat je robotje op een groot genoeg stuk papier staat en de stift erin zit. Druk op ``||input:knop A||`` om een cirkel te tekenen.
 
@@ -71,7 +71,7 @@ input.onButtonPressed(Button.A, function () {
 ### Stap 5
 Hopelijk tekende je robot een mooie cirkel - nu gaan we code maken om :MOVE Motor een kleine cirkel te laten tekenen.
 
-Maak een nieuwe ``||functions:functie||`` en noem die dit keer **kleineCirkel **. Kopieer alle code van het blok``||functions:functie groteCirkel||`` en plaats dat in het ``||functions:functie kleineCirkel||`` blok. (Klik met je **rechtermuisknop** op de code die je wilt kopiC+ren en klik daarna op **Dupliceren**).
+Maak een nieuwe ``||functions:functie||`` en noem die dit keer **kleineCirkel **. Kopieer alle code van het blok ``||functions:functie groteCirkel||`` en plaats dat in het ``||functions:functie kleineCirkel||`` blok. (Klik met je **rechtermuisknop** op de code die je wilt kopi&euml;ren en klik daarna op **Dupliceren**).
 
 #### ~ tutorialhint
 ```blocks

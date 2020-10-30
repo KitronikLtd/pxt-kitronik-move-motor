@@ -52,7 +52,7 @@ basic.forever(function () {
 Als je een @boardname@ hebt aangesloten, klik dan op ``|Download|`` om je code erop te zetten. Zet vervolgens de :MOVE Motor aan en de lichten gaan branden!
 
 ### Automatische lichten @unplugged
-:MOVE Motor heeft nu lichten die de hele tijd branden, maar bij echte wagens staan de lichten niet de hele tijd aan b ze gaan alleen aan als het donker wordt. 
+:MOVE Motor heeft nu lichten die de hele tijd branden, maar bij echte wagens staan de lichten niet de hele tijd aan. Ze gaan alleen aan als het donker wordt. 
 Veel moderne auto's hebben lichten die automatisch aangaan als de hoeveelheid licht beneden een bepaald niveau komt en voor :MOVE motor kunnen we dat ook regelen...
 
 ### Stap 5
@@ -129,8 +129,8 @@ Nu we hebben geregeld dat de :MOVE motor koplampen en achterlichten heeft, is he
 
 ### Stap 1
 De code voor het linker knipperlicht moet anders zijn dan voor het rechter knipperlicht. Maar het verschil is niet zo groot. Daarom is het handig om een zogenoemde  ``||functions:functie||`` te gebruiken.  
-Klik op **``Geavanceerd``** om extra blok-categorieC+n zichtbaar te maken. Kies de categorie ``||functions:Functies||`` en klik op ``||functions:Maak een functie...||``.
-Voeg een **``Tekst``**-parameter toe door op het woord Tekst te klikken en type **``richting``** in het rechter tekstvak. Type in het linker tekstvak **``knipperen``** als de naam van de functie. Klik daarna op **``Klaar``**. 
+Klik op **Geavanceerd** om extra blok-categorieC+n zichtbaar te maken. Kies de categorie ``||functions:Functies||`` en klik op ``||functions:Maak een functie...||``.
+Voeg een **Tekst**-parameter toe door op het woord Tekst te klikken en type **richting** in het rechter tekstvak. Type in het linker tekstvak **knipperen** als de naam van de functie. Klik daarna op **Klaar**. 
 
 #### ~ tutorialhint
 
@@ -156,8 +156,8 @@ basic.forever(function () {
 
 ### Stap 2
 Plaats een ``||logic:als||`` blok in het functie-blok, en klik twee keer op het ``||logic:+||`` icoon. Zo voeg je een ``||logic:anders als||`` en een ``||logic:anders||`` gedeelte toe. Het ``||logic:anders||`` gedeelte hebben we echter niet nodig. Klik daarom op het onderste ``||logic:-||`` icoon om deze weg te halen. 
-Met het ``||logic:als||`` gedeelte gaan we checken of de bewering variabele`` ||variables:richting||`` ``||logic:=||`` **``links``** klopt (haal`` ||variables:richting||``uit het ``||functions:function||`` blok door erop te klikken en dit blok daarna te slepen). Doe hetzelfde voor het ``||logic:anders als||`` gedeelte, maar vul dan **``rechts``** in.
-**Let op:** Gebruik het blok met het = - teken dat tekst vergelijkt, niet het blok dat getallen vergelijkt.
+Met het ``||logic:als||`` gedeelte gaan we checken of de bewering variabele `` ||variables:richting||`` ``||logic:=||`` **links** klopt (haal `` ||variables:richting||``uit het ``||functions:function||`` blok door erop te klikken en dit blok daarna te slepen). Doe hetzelfde voor het ``||logic:anders als||`` gedeelte, maar vul dan **rechts** in.
+**Let op:** Gebruik het blok met het ``||logic:=||`` teken dat tekst vergelijkt, niet het blok dat getallen vergelijkt.
 
 #### ~ tutorialhint
 ```blocks
@@ -171,7 +171,7 @@ function knipperen (richting: string) {
 ```
 
 ### Stap 3
-Tijd om het linkerlicht te laten knipperen. Plaats een ``||loops:4 keer herhalen||`` blok in het ``||logic:als||`` statement dat kijkt of de waarde **``links``** is, en plaats daarin een blok ``||Kitronik_Move_Motor.zet ZIP LED ||`` 0 en 3 op oranje. Zet daaronder een ``||Kitronik_Move_Motor.tonen||`` blok.
+Tijd om het linkerlicht te laten knipperen. Plaats een ``||loops:4 keer herhalen||`` blok in het ``||logic:als||`` statement dat kijkt of de waarde **links** is, en plaats daarin een blok ``||Kitronik_Move_Motor.zet ZIP LED ||`` 0 en 3 op oranje. Zet daaronder een ``||Kitronik_Move_Motor.tonen||`` blok.
 
 #### ~ tutorialhint
 ```blocks
@@ -249,7 +249,7 @@ function knipperen (richting: string) {
 
 ### Stap 6
 Nu is het tijd om de functie te gebruiken. Pak een ``||input:wanneer knop A wordt ingedrukt||`` blok en gebruik de ``||Kitronik_Move_Motor.MOVE Motor||`` blokken om de  :MOVE Motor vooruit te laten rijden, linksaf te laten slaan en dan te laten stoppen (daarbij heb je ook het ``||basic:pauzeer||`` blok nodig na elk ``||Kitronik_Move_Motor.ga||`` blok om :MOVE Motor tijd te geven om daadwerkelijk te bewegen).  
-Voeg net voor het blok ``||Kitronik_Move_Motor.ga links||`` het blok   ``||functions:aanroep knipperen||`` toe dat je vindt bij de ``||functions:Functies||`` categorie. Type **``links``** in het tekstvlak van dit blok (waar abc staat). 
+Voeg net voor het blok ``||Kitronik_Move_Motor.ga links||`` het blok   ``||functions:aanroep knipperen||`` toe dat je vindt bij de ``||functions:Functies||`` categorie. Type **links** in het tekstvlak van dit blok (waar abc staat). 
 
 #### ~ tutorialhint
 ```blocks
@@ -263,11 +263,11 @@ input.onButtonPressed(Button.A, function () {
     basic.pause(1000)
     Kitronik_Move_Motor.stop()
 })
-function knipperen (richting: rechts) {}
+function knipperen (richting: string) {}
 ```
 
 ### Stap 7
-Maak een kopie van het ``||input:knop A||`` blok en selecteer ``||input:knop B||``. Klik daarvoor op het witte driehoekje.  Verander ``||Kitronik_Move_Motor.ga links||`` in ``||Kitronik_Move_Motor.ga rechts||``, en type in het functieblok nu het woord **``links``** in plaats van **``rechts``**.
+Maak een kopie van het ``||input:knop A||`` blok en selecteer ``||input:knop B||``. Klik daarvoor op het witte driehoekje.  Verander ``||Kitronik_Move_Motor.ga links||`` in ``||Kitronik_Move_Motor.ga rechts||``, en type in het functieblok nu het woord **links** in plaats van **rechts**.
 
 #### ~ tutorialhint
 ```blocks
@@ -305,7 +305,7 @@ Als je een @boardname@ hebt aangesloten, klik dan op ``|Download|`` om je code e
 ### Stap 9
 We kunnen de koplampen en achterlichten tijdelijk uitzetten als de knipperlichten van de :MOVE motor aangaan. Maak daarvoor een nieuwe variabele met de naam ``||variables:AanHetKnipperen||``. Stel deze in op ``||logic:waar||`` aan het begin van de functie ``||functions:Knipperen||`` en op ``||logic:onwaar||`` aan het eind. 
 
-Tot slot is er nog een aanpassing nodig in het ``||basic:de hele tijd||`` blok. Plaats in dit blok nog een ``||logic:anders ... dan||`` blok dat de code alleen moet uitvoeren ``||logic:als niet||`` ``||variables:AanHetKnipperen||``.  **Let op:** je moet hiervoor een apart blok met de tekst **``niet``** erop gebruiken waar je het ``||variables:AanHetKnipperen||`` blok inplakt.
+Tot slot is er nog een aanpassing nodig in het ``||basic:de hele tijd||`` blok. Plaats in dit blok nog een ``||logic:anders ... dan||`` blok dat de code alleen moet uitvoeren ``||logic:als niet||`` ``||variables:AanHetKnipperen||``.  **Let op:** je moet hiervoor een apart blok met de tekst **niet** erop gebruiken waar je het ``||variables:AanHetKnipperen||`` blok inplakt.
 
 #### ~ tutorialhint
 ```blocks

@@ -22,7 +22,7 @@ basic.forever(function () {
 ```
 
 ### Stap 2
-Voeg een ``||basic:toon nummer||`` blok onder het blok ``||variables:stel variabele in op||``  ``||Kitronik_Move_Motor.meet afstand||``. Plaats de variabele ``||variables:afstand||``, die je vindt in de categorie ‘Variabelen’, in het ``||basic:toon nummer||`` blok.
+Voeg een ``||basic:toon nummer||`` blok onder het blok ``||variables:stel variabele in op||``  ``||Kitronik_Move_Motor.meet afstand||``. Plaats de variabele ``||variables:afstand||``, die je vindt in de categorie ``||variables:variabelen||``, in het ``||basic:toon nummer||`` blok.
 
 
 #### ~ tutorialhint
@@ -158,7 +158,7 @@ basic.forever(function () {
 
 ### Stap 3
 Tot slot moet de :MOVE Motor nog wegdraaien als die een obstakel heeft gedetecteerd.
-Voeg daarom een ``||draai links met snelheid 50||`` blok toe aan het ``||logic:anders als||`` gedeelte, gevolgd door een 500 ms ``||basic:pauzeer||`` blok en een ``||Kitronik_Move_Motor.stop||`` blok.
+Voeg daarom een ``||Kitronik_Move_Motor.draai links met snelheid 50||`` blok toe aan het ``||logic:anders als||`` gedeelte, gevolgd door een 500 ms ``||basic:pauzeer||`` blok en een ``||Kitronik_Move_Motor.stop||`` blok.
 
 
 #### ~ tutorialhint
