@@ -26,7 +26,7 @@
         "_locales/nl/LightsandSound.md",
         "_locales/nl/UsingUltrasonic.md",
         "_locales/nl/DrawingRobot.md",
-        "_locales/nl/LineFollowing.md"
+        "_locales/nl/LineFollowing.md",
         "_locales/nl/AdvancedMotorAdjustment.md"
     ],
     "testFiles": [
