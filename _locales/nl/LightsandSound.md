@@ -156,7 +156,7 @@ basic.forever(function () {
 
 ### Stap 2
 Plaats een ``||logic:als||`` blok in het functie-blok, en klik twee keer op het ``||logic:+||`` icoon. Zo voeg je een ``||logic:anders als||`` en een ``||logic:anders||`` gedeelte toe. Het ``||logic:anders||`` gedeelte hebben we echter niet nodig. Klik daarom op het onderste ``||logic:-||`` icoon om deze weg te halen. 
-Met het ``||logic:als||`` gedeelte gaan we checken of de bewering variabele `` ||variables:richting||`` ``||logic:=||`` **links** klopt (haal `` ||variables:richting||``uit het ``||functions:function||`` blok door erop te klikken en dit blok daarna te slepen). Doe hetzelfde voor het ``||logic:anders als||`` gedeelte, maar vul dan **rechts** in.
+Met het ``||logic:als||`` gedeelte gaan we checken of de bewering variabele `` ||variables:richting||`` ``||logic:=||`` **links** klopt (haal `` ||variables:richting||`` uit het ``||functions:function||`` blok door erop te klikken en dit blok daarna te slepen). Doe hetzelfde voor het ``||logic:anders als||`` gedeelte, maar vul dan **rechts** in.
 **Let op:** Gebruik het blok met het ``||logic:=||`` teken dat tekst vergelijkt, niet het blok dat getallen vergelijkt.
 
 #### ~ tutorialhint
