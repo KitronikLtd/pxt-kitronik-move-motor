@@ -118,7 +118,7 @@ basic.forever(function () {
 ```
 
 ### Stap 9
-Als je een @boardname@ hebt aangesloten, klik dan op ``|Download|`` om je code erop te zetten en deze uit te testen door het lichtniveau te variC+ren. Je zult de lichten van de :MOVE motor nu aan en uit zien gaan.
+Als je een @boardname@ hebt aangesloten, klik dan op ``|Download|`` om je code erop te zetten en deze uit te testen door het lichtniveau te vari&euml;ren. Je zult de lichten van de :MOVE motor nu aan en uit zien gaan.
 
 
 
@@ -129,7 +129,7 @@ Nu we hebben geregeld dat de :MOVE motor koplampen en achterlichten heeft, is he
 
 ### Stap 1
 De code voor het linker knipperlicht moet anders zijn dan voor het rechter knipperlicht. Maar het verschil is niet zo groot. Daarom is het handig om een zogenoemde  ``||functions:functie||`` te gebruiken.  
-Klik op **Geavanceerd** om extra blok-categorieC+n zichtbaar te maken. Kies de categorie ``||functions:Functies||`` en klik op ``||functions:Maak een functie...||``.
+Klik op **Geavanceerd** om extra blok-categorie&euml;n zichtbaar te maken. Kies de categorie ``||functions:Functies||`` en klik op ``||functions:Maak een functie...||``.
 Voeg een **Tekst**-parameter toe door op het woord Tekst te klikken en type **richting** in het rechter tekstvak. Type in het linker tekstvak **knipperen** als de naam van de functie. Klik daarna op **Klaar**. 
 
 #### ~ tutorialhint
@@ -156,7 +156,7 @@ basic.forever(function () {
 
 ### Stap 2
 Plaats een ``||logic:als||`` blok in het functie-blok, en klik twee keer op het ``||logic:+||`` icoon. Zo voeg je een ``||logic:anders als||`` en een ``||logic:anders||`` gedeelte toe. Het ``||logic:anders||`` gedeelte hebben we echter niet nodig. Klik daarom op het onderste ``||logic:-||`` icoon om deze weg te halen. 
-Met het ``||logic:als||`` gedeelte gaan we checken of de bewering variabele `` ||variables:richting||`` ``||logic:=||`` **links** klopt (haal `` ||variables:richting||``uit het ``||functions:function||`` blok door erop te klikken en dit blok daarna te slepen). Doe hetzelfde voor het ``||logic:anders als||`` gedeelte, maar vul dan **rechts** in.
+Met het ``||logic:als||`` gedeelte gaan we checken of de bewering variabele `` ||variables:richting||`` ``||logic:=||`` **links** klopt (haal `` ||variables:richting||`` uit het ``||functions:function||`` blok door erop te klikken en dit blok daarna te slepen). Doe hetzelfde voor het ``||logic:anders als||`` gedeelte, maar vul dan **rechts** in.
 **Let op:** Gebruik het blok met het ``||logic:=||`` teken dat tekst vergelijkt, niet het blok dat getallen vergelijkt.
 
 #### ~ tutorialhint
@@ -214,7 +214,7 @@ function knipperen (richting: string) {
 ```
 
 ### Stap 5
-De code voor het rechter knipperlicht is bijna hetzelfde. Klik daarom met de rechtermuisknop op het ``||loops:herhalen||`` blok  om het te kopiC+ren, samen met alle blokken die erin staan.  Plaats de gekopieerde code in het ``||logic:anders als||`` gedeelte. Je hoeft nu alleen de nummers van de LEDs aan te passen. Om de rechter knipperlichten aan te sturen gebruik je de getallen 1 en 2 in het ``||Kitronik_Move_Motor.zet ZIP LED op||`` blok. 
+De code voor het rechter knipperlicht is bijna hetzelfde. Klik daarom met de rechtermuisknop op het ``||loops:herhalen||`` blok  om het te kopi&euml;ren, samen met alle blokken die erin staan.  Plaats de gekopieerde code in het ``||logic:anders als||`` gedeelte. Je hoeft nu alleen de nummers van de LEDs aan te passen. Om de rechter knipperlichten aan te sturen gebruik je de getallen 1 en 2 in het ``||Kitronik_Move_Motor.zet ZIP LED op||`` blok. 
 
 #### ~ tutorialhint
 
