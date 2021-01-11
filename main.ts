@@ -629,8 +629,8 @@ namespace Kitronik_Move_Motor {
         //When measured actual distance compared to calculated distanceis not the same.  There must be an timing measurement with the pulse.
         //values have been changed to match the correct measured distances so 58 changed to 39 and 148 changed to 98
         switch (units) {
-            case Units.Centimeters: return Math.idiv(pulse, 39);
-            case Units.Inches: return Math.idiv(pulse, 98);
+            case Units.Centimeters: return Math.idiv(pulse, cmEquationDivider);
+            case Units.Inches: return Math.idiv(pulse, inEquationDivider);
             default: return 0;
         }
     }

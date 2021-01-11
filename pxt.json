@@ -4,7 +4,8 @@
     "description": "Blocks to simplify using Kitronik MOVE Motor board in PXT",
     "license": "MIT",
     "dependencies": {
-        "core": "*"
+        "core": "*",
+        "microphone": "*"
     },
     "files": [
         "main.ts",
