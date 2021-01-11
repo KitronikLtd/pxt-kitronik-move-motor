@@ -168,15 +168,15 @@ namespace Kitronik_Move_Motor {
     let rightLfOffset = 0
     let leftLfOffset = 0
     
-    let uBitVersion = 0
+    //let uBitVersion = 0
     
     /**
     *
     */
     //% shim=Kitronik_Move_Motor::hardwareVersion
-    function hardwareVersion(): number {
-        return uBitVersion;
-    }
+   // function hardwareVersion(): number {
+    //    return uBitVersion;
+    //}
     
     /*
 	This sets up the PCA9632 I2C driver chip for controlling the motors
@@ -211,8 +211,9 @@ namespace Kitronik_Move_Motor {
         }
         
         //determine which version of microbit is being used.  From this the correct value used in the equation to convert pulse to distance
-        uBitVersion = hardwareVersion()
-        if (uBitVersion == 2)
+        //uBitVersion = hardwareVersion()
+        let sizeOfRam = control.ramSize()
+        if (sizeOfRam >= 100000)
         {
             cmEquationDivider = ULTRASONIC_V2_DIV_CM
             inEquationDivider = ULTRASONIC_V2_DIV_IN
