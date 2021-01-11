@@ -212,16 +212,17 @@ namespace Kitronik_Move_Motor {
         
         //determine which version of microbit is being used.  From this the correct value used in the equation to convert pulse to distance
         uBitVersion = hardwareVersion()
-        if (uBitVersion == 1)
-        {
-            cmEquationDivider = ULTRASONIC_V1_DIV_CM
-            inEquationDivider = ULTRASONIC_V1_DIV_IN
-        }
-        else if (uBitVersion == 2)
+        if (uBitVersion == 2)
         {
             cmEquationDivider = ULTRASONIC_V2_DIV_CM
             inEquationDivider = ULTRASONIC_V2_DIV_IN
         }
+        else
+        {
+            cmEquationDivider = ULTRASONIC_V1_DIV_CM
+            inEquationDivider = ULTRASONIC_V1_DIV_IN
+        }
+        basic.showNumber(uBitVersion)
         
         buf[0] = MODE_2_REG_ADDR
         buf[1] = MODE_2_REG_VALUE
