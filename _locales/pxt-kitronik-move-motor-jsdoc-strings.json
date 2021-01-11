@@ -1,5 +1,5 @@
 {
-  "Kitronik_Move_Motor": "Blocks for driving the Kitronik MOVE Motor Buggy",
+  "Kitronik_Move_Motor": "This is the Kitronik_Move_Motor Package\n\r\nBlocks for driving the Kitronik MOVE Motor Buggy",
   "Kitronik_Move_Motor.HueInterpolationDirection": "Options for direction hue changes, used by rainbow block (never visible to end user)",
   "Kitronik_Move_Motor.MoveMotorZIP.clear": "Turn off all LEDs on the Move Motor ZIP LEDs.\r\nYou need to call show to make the changes visible.",
   "Kitronik_Move_Motor.MoveMotorZIP.range": "Create a range of LEDs.",

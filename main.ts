@@ -14,6 +14,12 @@ namespace Kitronik_Move_Motor {
     let MODE_2_REG_VALUE = 0x0D  //Setup to make changes on ACK, outputs set to Totem poled to drive the motor driver chip
     let MOTOR_OUT_VALUE = 0xAA  //Outputs set to be controled PWM registers
 
+    //Define of the two different values required in conversion equation for the ultrasonic to measure accurately
+    let ULTRASONIC_V1_DIV_CM = 39
+    let ULTRASONIC_V2_DIV_CM = 58
+    let ULTRASONIC_V1_DIV_IN = 98
+    let ULTRASONIC_V2_DIV_IN = 148
+    
     /*GENERAL*/
     export enum OnOffSelection {
         //% block="on"
@@ -145,6 +151,7 @@ namespace Kitronik_Move_Motor {
     }
 
     let initalised = false //a flag to allow us to initialise without the user having to explicitly call the initialisation routine
+    let moveMotorVersion = 0
     //Motor global variables to allow user to 'bias' the motors to drive the :MOVE motor in a straight line
     let rightMotorBias = 0
     let leftMotorBias = 0
@@ -152,12 +159,25 @@ namespace Kitronik_Move_Motor {
     //Sound global variables
     let sirenOn = false
     //Ultrasonic global variables
+    let cmEquationDivider = 0
+    let inEquationDivider = 0
     let triggerPin = DigitalPin.P13
     let echoPin = DigitalPin.P14
     let units = Units.Centimeters
     //Line following sensors global variables
     let rightLfOffset = 0
     let leftLfOffset = 0
+    
+    let uBitVersion = 0
+    
+    /**
+    *
+    */
+    //% shim=Kitronik_Move_Motor::hardwareVersion
+    function hardwareVersion(): number {
+        return uBitVersion;
+    }
+    
     /*
 	This sets up the PCA9632 I2C driver chip for controlling the motors
 	It is called from other blocks, so never needs calling directly.
@@ -165,9 +185,44 @@ namespace Kitronik_Move_Motor {
     function setup(): void {
 
         let buf = pins.createBuffer(2)
-        //figure out the sensor offsets in case we have wide toleranced sensors. This improves the line following.
-        equaliseSensorOffsets()
+        //Pin 3 toggled while pin12 reads the toggle.  This is to determine the version of the board for which line following sensor is attached.
+        basic.clearScreen()
+        led.enable(false)
+        pins.digitalWritePin(DigitalPin.P3, 1)
+        basic.pause(100)
+        if (pins.digitalReadPin(DigitalPin.P12) == 1) {
+            pins.digitalWritePin(DigitalPin.P3, 0)
+            basic.pause(100)
+            if (pins.digitalReadPin(DigitalPin.P12) == 0) {
+                moveMotorVersion = 13
+            } else {
+                moveMotorVersion = 10
+            }
+        } else {
+            moveMotorVersion = 10
+        }
 
+        
+        led.enable(true)
+        
+        //If version number is 1.0 (10) run the equalise sensor code
+        if (moveMotorVersion == 10){
+            equaliseSensorOffsets()
+        }
+        
+        //determine which version of microbit is being used.  From this the correct value used in the equation to convert pulse to distance
+        uBitVersion = hardwareVersion()
+        if (uBitVersion == 1)
+        {
+            cmEquationDivider = ULTRASONIC_V1_DIV_CM
+            inEquationDivider = ULTRASONIC_V1_DIV_IN
+        }
+        else if (uBitVersion == 2)
+        {
+            cmEquationDivider = ULTRASONIC_V2_DIV_CM
+            inEquationDivider = ULTRASONIC_V2_DIV_IN
+        }
+        
         buf[0] = MODE_2_REG_ADDR
         buf[1] = MODE_2_REG_VALUE
         pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
