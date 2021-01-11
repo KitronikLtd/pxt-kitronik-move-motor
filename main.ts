@@ -628,6 +628,7 @@ namespace Kitronik_Move_Motor {
         //From the HC-SR04 datasheet the formula for calculating distance is "microSecs of pulse"/58 for cm or "microSecs of pulse"/148 for inches.
         //When measured actual distance compared to calculated distanceis not the same.  There must be an timing measurement with the pulse.
         //values have been changed to match the correct measured distances so 58 changed to 39 and 148 changed to 98
+        //added variable that is set depending on the version of hardware used in the Move Motor 
         switch (units) {
             case Units.Centimeters: return Math.idiv(pulse, cmEquationDivider);
             case Units.Inches: return Math.idiv(pulse, inEquationDivider);
