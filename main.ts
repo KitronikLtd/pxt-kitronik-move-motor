@@ -605,6 +605,9 @@ namespace Kitronik_Move_Motor {
     //% block="measure distances in %unit"
     //% weight=100 blockGap=8
     export function setUltrasonicUnits(unit: Units): void {
+        if (initalised == false) {
+            setup()
+        }
         units = unit
     }
     
@@ -618,6 +621,9 @@ namespace Kitronik_Move_Motor {
     //% block="measure distance"
     //% weight=95 blockGap=8
     export function measure(maxCmDistance = 500): number {
+        if (initalised == false) {
+            setup()
+        }
         // send pulse
         pins.setPull(triggerPin, PinPullMode.PullNone);
         pins.digitalWritePin(triggerPin, 0);
