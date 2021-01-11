@@ -175,7 +175,6 @@ namespace Kitronik_Move_Motor {
     */
     //% shim=Kitronik_Move_Motor::hardwareVersion
     function hardwareVersion(): number {
-        basic.showString("A")
         return uBitVersion;
     }
     
@@ -215,13 +214,11 @@ namespace Kitronik_Move_Motor {
         uBitVersion = hardwareVersion()
         if (uBitVersion == 2)
         {
-            basic.showString("t")
             cmEquationDivider = ULTRASONIC_V2_DIV_CM
             inEquationDivider = ULTRASONIC_V2_DIV_IN
         }
         else
         {
-            basic.showString("o")
             cmEquationDivider = ULTRASONIC_V1_DIV_CM
             inEquationDivider = ULTRASONIC_V1_DIV_IN
         }
