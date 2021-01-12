@@ -10,9 +10,6 @@
     "files": [
         "main.ts",
         "README.md",
-        "shims.d.ts",
-        "enums.d.ts",
-        "main.cpp",
         "LightsandSound.md",
         "UsingUltrasonic.md",
         "AdvancedMotorAdjustment.md",
