@@ -169,11 +169,7 @@ namespace Kitronik_Move_Motor {
     let leftLfOffset = 0
     
     //let uBitVersion = 0
-    
-    /**
-    *
-    */
-    //% shim=Kitronik_Move_Motor::hardwareVersion
+
    // function hardwareVersion(): number {
     //    return uBitVersion;
     //}
@@ -639,6 +635,8 @@ namespace Kitronik_Move_Motor {
         switch (units) {
             case Units.Centimeters: return Math.idiv(pulse, cmEquationDivider);
             case Units.Inches: return Math.idiv(pulse, inEquationDivider);
+            //case Units.Centimeters: return Math.idiv(pulse, 39);
+            //case Units.Inches: return Math.idiv(pulse, 98);
             default: return 0;
         }
     }
