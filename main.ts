@@ -159,8 +159,8 @@ namespace Kitronik_Move_Motor {
     //Sound global variables
     let sirenOn = false
     //Ultrasonic global variables
-    let cmEquationDivider = 0
-    let inEquationDivider = 0
+    let cmEquationDivider = ULTRASONIC_V1_DIV_CM
+    let inEquationDivider = ULTRASONIC_V1_DIV_IN
     let triggerPin = DigitalPin.P13
     let echoPin = DigitalPin.P14
     let units = Units.Centimeters
