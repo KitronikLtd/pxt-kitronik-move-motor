@@ -219,7 +219,8 @@ namespace Kitronik_Move_Motor {
             cmEquationDivider = ULTRASONIC_V1_DIV_CM
             inEquationDivider = ULTRASONIC_V1_DIV_IN
         }
-        
+        pins.digitalWritePin(DigitalPin.P13, 0) //set the ultrasonic pin low ready to trigger
+        pins.digitalWritePin(DigitalPin.P14, 0) //set the ultrasonic pin low ready for return pulse
         buf[0] = MODE_2_REG_ADDR
         buf[1] = MODE_2_REG_VALUE
         pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
