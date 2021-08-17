@@ -803,6 +803,12 @@ namespace Kitronik_Move_Motor {
     //% block="bias to %direction by %balance"
     //% balance.min=0 balance.max=10
     export function motorBalance(direction: SpinDirections, balance: number): void {
+        if (balance < 0) {
+            balance = 0
+        }
+        else if (balance > 10) {
+            balance = 10
+        }
         leftMotorBias = 0
         rightMotorBias = 0
         switch (direction)
