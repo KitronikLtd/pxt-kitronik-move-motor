@@ -5,7 +5,8 @@
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "ws2812b": "github:KitronikLtd/pxt-ws2812b#v0.0.5"
+        "ws2812b": "github:KitronikLtd/pxt-ws2812b#v0.0.5",
+        "microphone": "*"
     },
     "files": [
         "main.ts",
@@ -24,6 +25,10 @@
     "testFiles": [
         "test.ts"
     ],
+    "targetVersions": {
+        "target": "4.0.11",
+        "targetId": "microbit"
+    },
     "supportedTargets": [
         "microbit"
     ],
