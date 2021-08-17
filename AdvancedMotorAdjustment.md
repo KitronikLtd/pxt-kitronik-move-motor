@@ -3,7 +3,7 @@
 # :MOVE Motor Advanced Motor Adjustment
 
 ### Introduction Step @unplugged
-Motors are great, but even when the are supposed to be identical, they don't always run at the same speed.  
+Motors are great, but even when they are supposed to be identical, they don't always run at the same speed.  
 In this tutorial, we're going to learn how to adjust the individual motor outputs on :MOVE Motor to keep it driving in a straight line.
 
 ![:MOVE Motor front view](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/move-motor-front.jpg)
