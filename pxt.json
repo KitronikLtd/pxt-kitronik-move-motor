@@ -1,11 +1,10 @@
 {
     "name": "pxt-kitronik-move-motor",
-    "version": "0.1.39",
+    "version": "0.3.3",
     "description": "Blocks to simplify using Kitronik MOVE Motor board in PXT",
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "ws2812b": "github:KitronikLtd/pxt-ws2812b#v0.0.5",
         "microphone": "*"
     },
     "files": [
@@ -18,9 +17,19 @@
         "LineFollowing.md",
         "RadioControlRx.md",
         "RadioControlTx.md",
+        "Klaw.md",
         "_locales/fr/pxt-kitronik-move-motor-jsodc-strings.json",
         "_locales/fr/pxt-kitronik-move-motor-strings.json",
-        "_locales/fr/LightsandSound.md"
+        "_locales/fr/LightsandSound.md",
+        "_locales/nl/pxt-kitronik-move-motor-jsdoc-strings.json",
+        "_locales/nl/pxt-kitronik-move-motor-strings.json",
+        "_locales/nl/LightsandSound.md",
+        "_locales/nl/UsingUltrasonic.md",
+        "_locales/nl/DrawingRobot.md",
+        "_locales/nl/LineFollowing.md",
+        "_locales/nl/AdvancedMotorAdjustment.md",
+        "_locales/nl/RadioControlRx.md",
+        "_locales/nl/RadioControlTx.md"
     ],
     "testFiles": [
         "test.ts"

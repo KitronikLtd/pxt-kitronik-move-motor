@@ -11,9 +11,15 @@ namespace Kitronik_Move_Motor {
     let MOTOR_OUT_ADDR = 0x08  //MOTOR output register address
 
     let MODE_1_REG_VALUE = 0x00 //setup to normal mode and not to respond to sub address
-    let MODE_2_REG_VALUE = 0x04  //Setup to make changes on ACK, outputs set to open-drain
+    let MODE_2_REG_VALUE = 0x0D  //Setup to make changes on ACK, outputs set to Totem poled to drive the motor driver chip
     let MOTOR_OUT_VALUE = 0xAA  //Outputs set to be controled PWM registers
 
+    //Define of the two different values required in conversion equation for the ultrasonic to measure accurately
+    let ULTRASONIC_V1_DIV_CM = 39
+    let ULTRASONIC_V2_DIV_CM = 58
+    let ULTRASONIC_V1_DIV_IN = 98
+    let ULTRASONIC_V2_DIV_IN = 148
+    
     /*GENERAL*/
     export enum OnOffSelection {
         //% block="on"
@@ -48,7 +54,7 @@ namespace Kitronik_Move_Motor {
     }
 
     /*MOTORS*/
-    // List of motors for the motor blocks to use. These represent register offsets in the PCA9832 driver IC.
+    // List of motors for the motor blocks to use. These correspond to the register offsets in the PCA9832 driver IC.
     export enum Motors {
         //% block="Left"
         MotorLeft = 0x04,
@@ -126,7 +132,26 @@ namespace Kitronik_Move_Motor {
         High
     }
 
+    //Pin selection from expansion pins
+    export enum PinSelection
+    {
+        //% block="P15"
+        P15,
+        //% block="P16"
+        P16
+    }
+
+    //Pin selection from expansion pins
+    export enum ServoSelection
+    {
+        //% block="servo 1"
+        servo1,
+        //% block="servo 2"
+        servo2
+    }
+
     let initalised = false //a flag to allow us to initialise without the user having to explicitly call the initialisation routine
+    let moveMotorVersion = 0
     //Motor global variables to allow user to 'bias' the motors to drive the :MOVE motor in a straight line
     let rightMotorBias = 0
     let leftMotorBias = 0
@@ -134,28 +159,76 @@ namespace Kitronik_Move_Motor {
     //Sound global variables
     let sirenOn = false
     //Ultrasonic global variables
+    let cmEquationDivider = ULTRASONIC_V1_DIV_CM
+    let inEquationDivider = ULTRASONIC_V1_DIV_IN
     let triggerPin = DigitalPin.P13
     let echoPin = DigitalPin.P14
     let units = Units.Centimeters
     //Line following sensors global variables
-    let detectionLevel = 205
+    let rightLfOffset = 0
+    let leftLfOffset = 0
+    
+    //let uBitVersion = 0
 
-
+   // function hardwareVersion(): number {
+    //    return uBitVersion;
+    //}
+    
     /*
 	This sets up the PCA9632 I2C driver chip for controlling the motors
 	It is called from other blocks, so never needs calling directly.
     */
     function setup(): void {
-        let buf = pins.createBuffer(2)
 
-        buf[0] = MODE_1_REG_ADDR
-        buf[1] = MODE_1_REG_VALUE
-        pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+        let buf = pins.createBuffer(2)
+        //Pin 3 toggled while pin12 reads the toggle.  This is to determine the version of the board for which line following sensor is attached.
+        basic.clearScreen()
+        led.enable(false)
+        pins.digitalWritePin(DigitalPin.P3, 1)
+        basic.pause(100)
+        if (pins.digitalReadPin(DigitalPin.P12) == 1) {
+            pins.digitalWritePin(DigitalPin.P3, 0)
+            basic.pause(100)
+            if (pins.digitalReadPin(DigitalPin.P12) == 0) {
+                moveMotorVersion = 13
+            } else {
+                moveMotorVersion = 10
+            }
+        } else {
+            moveMotorVersion = 10
+        }
+
+        
+        led.enable(true)
+        
+        //If version number is 1.0 (10) run the equalise sensor code
+        if (moveMotorVersion == 10){
+            equaliseSensorOffsets()
+        }
+        
+        //determine which version of microbit is being used.  From this the correct value used in the equation to convert pulse to distance
+        //uBitVersion = hardwareVersion()
+        let sizeOfRam = control.ramSize()
+        if (sizeOfRam >= 100000)
+        {
+            cmEquationDivider = ULTRASONIC_V2_DIV_CM
+            inEquationDivider = ULTRASONIC_V2_DIV_IN
+        }
+        else
+        {
+            cmEquationDivider = ULTRASONIC_V1_DIV_CM
+            inEquationDivider = ULTRASONIC_V1_DIV_IN
+        }
+        pins.digitalWritePin(DigitalPin.P13, 0) //set the ultrasonic pin low ready to trigger
+        pins.digitalWritePin(DigitalPin.P14, 0) //set the ultrasonic pin low ready for return pulse
         buf[0] = MODE_2_REG_ADDR
         buf[1] = MODE_2_REG_VALUE
         pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
         buf[0] = MOTOR_OUT_ADDR
         buf[1] = MOTOR_OUT_VALUE
+        pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+        buf[0] = MODE_1_REG_ADDR
+        buf[1] = MODE_1_REG_VALUE
         pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
         basic.pause(1)
 
@@ -324,7 +397,9 @@ namespace Kitronik_Move_Motor {
         //% weight=95
         show() {
             //use the Kitronik version which respects brightness for all 
-            ws2812b.sendBuffer(this.buf, this.pin, this.brightness);
+            //ws2812b.sendBuffer(this.buf, this.pin, this.brightness);
+            // Use the pxt-microbit core version which now respects brightness (10/2020)
+            light.sendWS2812BufferWithBrightness(this.buf, this.pin, this.brightness);
         }
 
         /**
@@ -514,6 +589,7 @@ namespace Kitronik_Move_Motor {
     //////////////
     //  SENSORS //
     //////////////
+
     /**
      * Set the distance measurement units to cm or inches (cm is default)
      * @param unit desired conversion unit
@@ -524,6 +600,9 @@ namespace Kitronik_Move_Motor {
     //% block="measure distances in %unit"
     //% weight=100 blockGap=8
     export function setUltrasonicUnits(unit: Units): void {
+        if (initalised == false) {
+            setup()
+        }
         units = unit
     }
     
@@ -537,6 +616,9 @@ namespace Kitronik_Move_Motor {
     //% block="measure distance"
     //% weight=95 blockGap=8
     export function measure(maxCmDistance = 500): number {
+        if (initalised == false) {
+            setup()
+        }
         // send pulse
         pins.setPull(triggerPin, PinPullMode.PullNone);
         pins.digitalWritePin(triggerPin, 0);
@@ -550,14 +632,41 @@ namespace Kitronik_Move_Motor {
         //From the HC-SR04 datasheet the formula for calculating distance is "microSecs of pulse"/58 for cm or "microSecs of pulse"/148 for inches.
         //When measured actual distance compared to calculated distanceis not the same.  There must be an timing measurement with the pulse.
         //values have been changed to match the correct measured distances so 58 changed to 39 and 148 changed to 98
+        //added variable that is set depending on the version of hardware used in the Move Motor 
         switch (units) {
-            case Units.Centimeters: return Math.idiv(pulse, 39);
-            case Units.Inches: return Math.idiv(pulse, 98);
+            case Units.Centimeters: return Math.idiv(pulse, cmEquationDivider);
+            case Units.Inches: return Math.idiv(pulse, inEquationDivider);
+            //case Units.Centimeters: return Math.idiv(pulse, 39);
+            //case Units.Inches: return Math.idiv(pulse, 98);
             default: return 0;
         }
     }
     
-
+    
+    /**
+    This function allows us to read the difference in the sensor outputs. 
+    It assumes that both are over a similar surface, and hence any offset is a fixed offset caused by component tolerances.
+    If the sensors are over different surfaces it will reuslt in a false offset reading,and pants perfomance.
+    We do this to help hide the complexity of tolerance and similar from novice users, 
+    but if you are an expert reading this comment then feel free to play with this functionand see what it does.
+    **/
+    export function equaliseSensorOffsets(): void {
+        let rightLineSensor = pins.analogReadPin(AnalogPin.P1)
+        let leftLineSensor = pins.analogReadPin(AnalogPin.P2)
+        let Offset = ((Math.abs(rightLineSensor-leftLineSensor))/2)
+        if (leftLineSensor > rightLineSensor) {
+            leftLfOffset = -Offset
+            rightLfOffset = Offset
+        } else {
+        leftLfOffset = Offset
+            rightLfOffset = -Offset
+        }
+        /*if (leftLineSensor > rightLineSensor) {
+            rightLfOffset = leftLineSensor - rightLineSensor
+        } else if (leftLineSensor < rightLineSensor) {
+            leftLfOffset = rightLineSensor - leftLineSensor
+        }*/
+    }
 
     /**
     * Read sensor block allows user to read the value of the sensor (returns value in range 0-1023)
@@ -569,12 +678,15 @@ namespace Kitronik_Move_Motor {
     //% block="%pinSelected| line following sensor value"
     //% weight=85 blockGap=8
     export function readSensor(sensorSelected: LfSensor) {
+        if (initalised == false) {
+            setup()
+        }
         let value = 0
         if (sensorSelected == LfSensor.Left) {
-            value = pins.analogReadPin(AnalogPin.P2)
+            value = pins.analogReadPin(AnalogPin.P2) + leftLfOffset
         }
         else if (sensorSelected == LfSensor.Right) {
-            value = pins.analogReadPin(AnalogPin.P1)
+            value = pins.analogReadPin(AnalogPin.P1) + rightLfOffset
         }
         return value;
     }
@@ -583,6 +695,12 @@ namespace Kitronik_Move_Motor {
     //////////////
     //  MOTORS  //
     //////////////
+    // These variables hold the register values for the 4 PWM registers.
+    // Each pair of these controls a motor. We do it this way so we can do an auto increment write to the chip.
+    let PWMReg1 = 0
+    let PWMReg2 = 0
+    let PWMReg3 = 0
+    let PWMReg4 = 0
     /**
      * Drives the :MOVE motor in the specified direction. Turns have a small amount of forward motion.
      * @param direction Direction to move in
@@ -595,7 +713,7 @@ namespace Kitronik_Move_Motor {
     //% block="move %direction|at speed %speed"
     //% speed.min=0, speed.max=100
     export function move(direction: DriveDirections, speed: number): void {
-         if (initalised == false) {
+        if (initalised == false) {
             setup()
         }
         switch (direction)
@@ -748,7 +866,7 @@ namespace Kitronik_Move_Motor {
     //% block="turn %motor|motor on direction %dir|speed %speed"
     //% weight=75 blockGap=8
     //% speed.min=0 speed.max=100
-    export function motorOn(motor: Motors, dir: MotorDirection, speed: number): void {
+    export function motorOn(motor: Motors, dir: MotorDirection, speed: number): void { 
         if (initalised == false) {
             setup()
         }
@@ -757,48 +875,64 @@ namespace Kitronik_Move_Motor {
         if (outputVal > 255){ 
             outputVal = 255 
         }
-        let motorOnbuf = pins.createBuffer(2)
-        if (motor == Motors.MotorRight){
+        let motorOnbuf = pins.createBuffer(5)
+        motorOnbuf[0] = 0xA2
+        //The jerk message gives the motor a 'shove' at ful power to aid starting on lower pwm ratios
+        let motorJerkBuf = pins.createBuffer(5)
+        motorJerkBuf[0] = 0xA2
+        switch (motor) {
+            case Motors.MotorRight:
             switch (dir) {
                 case MotorDirection.Forward:
-                    motorOnbuf[0] = motor
-                    motorOnbuf[1] = 0x00
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
-                    motorOnbuf[0] = motor + 1
-                    motorOnbuf[1] = outputVal  - rightMotorBias
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
+                    PWMReg1 = 0
+                    PWMReg2 = outputVal  - rightMotorBias
+                    motorJerkBuf[1] = 0
+                    motorJerkBuf[2] = 0xFF
                     break
                 case MotorDirection.Reverse:
-                    motorOnbuf[0] = motor
-                    motorOnbuf[1] = outputVal - rightMotorBias
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
-                    motorOnbuf[0] = motor + 1
-                    motorOnbuf[1] = 0x00
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
+                    PWMReg1 =  outputVal  - rightMotorBias
+                    PWMReg2 = 0
+                    motorJerkBuf[1] = 0xFF
+                    motorJerkBuf[2] = 0
                     break
+            
             }
-        }
-        else if (motor == Motors.MotorLeft){
-            switch (dir) {
+            break
+            case Motors.MotorLeft:
+                        switch (dir) {
                 case MotorDirection.Forward:
-                    motorOnbuf[0] = motor
-                    motorOnbuf[1] = outputVal - leftMotorBias
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
-                    motorOnbuf[0] = motor + 1
-                    motorOnbuf[1] = 0x00
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
+                    PWMReg3 = outputVal  - leftMotorBias
+                    PWMReg4 = 0
+                    motorJerkBuf[3] = 0xFF
+                    motorJerkBuf[4] = 0x00
                     break
                 case MotorDirection.Reverse:
-                    motorOnbuf[0] = motor
-                    motorOnbuf[1] = 0x00
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
-                    motorOnbuf[0] = motor + 1
-                    motorOnbuf[1] = outputVal - leftMotorBias
-                    pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
+                    PWMReg3 = 0
+                    PWMReg4 = outputVal  - leftMotorBias
+                    motorJerkBuf[3] = 0x00
+                    motorJerkBuf[4] = 0xFF
                     break
+            
             }
+            break
+            default:
+            //Stop - something has gone wrong
+            
         }
+
+        motorOnbuf[1] = PWMReg1
+        motorOnbuf[2] = PWMReg2
+        motorOnbuf[3] = PWMReg3
+        motorOnbuf[4] = PWMReg4
+
+        //At this point we have updated the required PWM Registers, so write it to the Chip
+        pins.i2cWriteBuffer(CHIP_ADDR, motorJerkBuf, false)
+        basic.pause(1) //let the motor start before throttling them to the lower level
+        pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
+ 
     }
+
+
 
     /**
      * Turns off the specified motor.
@@ -813,13 +947,24 @@ namespace Kitronik_Move_Motor {
         if (initalised == false) {
             setup()
         }
-        let motorOffbuf = pins.createBuffer(2)
-        motorOffbuf[0] = motor
-        motorOffbuf[1] = 0x00
-        pins.i2cWriteBuffer(CHIP_ADDR, motorOffbuf, false)
-        motorOffbuf[0] = motor + 1
-        motorOffbuf[1] = 0x00
-        pins.i2cWriteBuffer(CHIP_ADDR, motorOffbuf, false)
+        let motorOnbuf = pins.createBuffer(5)
+        motorOnbuf[0] = 0xA2
+        switch (motor) {
+            case Motors.MotorRight:
+                    PWMReg1 = 0
+                    PWMReg2 = 0
+            break
+            case Motors.MotorLeft:
+                    PWMReg3 = 0
+                    PWMReg4 = 0
+            break
+        }
+        motorOnbuf[1] = PWMReg1
+        motorOnbuf[2] = PWMReg2
+        motorOnbuf[3] = PWMReg3
+        motorOnbuf[4] = PWMReg4
+        //At this point we have updated the required PWM Registers, so write it to the Chip
+        pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
     }
 
     //////////////
@@ -862,6 +1007,81 @@ namespace Kitronik_Move_Motor {
         else {
             sirenOn = false
             music.stopMelody(MelodyStopOptions.Background)
+        }
+    }
+    
+    
+    ////////////////////
+    //  SERVO & PINS  //
+    ////////////////////
+    /**
+    * Read the digital value of the pin selected.
+    * @param PinSelection is the list of pins avaible to choose from.
+    */
+    //% subcategory=Pins
+    //% blockId=kitronik_move_motor_digital_read
+    //% weight=90 blockGap=8
+    //% block="digital read pin %pin"
+    export function readDigitalPin(pin: PinSelection): number {
+        if (pin == PinSelection.P15) {
+            return pins.digitalReadPin(DigitalPin.P15)
+        }
+        else{
+            return pins.digitalReadPin(DigitalPin.P16)
+        }
+    }
+    
+    /**
+    * Write the digital value of the pin selected.
+    * @param PinSelection is the list of pins avaible to choose from.
+    */
+    //% subcategory=Pins
+    //% blockId=kitronik_move_motor_digital_write
+    //% weight=90 blockGap=8
+    //% block="digital write pin %pin to %value"
+    //% value.min=0 value.max=1
+    export function writeDigitalPin(pin: PinSelection, value: number): void {
+        if (pin == PinSelection.P15) {
+            pins.digitalWritePin(DigitalPin.P15, value)
+        }
+        else{
+            pins.digitalWritePin(DigitalPin.P16, value)
+        }
+    }
+
+    /**
+    * Write the analog value of the pin selected.
+    * @param PinSelection is the list of pins avaible to choose from.
+    */
+    //% subcategory=Pins
+    //% blockId=kitronik_move_motor_analog_write
+    //% weight=90 blockGap=8
+    //% block="analog write pin %pin to %value"
+    //% value.min=0 value.max=1023
+    export function writeAnalogPin(pin: PinSelection, value: number): void {
+        if (pin == PinSelection.P15) {
+            pins.analogWritePin(AnalogPin.P15, value)
+        }
+        else{
+            pins.analogWritePin(AnalogPin.P16, value)
+        }
+    }
+
+    /**
+    * Write the servo angle of the pin selected for driving a servo.
+    * @param PinSelection is the list of pins avaible to choose from.
+    */
+    //% subcategory=Pins
+    //% blockId=kitronik_move_motor_servo_write
+    //% weight=90 blockGap=8
+    //% block="write %servo to %angle"
+    //% angle.min=0 angle.max=180
+    export function writeServoPin(servo: ServoSelection, angle: number): void {
+        if (servo == ServoSelection.servo1) {
+            pins.servoWritePin(AnalogPin.P15, angle)
+        }
+        else{
+            pins.servoWritePin(AnalogPin.P16, angle)
         }
     }
 }
