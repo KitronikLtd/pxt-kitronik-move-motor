@@ -701,6 +701,11 @@ namespace Kitronik_Move_Motor {
     let PWMReg2 = 0
     let PWMReg3 = 0
     let PWMReg4 = 0
+
+    // Note: WS2811 takes the data in GRB format
+    let motorBuf = pins.createBuffer(6) // WS2811 ICs, each with RGB (RG = Motor, B = Brake)
+    let motorPin = DigitalPin.P12
+
     /**
      * Drives the :MOVE motor in the specified direction. Turns have a small amount of forward motion.
      * @param direction Direction to move in
@@ -932,6 +937,67 @@ namespace Kitronik_Move_Motor {
  
     }
 
+    // New function using WS2811 LED Drivers
+    /**
+     * Sets the requested motor running in chosen direction at a set speed.
+     * @param motor which motor to turn on
+     * @param dir   which direction to go
+     * @param speed how fast to spin the motor
+     */
+    //% subcategory=Motors
+    //% group="Motor Control"
+    //% blockId=kitronik_move_motor_motor_drive
+    //% block="drive %motor|motor on direction %dir|speed %speed"
+    //% weight=75 blockGap=8
+    //% speed.min=0 speed.max=100
+    export function motorDrive(motor: Motors, dir: MotorDirection, speed: number): void {
+        /*convert 0-100 to 0-255 by a simple multiple by 2.55*/
+        let outputVal = Math.round(speed*2.55)
+        if (outputVal > 255){ 
+            outputVal = 255 
+        }
+        switch (motor) {
+            case Motors.MotorRight:
+                switch (dir) {
+                    case MotorDirection.Forward:
+                        motorBuf[0] = outputVal
+                        motorBuf[1] = 0
+                        break
+                    case MotorDirection.Reverse:
+                        motorBuf[0] = 0
+                        motorBuf[1] = outputVal
+                        break
+                }
+                if (outputVal == 0) {
+                    motorBuf[2] = 255
+                }
+                else {
+                    motorBuf[2] = 0
+                }
+            break
+            case Motors.MotorLeft:
+                switch (dir) {
+                    case MotorDirection.Forward:
+                        motorBuf[3] = outputVal
+                        motorBuf[4] = 0
+                        break
+                    case MotorDirection.Reverse:
+                        motorBuf[3] = 0
+                        motorBuf[4] = outputVal
+                        break
+                }
+                if (outputVal == 0) {
+                    motorBuf[5] = 255
+                }
+                else {
+                    motorBuf[5] = 0
+                }
+            break
+            default:
+            //Stop - something has gone wrong
+        }
+        Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
+    }
 
 
     /**

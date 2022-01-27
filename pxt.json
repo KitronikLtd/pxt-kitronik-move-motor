@@ -5,7 +5,8 @@
     "license": "MIT",
     "dependencies": {
         "core": "*",
-        "microphone": "*"
+        "microphone": "*",
+        "Kitronik_WS2811": "github:KitronikLtd/pxt-kitronik-ws2811"
     },
     "files": [
         "main.ts",
