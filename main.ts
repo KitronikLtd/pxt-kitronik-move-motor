@@ -997,6 +997,7 @@ namespace Kitronik_Move_Motor {
             //Stop - something has gone wrong
         }
         //Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
+        ws2812b.sendBuffer(motorBuf, motorPin)
     }
 
 
