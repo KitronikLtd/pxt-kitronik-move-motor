@@ -996,7 +996,7 @@ namespace Kitronik_Move_Motor {
             default:
             //Stop - something has gone wrong
         }
-        Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
+        //Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
     }
 
 
