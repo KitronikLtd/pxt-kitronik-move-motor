@@ -251,6 +251,7 @@ namespace Kitronik_Move_Motor {
             basic.pause(1)
         }
         
+        basic.showNumber(moveMotorVersion)
         initalised = true // We have setup, so don't come in here again.
     }
 
