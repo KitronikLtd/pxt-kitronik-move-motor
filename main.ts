@@ -179,7 +179,6 @@ namespace Kitronik_Move_Motor {
 	It is called from other blocks, so never needs calling directly.
     */
     function setup(): void {
-
         let buf = pins.createBuffer(2)
         let readBuf = pins.createBuffer(1)
         // Pin 3 toggled while Pin 12 reads the toggle - this is to determine the version of the board for which line following sensor is attached (V1.0 or V1.3)
@@ -208,7 +207,7 @@ namespace Kitronik_Move_Motor {
             readBuf = pins.i2cReadBuffer(CHIP_ADDR, 1, false)
             let readValue = readBuf[0]
 
-            if (readValue == MODE_2_REG_VALUE) {
+            if (readValue != MODE_2_REG_VALUE) {
                 moveMotorVersion = 31
             }
             else {
