@@ -206,7 +206,7 @@ namespace Kitronik_Move_Motor {
             buf[1] = MODE_2_REG_VALUE
             pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
             readBuf = pins.i2cReadBuffer(CHIP_ADDR, 1, false)
-            readValue = readBuf[0]
+            let readValue = readBuf[0]
 
             if (readValue == MODE_2_REG_VALUE) {
                 moveMotorVersion = 31
