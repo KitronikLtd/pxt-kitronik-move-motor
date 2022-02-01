@@ -181,7 +181,7 @@ namespace Kitronik_Move_Motor {
     function setup(): void {
         let buf = pins.createBuffer(2)
         let readBuf = pins.createBuffer(1)
-        // Pin 3 toggled while Pin 12 reads the toggle - this is to determine the version of the board for which line following sensor is attached (V1.0 or V1.3)
+        // Pin 3 toggled while Pin 12 reads the toggle - this is to determine the version of the board for which line following sensor is attached (V1.0 or V2.0)
         basic.clearScreen()
         led.enable(false) // Disable uBit LED display as Pin 3 controls part it
         pins.digitalWritePin(DigitalPin.P3, 1)
@@ -190,9 +190,9 @@ namespace Kitronik_Move_Motor {
             pins.digitalWritePin(DigitalPin.P3, 0)
             basic.pause(100)
             if (pins.digitalReadPin(DigitalPin.P12) == 0) {
-                moveMotorVersion = 13
+                moveMotorVersion = 20
             } else {
-                moveMotorVersion = 0
+                moveMotorVersion = 0 // Set to 0 as still need to identify between V1.0 and V3.1
             }
         }
         led.enable(true) // Enable the uBit LED display again
@@ -249,8 +249,7 @@ namespace Kitronik_Move_Motor {
             pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
             basic.pause(1)
         }
-        
-        basic.showNumber(moveMotorVersion)
+
         initalised = true // We have setup, so don't come in here again.
     }
 
