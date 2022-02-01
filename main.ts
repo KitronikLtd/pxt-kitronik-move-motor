@@ -953,12 +953,12 @@ namespace Kitronik_Move_Motor {
 
             // Send the data to the WS2811 ICs
             if (outputVal != 0) {
-                //Kitronik_WS2811.sendBuffer(motorJerkBuf, motorPin)
-                ws2812b.sendBuffer(motorJerkBuf, motorPin)
+                Kitronik_WS2811.sendBuffer(motorJerkBuf, motorPin)
+                //ws2812b.sendBuffer(motorJerkBuf, motorPin)
                 basic.pause(1)
             }
-            //Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
-            ws2812b.sendBuffer(motorBuf, motorPin)
+            Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
+            //ws2812b.sendBuffer(motorBuf, motorPin)
         }
         else {
             let motorOnbuf1 = pins.createBuffer(5)
@@ -1049,8 +1049,8 @@ namespace Kitronik_Move_Motor {
             }
             
             // Send the data to the WS2811 ICs
-            //Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
-            ws2812b.sendBuffer(motorBuf, motorPin)
+            Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
+            //ws2812b.sendBuffer(motorBuf, motorPin)
         }
         else {
             let motorOnbuf1 = pins.createBuffer(5)

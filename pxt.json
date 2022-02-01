@@ -1,12 +1,12 @@
 {
     "name": "pxt-kitronik-move-motor",
-    "version": "0.4.8",
+    "version": "0.4.9",
     "description": "Blocks to simplify using Kitronik MOVE Motor board in PXT",
     "license": "MIT",
     "dependencies": {
         "core": "*",
         "microphone": "*",
-        "ws2812b": "github:microsoft/pxt-ws2812b#v0.1.1"
+        "Kitronik_WS2811": "github:KitronikLtd/pxt-kitronik-ws2811"
     },
     "files": [
         "main.ts",
