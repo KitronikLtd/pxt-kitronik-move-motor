@@ -156,6 +156,7 @@ namespace Kitronik_Move_Motor {
     let rightMotorBias = 0
     let leftMotorBias = 0
     let turnTightness = 4
+    let latestMotorBuf = pins.createBuffer(6) // Store the most recent data sent to the WS2811 driver so that we can see the latest speed settings
     //Sound global variables
     let sirenOn = false
     //Ultrasonic global variables
@@ -257,6 +258,20 @@ namespace Kitronik_Move_Motor {
     //  LIGHTS  //
     //////////////
 
+    /**
+     * Turn off the brake lights.
+     */
+    //% subcategory="Lights"
+    //% blockId="kitronik_move_motor_brake_light_off"
+    //% block="turn off brake lights"
+    //% weight=100 blockGap=8
+    export function brakeLightsOff(): void {
+        let brakeBuf = pins.createBuffer(6) // WS2811 ICs, each with RGB (RG = Motor, B = Brake)
+        brakeBuf = latestMotorBuf
+        brakeBuf[2] = 0
+        brakeBuf[5] = 0
+        Kitronik_WS2811.sendBuffer(brakeBuf, motorPin)
+    }
 
     export class MoveMotorZIP {
         buf: Buffer;
@@ -956,6 +971,7 @@ namespace Kitronik_Move_Motor {
                 //ws2812b.sendBuffer(motorJerkBuf, motorPin)
                 basic.pause(1)
             }
+            latestMotorBuf = motorBuf
             Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
             //ws2812b.sendBuffer(motorBuf, motorPin)
         }
