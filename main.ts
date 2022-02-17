@@ -1,5 +1,5 @@
 /**
- * Blocks for driving the Kitronik MOVE Motor Buggy
+ * Blocks for driving the Kitronik :MOVE Motor Buggy
  */
 //% weight=100 color=#00A654 icon="\uf1b9" block="MOVE Motor"
 //% groups='["Ultrasonic","Line Following","Drive", "Setup", "Motor Control"]'
@@ -510,7 +510,7 @@ namespace Kitronik_Move_Motor {
     //% subcategory="Lights"
     //% blockId="kitronik_move_motor_ZIP_LED_create" 
     //% block="MOVE Motor with %numZips|ZIP LEDs"
-    //% weight=100 blockGap=8
+    //% weight=99 blockGap=8
     //% trackArgs=0,2
     //% blockSetVariable=moveMotorZIP
     export function createMoveMotorZIPLED(numZips: number): MoveMotorZIP {
@@ -749,7 +749,7 @@ namespace Kitronik_Move_Motor {
     //% blockId=kitronik_move_motor_drive
     //% weight=100 blockGap=8
     //% block="move %direction|at speed %speed"
-    //% speed.min=0, speed.max=100
+    //% speed.min=0 speed.max=100
     export function move(direction: DriveDirections, speed: number): void {
         if (initalised == false) {
             setup()
@@ -968,12 +968,10 @@ namespace Kitronik_Move_Motor {
             // Send the data to the WS2811 ICs
             if (outputVal != 0) {
                 Kitronik_WS2811.sendBuffer(motorJerkBuf, motorPin)
-                //ws2812b.sendBuffer(motorJerkBuf, motorPin)
                 basic.pause(1)
             }
             latestMotorBuf = motorBuf
             Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
-            //ws2812b.sendBuffer(motorBuf, motorPin)
         }
         else {
             let motorOnbuf1 = pins.createBuffer(5)
@@ -1065,7 +1063,6 @@ namespace Kitronik_Move_Motor {
             
             // Send the data to the WS2811 ICs
             Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
-            //ws2812b.sendBuffer(motorBuf, motorPin)
         }
         else {
             let motorOnbuf1 = pins.createBuffer(5)
