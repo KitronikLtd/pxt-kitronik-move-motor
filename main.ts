@@ -1,10 +1,10 @@
 /**
- * Blocks for driving the Kitronik MOVE Motor Buggy
+ * Blocks for driving the Kitronik :MOVE Motor Buggy
  */
 //% weight=100 color=#00A654 icon="\uf1b9" block="MOVE Motor"
 //% groups='["Ultrasonic","Line Following","Drive", "Setup", "Motor Control"]'
 namespace Kitronik_Move_Motor {
-    //Constants 
+    //Constants for PCA9632 Driver IC
     let CHIP_ADDR = 0x62 // CHIP_ADDR is the standard chip address for the PCA9632, datasheet refers to LED control but chip is used for PWM to motor driver
     let MODE_1_REG_ADDR = 0x00 //mode 1 register address
     let MODE_2_REG_ADDR = 0x01  //mode 2 register address
@@ -156,6 +156,7 @@ namespace Kitronik_Move_Motor {
     let rightMotorBias = 0
     let leftMotorBias = 0
     let turnTightness = 4
+    let latestMotorBuf = pins.createBuffer(6) // Store the most recent data sent to the WS2811 driver so that we can see the latest speed settings
     //Sound global variables
     let sirenOn = false
     //Ultrasonic global variables
@@ -175,38 +176,52 @@ namespace Kitronik_Move_Motor {
     //}
     
     /*
-	This sets up the PCA9632 I2C driver chip for controlling the motors
+	This function checks the version of :MOVE Motor PCB and carries out different setup routines depending on the version number.
 	It is called from other blocks, so never needs calling directly.
     */
     function setup(): void {
-
         let buf = pins.createBuffer(2)
-        //Pin 3 toggled while pin12 reads the toggle.  This is to determine the version of the board for which line following sensor is attached.
+        let readBuf = pins.createBuffer(1)
+        // Pin 3 toggled while Pin 12 reads the toggle - this is to determine the version of the board for which line following sensor is attached (V1.0 or V2.0)
         basic.clearScreen()
-        led.enable(false)
+        led.enable(false) // Disable uBit LED display as Pin 3 controls part it
         pins.digitalWritePin(DigitalPin.P3, 1)
         basic.pause(100)
         if (pins.digitalReadPin(DigitalPin.P12) == 1) {
             pins.digitalWritePin(DigitalPin.P3, 0)
             basic.pause(100)
             if (pins.digitalReadPin(DigitalPin.P12) == 0) {
-                moveMotorVersion = 13
+                moveMotorVersion = 20
             } else {
+                moveMotorVersion = 0 // Set to 0 as still need to identify between V1.0 and V3.1
+            }
+        }
+        led.enable(true) // Enable the uBit LED display again
+
+        // If the toggle check does not identify the board as V1.3, there needs to be a check between V1.0 and V3.1
+        // Attempting to write/read a register on the PCA9632 IC will identify whether the IC is there or not (no PCA9632 on V3.1)
+        // Note: This check relies on the micro:bit not throwing an error when an I2C address is used which isn't present on the I2C bus
+        if (moveMotorVersion == 0) {
+            buf[0] = MODE_2_REG_ADDR
+            buf[1] = MODE_2_REG_VALUE
+            pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+            readBuf = pins.i2cReadBuffer(CHIP_ADDR, 1, false)
+            let readValue = readBuf[0]
+
+            if (readValue != MODE_2_REG_VALUE) {
+                moveMotorVersion = 31
+            }
+            else {
                 moveMotorVersion = 10
             }
-        } else {
-            moveMotorVersion = 10
         }
-
-        
-        led.enable(true)
         
         //If version number is 1.0 (10) run the equalise sensor code
         if (moveMotorVersion == 10){
             equaliseSensorOffsets()
         }
         
-        //determine which version of microbit is being used.  From this the correct value used in the equation to convert pulse to distance
+        //determine which version of microbit is being used. From this the correct value is used in the equation to convert pulse to distance
         //uBitVersion = hardwareVersion()
         let sizeOfRam = control.ramSize()
         if (sizeOfRam >= 100000)
@@ -221,24 +236,42 @@ namespace Kitronik_Move_Motor {
         }
         pins.digitalWritePin(DigitalPin.P13, 0) //set the ultrasonic pin low ready to trigger
         pins.digitalWritePin(DigitalPin.P14, 0) //set the ultrasonic pin low ready for return pulse
-        buf[0] = MODE_2_REG_ADDR
-        buf[1] = MODE_2_REG_VALUE
-        pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
-        buf[0] = MOTOR_OUT_ADDR
-        buf[1] = MOTOR_OUT_VALUE
-        pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
-        buf[0] = MODE_1_REG_ADDR
-        buf[1] = MODE_1_REG_VALUE
-        pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
-        basic.pause(1)
 
-        initalised = true //we have setup, so dont come in here again.
+        // Setup the PCA9632 IC if NOT Version 3.1
+        if (moveMotorVersion != 31) {
+            buf[0] = MODE_2_REG_ADDR
+            buf[1] = MODE_2_REG_VALUE
+            pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+            buf[0] = MOTOR_OUT_ADDR
+            buf[1] = MOTOR_OUT_VALUE
+            pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+            buf[0] = MODE_1_REG_ADDR
+            buf[1] = MODE_1_REG_VALUE
+            pins.i2cWriteBuffer(CHIP_ADDR, buf, false)
+            basic.pause(1)
+        }
+
+        initalised = true // We have setup, so don't come in here again.
     }
 
     //////////////
     //  LIGHTS  //
     //////////////
 
+    /**
+     * Turn off the brake lights.
+     */
+    //% subcategory="Lights"
+    //% blockId="kitronik_move_motor_brake_light_off"
+    //% block="turn off brake lights"
+    //% weight=100 blockGap=8
+    export function brakeLightsOff(): void {
+        let brakeBuf = pins.createBuffer(6) // WS2811 ICs, each with RGB (RG = Motor, B = Brake)
+        brakeBuf = latestMotorBuf
+        brakeBuf[2] = 0
+        brakeBuf[5] = 0
+        Kitronik_WS2811.sendBuffer(brakeBuf, motorPin)
+    }
 
     export class MoveMotorZIP {
         buf: Buffer;
@@ -477,7 +510,7 @@ namespace Kitronik_Move_Motor {
     //% subcategory="Lights"
     //% blockId="kitronik_move_motor_ZIP_LED_create" 
     //% block="MOVE Motor with %numZips|ZIP LEDs"
-    //% weight=100 blockGap=8
+    //% weight=99 blockGap=8
     //% trackArgs=0,2
     //% blockSetVariable=moveMotorZIP
     export function createMoveMotorZIPLED(numZips: number): MoveMotorZIP {
@@ -701,6 +734,11 @@ namespace Kitronik_Move_Motor {
     let PWMReg2 = 0
     let PWMReg3 = 0
     let PWMReg4 = 0
+
+    // Note: WS2811 takes the data in GRB format
+    let motorBuf = pins.createBuffer(6) // WS2811 ICs, each with RGB (RG = Motor, B = Brake)
+    let motorPin = DigitalPin.P12
+
     /**
      * Drives the :MOVE motor in the specified direction. Turns have a small amount of forward motion.
      * @param direction Direction to move in
@@ -711,7 +749,7 @@ namespace Kitronik_Move_Motor {
     //% blockId=kitronik_move_motor_drive
     //% weight=100 blockGap=8
     //% block="move %direction|at speed %speed"
-    //% speed.min=0, speed.max=100
+    //% speed.min=0 speed.max=100
     export function move(direction: DriveDirections, speed: number): void {
         if (initalised == false) {
             setup()
@@ -739,9 +777,6 @@ namespace Kitronik_Move_Motor {
                 motorOff(Motors.MotorRight)
             break
         }
-            
-        
-        
     }
 
     /**
@@ -855,9 +890,9 @@ namespace Kitronik_Move_Motor {
     
      /**
      * Sets the requested motor running in chosen direction at a set speed.
-     * if the PCA has not yet been initialised calls the initialisation routine.
+     * If setup is not complete, calls the initialisation routine.
      * @param motor which motor to turn on
-     * @param dir   which direction to go
+     * @param dir which direction to go
      * @param speed how fast to spin the motor
      */
     //% subcategory=Motors
@@ -875,64 +910,124 @@ namespace Kitronik_Move_Motor {
         if (outputVal > 255){ 
             outputVal = 255 
         }
-        let motorOnbuf = pins.createBuffer(5)
-        motorOnbuf[0] = 0xA2
-        //The jerk message gives the motor a 'shove' at ful power to aid starting on lower pwm ratios
-        let motorJerkBuf = pins.createBuffer(5)
-        motorJerkBuf[0] = 0xA2
-        switch (motor) {
-            case Motors.MotorRight:
-            switch (dir) {
-                case MotorDirection.Forward:
-                    PWMReg1 = 0
-                    PWMReg2 = outputVal  - rightMotorBias
-                    motorJerkBuf[1] = 0
-                    motorJerkBuf[2] = 0xFF
+
+        // Depending on board version, motors are driven in different ways: V1.0 & V1.3 - PCA9632, V3.1 - WS2811
+        if (moveMotorVersion == 31) {
+            let motorOnbuf = pins.createBuffer(6)
+            //The jerk message gives the motor a 'shove' at full power to aid starting on lower pwm ratios
+            let motorJerkBuf = pins.createBuffer(6)
+            switch (motor) {
+                case Motors.MotorRight:
+                    switch (dir) {
+                        case MotorDirection.Forward:
+                            motorBuf[0] = outputVal - rightMotorBias
+                            motorBuf[1] = 0
+                            motorJerkBuf[0] = 255
+                            motorJerkBuf[1] = 0
+                            break
+                        case MotorDirection.Reverse:
+                            motorBuf[0] = 0
+                            motorBuf[1] = outputVal - rightMotorBias
+                            motorJerkBuf[0] = 0
+                            motorJerkBuf[1] = 255
+                            break
+                    }
+                    if (outputVal == 0) {
+                        motorBuf[2] = 255
+                    }
+                    else {
+                        motorBuf[2] = 0
+                    }
                     break
-                case MotorDirection.Reverse:
-                    PWMReg1 =  outputVal  - rightMotorBias
-                    PWMReg2 = 0
-                    motorJerkBuf[1] = 0xFF
-                    motorJerkBuf[2] = 0
+                case Motors.MotorLeft:
+                    switch (dir) {
+                        case MotorDirection.Forward:
+                            motorBuf[3] = 0
+                            motorBuf[4] = outputVal - leftMotorBias
+                            motorJerkBuf[3] = 0
+                            motorJerkBuf[4] = 255
+                            break
+                        case MotorDirection.Reverse:
+                            motorBuf[3] = outputVal - leftMotorBias
+                            motorBuf[4] = 0
+                            motorJerkBuf[3] = 255
+                            motorJerkBuf[4] = 0
+                            break
+                    }
+                    if (outputVal == 0) {
+                        motorBuf[5] = 255
+                    }
+                    else {
+                        motorBuf[5] = 0
+                    }
                     break
-            
+                default:
+                //Stop - something has gone wrong
             }
-            break
-            case Motors.MotorLeft:
-                        switch (dir) {
-                case MotorDirection.Forward:
-                    PWMReg3 = outputVal  - leftMotorBias
-                    PWMReg4 = 0
-                    motorJerkBuf[3] = 0xFF
-                    motorJerkBuf[4] = 0x00
-                    break
-                case MotorDirection.Reverse:
-                    PWMReg3 = 0
-                    PWMReg4 = outputVal  - leftMotorBias
-                    motorJerkBuf[3] = 0x00
-                    motorJerkBuf[4] = 0xFF
-                    break
-            
+
+            // Send the data to the WS2811 ICs
+            if (outputVal != 0) {
+                Kitronik_WS2811.sendBuffer(motorJerkBuf, motorPin)
+                basic.pause(1)
             }
-            break
-            default:
-            //Stop - something has gone wrong
-            
+            latestMotorBuf = motorBuf
+            Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
         }
+        else {
+            let motorOnbuf1 = pins.createBuffer(5)
+            //The jerk message gives the motor a 'shove' at full power to aid starting on lower pwm ratios
+            let motorJerkBuf1 = pins.createBuffer(5)
 
-        motorOnbuf[1] = PWMReg1
-        motorOnbuf[2] = PWMReg2
-        motorOnbuf[3] = PWMReg3
-        motorOnbuf[4] = PWMReg4
+            motorOnbuf1[0] = 0xA2
+            motorJerkBuf1[0] = 0xA2
+            switch (motor) {
+                case Motors.MotorRight:
+                switch (dir) {
+                    case MotorDirection.Forward:
+                        PWMReg1 = 0
+                        PWMReg2 = outputVal - rightMotorBias
+                        motorJerkBuf1[1] = 0
+                        motorJerkBuf1[2] = 0xFF
+                        break
+                    case MotorDirection.Reverse:
+                        PWMReg1 =  outputVal - rightMotorBias
+                        PWMReg2 = 0
+                        motorJerkBuf1[1] = 0xFF
+                        motorJerkBuf1[2] = 0
+                        break
+                }
+                    break
+                case Motors.MotorLeft:
+                switch (dir) {
+                    case MotorDirection.Forward:
+                        PWMReg3 = outputVal - leftMotorBias
+                        PWMReg4 = 0
+                        motorJerkBuf1[3] = 0xFF
+                        motorJerkBuf1[4] = 0
+                        break
+                    case MotorDirection.Reverse:
+                        PWMReg3 = 0
+                        PWMReg4 = outputVal - leftMotorBias
+                        motorJerkBuf1[3] = 0
+                        motorJerkBuf1[4] = 0xFF
+                        break
+                }
+                    break
+                default:
+                //Stop - something has gone wrong
+            }
 
-        //At this point we have updated the required PWM Registers, so write it to the Chip
-        pins.i2cWriteBuffer(CHIP_ADDR, motorJerkBuf, false)
-        basic.pause(1) //let the motor start before throttling them to the lower level
-        pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
- 
+            motorOnbuf1[1] = PWMReg1
+            motorOnbuf1[2] = PWMReg2
+            motorOnbuf1[3] = PWMReg3
+            motorOnbuf1[4] = PWMReg4
+
+            //At this point we have updated the required PWM Registers, so write it to the Chip
+            pins.i2cWriteBuffer(CHIP_ADDR, motorJerkBuf1, false)
+            basic.pause(1) //let the motor start before throttling them to the lower level
+            pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf1, false)
+        }
     }
-
-
 
     /**
      * Turns off the specified motor.
@@ -947,24 +1042,48 @@ namespace Kitronik_Move_Motor {
         if (initalised == false) {
             setup()
         }
-        let motorOnbuf = pins.createBuffer(5)
-        motorOnbuf[0] = 0xA2
-        switch (motor) {
-            case Motors.MotorRight:
+
+        // Depending on board version, motors are driven in different ways: V1.0 & V1.3 - PCA9632, V3.1 - WS2811
+        if (moveMotorVersion == 31) {
+            let motorOnbuf = pins.createBuffer(6)
+            switch (motor) {
+                case Motors.MotorRight:
+                    motorBuf[0] = 0
+                    motorBuf[1] = 0
+                    motorBuf[2] = 255 // Turn on the brake light
+                    break
+                case Motors.MotorLeft:
+                    motorBuf[3] = 0
+                    motorBuf[4] = 0
+                    motorBuf[5] = 255 // Turn on the brake light
+                    break
+                default:
+                //Stop - something has gone wrong
+            }
+            
+            // Send the data to the WS2811 ICs
+            Kitronik_WS2811.sendBuffer(motorBuf, motorPin)
+        }
+        else {
+            let motorOnbuf1 = pins.createBuffer(5)
+            motorOnbuf1[0] = 0xA2
+            switch (motor) {
+                case Motors.MotorRight:
                     PWMReg1 = 0
                     PWMReg2 = 0
-            break
-            case Motors.MotorLeft:
+                    break
+                case Motors.MotorLeft:
                     PWMReg3 = 0
                     PWMReg4 = 0
-            break
+                    break
+            }
+            motorOnbuf1[1] = PWMReg1
+            motorOnbuf1[2] = PWMReg2
+            motorOnbuf1[3] = PWMReg3
+            motorOnbuf1[4] = PWMReg4
+            //At this point we have updated the required PWM Registers, so write it to the Chip
+            pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf1, false)
         }
-        motorOnbuf[1] = PWMReg1
-        motorOnbuf[2] = PWMReg2
-        motorOnbuf[3] = PWMReg3
-        motorOnbuf[4] = PWMReg4
-        //At this point we have updated the required PWM Registers, so write it to the Chip
-        pins.i2cWriteBuffer(CHIP_ADDR, motorOnbuf, false)
     }
 
     //////////////
