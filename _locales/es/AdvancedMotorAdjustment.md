@@ -10,7 +10,7 @@ En este tutorial, vamos a aprender cómo ajustar las salidas de motor individual
 
 ### Step 1
 Antes de comenzar a realizar ajustes, debemos verificar en qué dirección :MOVE Motor tiende a girar cuando se supone que debe conducir en línea recta.
-En el bucle ``||basic:para siempre||``, agregue un bloque ``||Kitronik_Move_Motor.move adelante a la velocidad de 100||``
+En el bucle ``||basic:para siempre||``, agregue un bloque ``||Kitronik_Move_Motor.mover adelante a la velocidad de 100||``
 
 #### ~ tutorialhint
 ```blocks
