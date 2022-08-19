@@ -85,7 +85,7 @@ basic.forever(function () {
 ```
 
 ### Step 4
-Si tiene un @boardname@ conectado, haga clic en ``|Download|`` para transferir su código y encienda :MOVE Motor.
+Si tiene un @boardname@ conectado, haga clic en ``|Descargar|`` para transferir su código y encienda :MOVE Motor.
 Como antes, coloque una caja frente al motor :MOVE y observe cómo se aleja la caja, pero esta vez se detiene cuando se acerca a 10 cm.
 
 ### Step 5

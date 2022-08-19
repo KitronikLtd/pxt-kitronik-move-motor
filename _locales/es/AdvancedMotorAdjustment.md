@@ -20,7 +20,7 @@ basic.forever(function () {
 ```
 
 ### Step 2
-Si tiene un @boardname@ conectado, haga clic en ``|Download|`` para transferir su código.
+Si tiene un @boardname@ conectado, haga clic en ``|Descargar|`` para transferir su código.
 Asegúrese de que haya una buena área abierta para que :MOVE Motor funcione y luego enciéndalo. Observe con atención y vea si tiende a ir hacia la izquierda o hacia la derecha.
 (Es posible que funcione en una línea perfecta, en cuyo caso no es necesario ajustarlo. Sin embargo, los motores también se ven afectados por el voltaje de la batería, por lo que es posible que no se mantenga recto para siempre).
 
@@ -37,7 +37,7 @@ basic.forever(function () {
 
 ### Step 4
 En lugar de tener que seguir reprogramando @boardname@ cada vez que el número de polarización necesita cambiarse, vamos a usar los botones en su lugar.
-Cree una variable llamada ``||variables:valorSesgo||`` y en el bloque ``||basic:al iniciar||``, ``||variables:establecer valorSesgo a 0||``. Agregue un bloque ``||input:al presionar el botón A||`` y luego coloque un bloque ``||variables:cambiar biasValue por -1||`` dentro. Finalmente, coloque ``||variables:biasValue||`` en el bloque ``||Kitronik_Move_Motor.sesgo a Izquierda/Derecha||``.
+Cree una variable llamada ``||variables:valorSesgo||`` y en el bloque ``||basic:al iniciar||``, ``||variables:establecer valorSesgo a 0||``. Agregue un bloque ``||input:al presionar el botón A||`` y luego coloque un bloque ``||variables:cambiar valorSesgo por -1||`` dentro. Finalmente, coloque ``||variables:valorSesgo||`` en el bloque ``||Kitronik_Move_Motor.sesgo a Izquierda/Derecha||``.
 
 #### ~ tutorialhint
 ```blocks
@@ -53,7 +53,7 @@ basic.forever(function () {
 
 ### Step 5
 Agrega un bloque ``||input:al presionar el botón B||`` y dentro de ``||variables:cambiar valoSesgo por 1||``.
-Si tiene un @boardname@ conectado, haga clic en ``|Download|`` para transferir su código.
+Si tiene un @boardname@ conectado, haga clic en ``|Descargar|`` para transferir su código.
 Configure :MOVE Motor en marcha nuevamente, probando diferentes valores de polarización presionando ``||input:botón A||`` o ``||input:botón B||``. (**Nota:** El sesgo puede estar en el rango de 0 a 10).
 
 #### ~ tutorialhint
@@ -84,7 +84,7 @@ input.onButtonPressed(Button.AB, function () {
 
 ### Step 7
 Finalmente, queremos asegurarnos de no intentar establecer ``||variables:valorSesgo||`` en algo fuera del rango 0-10.
-En el bloque ``||input:boton A||``, agregue una declaración ``||logic:si si no||``, colocando ``||variables:cambiar valorSesgo por -1||`` dentro la sección ``||logic:si||``. La condición de prueba debe ser ``||logic:si||`` ``||variables:valorSesgo||`` ``||logic:> 0||`` En ``||logic:si||`` sección, ``||variables: establezca biasValue en 0||``.
+En el bloque ``||input:boton A||``, agregue una declaración ``||logic:si si no||``, colocando ``||variables:cambiar valorSesgo por -1||`` dentro la sección ``||logic:si||``. La condición de prueba debe ser ``||logic:si||`` ``||variables:valorSesgo||`` ``||logic:> 0||`` En ``||logic:si||`` sección, ``||variables: establezca valorSesgo en 0||``.
 Haga lo mismo para el bloque ``||input:al presionarse el botón B||``, pero la condición de prueba debe ser ``||logic:si||`` ``||variables:valorSesgo||`` ``||logic:< 10||``, y ``||variables:establecer valorSesgo a 10||`` en la sección ``||logic:si no||``.
 
 #### ~ tutorialhint
@@ -106,4 +106,4 @@ input.onButtonPressed(Button.B, function () {
 ```
 
 ### Step 8
-¡CODIFICACIÓN COMPLETA! Si tiene un @boardname@ conectado, haga clic en ``|Download|`` para transferir su código. Ahora puede ajustar la polarización del motor como antes, pero ahora no puede configurarlo fuera de los límites y puede ver qué valor tiene presionando ``||input:botones A+B||``. Una vez que tenga este valor, puede ingresar el valor en el bloque ``||Kitronik_Move_Motor.sesgo||`` para cualquier otro código.
+¡CODIFICACIÓN COMPLETA! Si tiene un @boardname@ conectado, haga clic en ``|Descargar|`` para transferir su código. Ahora puede ajustar la polarización del motor como antes, pero ahora no puede configurarlo fuera de los límites y puede ver qué valor tiene presionando ``||input:botones A+B||``. Una vez que tenga este valor, puede ingresar el valor en el bloque ``||Kitronik_Move_Motor.sesgo||`` para cualquier otro código.

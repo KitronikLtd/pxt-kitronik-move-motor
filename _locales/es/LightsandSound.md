@@ -12,7 +12,7 @@ Aprende a usar las luces de :MOVE Motor para hacer faros e indicadores, y luego 
 ## Headlights and Rear Lights
 ### Step 1
 Para empezar, hagamos algunos faros y luces traseras para :MOVE Motor.  
-Primero, coloque el ``||variables:establecer moveMotorZIP para||`` ``||Kitronik_Move_Motor.MOVE Motor con 4 ZIP LEDs||`` bloque de la ``||Kitronik_Move_Motor.Lights||`` sección de la ``||Kitronik_Move_Motor.MOVE Motor||`` categoría en el ``||basic:al iniciar||`` block.  
+Primero, coloque el ``||variables:establecer moveMotorZIP para||`` ``||Kitronik_Move_Motor.MOVE Motor con 4 ZIP LEDs||`` bloque de la ``||Kitronik_Move_Motor.Luces||`` sección de la ``||Kitronik_Move_Motor.MOVE Motor||`` categoría en el ``||basic:al iniciar||`` block.  
 Esto configura los LED ZIP en :MOVE Motor listos para usar.
 
 #### ~ tutorialhint
@@ -124,7 +124,7 @@ Ahora que los faros y las luces traseras de :MOVE Motor están en su lugar, pase
 Al indicar, vamos a querer girar o bien a la izquierda o bien a la derecha. Esto significa que vamos a necesitar usar diferentes ZIP LED para cada acción..
 Sin embargo, debido a que casi todo lo demás es igual, podemos usar ``||functions:función||`` para facilitar las cosas.  
 Click en **``Advanced``** para revelar más categorías de bloques, y luego en el ``||functions:Functiones||`` categoría, haga clic ``||functions:Crear una función...||``.
-Añadir un **``Text``** parámetro y llamarlo **``direction``**, nombra la función **``intermitencia``** y click **``Done``**. 
+Añadir un **``Text``** parámetro y llamarlo **``direction``**, nombra la función **``intermitencia``** y click **``Listo``**. 
 
 #### ~ tutorialhint
 
@@ -150,7 +150,7 @@ basic.forever(function () {
 
 ### Step 2
 Añadir un ``||logic:si||`` bloque a la función, luego haga clic en el ``||logic:+||`` icono dos veces. Esto agregará un extra ``||logic:si no||`` y ``||logic:si no, si||`` Sección, pero no necesitamos la ``||logic:si no||``, así que haga clic en el ``||logic:-||`` icono para eliminarlo. 
-Ahora necesitamos algunas condiciones de prueba. En el ``||logic:si||`` declaración, verifique si ``||variables:dirección||`` ``||logic:=||`` **``"left"``** (arrastra ``||variables:dirección||`` desde el ``||functions:función||`` bloquear). Utilice el mismo bloque de prueba en el ``||logic:si no, si||`` declaración, pero en lugar de comprobar si hay **``"right"``**.
+Ahora necesitamos algunas condiciones de prueba. En el ``||logic:si||`` declaración, verifique si ``||variables:dirección||`` ``||logic:=||`` **``"izquierda"``** (arrastra ``||variables:dirección||`` desde el ``||functions:función||`` bloquear). Utilice el mismo bloque de prueba en el ``||logic:si no, si||`` declaración, pero en lugar de comprobar si hay **``"right"``**.
 **Nota:** Asegúrate de usar el bloque de comparación de texto.
 
 #### ~ tutorialhint
@@ -243,7 +243,7 @@ function indicate (direction: string) {
 
 ### Step 6
 Ahora que hemos completado la función, es hora de usarla. Introduzca un bloque ``||input:al presionarse el botón A||`` y use los bloques ``||Kitronik_Move_Motor.MOVE Motor||`` para hacer que :MOVE Motor avance, gire a la izquierda y luego se detenga (usted necesita ``||basic:pausa||`` después de que el movimiento se bloquee para darle a :MOVE Motor tiempo para moverse).
-Inmediatamente después del bloque ``||Kitronik_Move_Motor.mover izquierda a velocidad||``, agregue el bloque ``||functions:llamada intermitencia||`` de la categoría ``||functions:Funciónes||``. Escriba **``"left"``** en el bloque de llamada de función.
+Inmediatamente después del bloque ``||Kitronik_Move_Motor.mover izquierda a velocidad||``, agregue el bloque ``||functions:llamada intermitencia||`` de la categoría ``||functions:Funciónes||``. Escriba **``"izquierda"``** en el bloque de llamada de función.
 
 #### ~ tutorialhint
 ```blocks
@@ -260,7 +260,7 @@ function indicate (direction: string) {}
 ```
 
 ### Step 7
-Duplica el bloque ``||input:botón A||``. Luego, cambie el menú desplegable para que sea ``||input:botón B||``, cambie ``||Kitronik_Move_Motor.mover Izquierda||`` a ``||Kitronik_Move_Motor.mover Derecha||``, y la llamada de función a **``"right"``**.
+Duplica el bloque ``||input:botón A||``. Luego, cambie el menú desplegable para que sea ``||input:botón B||``, cambie ``||Kitronik_Move_Motor.mover Izquierda||`` a ``||Kitronik_Move_Motor.mover Derecha||``, y la llamada de función a **``"derecha"``**.
 
 #### ~ tutorialhint
 ```blocks
