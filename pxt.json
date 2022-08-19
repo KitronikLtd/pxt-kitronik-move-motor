@@ -30,7 +30,16 @@
         "_locales/nl/LineFollowing.md",
         "_locales/nl/AdvancedMotorAdjustment.md",
         "_locales/nl/RadioControlRx.md",
-        "_locales/nl/RadioControlTx.md"
+        "_locales/nl/RadioControlTx.md",
+        "_locales/es/AdvancedMotorAdjustment.md",
+        "_locales/es/DrawingRobot.md",
+        "_locales/es/LightsandSound.md",
+        "_locales/es/LineFollowing.md",
+        "_locales/es/pxt-kitronik-move-motor-jsdoc-strings.md",
+        "_locales/es/pxt-kitronik-move-motor-strings.md",
+        "_locales/es/RadioControlRx.md",
+        "_locales/es/RadioControlTx.md",
+        "_locales/es/UsingUltrasonic.md"
     ],
     "testFiles": [
         "test.ts"
