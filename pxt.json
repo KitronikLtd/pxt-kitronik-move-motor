@@ -22,6 +22,7 @@
         "_locales/fr/pxt-kitronik-move-motor-jsodc-strings.json",
         "_locales/fr/pxt-kitronik-move-motor-strings.json",
         "_locales/fr/LightsandSound.md",
+
         "_locales/nl/pxt-kitronik-move-motor-jsdoc-strings.json",
         "_locales/nl/pxt-kitronik-move-motor-strings.json",
         "_locales/nl/LightsandSound.md",
@@ -30,7 +31,17 @@
         "_locales/nl/LineFollowing.md",
         "_locales/nl/AdvancedMotorAdjustment.md",
         "_locales/nl/RadioControlRx.md",
-        "_locales/nl/RadioControlTx.md"
+        "_locales/nl/RadioControlTx.md",
+
+        "_locales/es/pxt-kitronik-move-motor-jsdoc-strings.json",
+        "_locales/es/pxt-kitronik-move-motor-strings.json",
+        "_locales/es/LightsandSound.md",
+        "_locales/es/UsingUltrasonic.md",
+        "_locales/es/DrawingRobot.md",
+        "_locales/es/LineFollowing.md",
+        "_locales/es/AdvancedMotorAdjustment.md",
+        "_locales/es/RadioControlRx.md",
+        "_locales/es/RadioControlTx.md"
     ],
     "testFiles": [
         "test.ts"
