@@ -11,7 +11,7 @@ Aprenda a usar el motor :MOVE con control de radio para conducir su buggy (esto 
 
 ## Basic Drive Forward
 ### Step 1
-Para empezar, para ayudar a saber qué micro:bit es cuál, mostraremos una letra en la pantalla para que podamos identificar qué micro:bit es el transmisor y cuál el receptor. Agregue ``||basic.mostrar cadena||`` y agregue la letra "T" en ``||basic.al iniciar||``. Esto indicará que este es el transmisor micro: bit.
+Para empezar, para ayudar a saber qué micro:bit es cuál, mostraremos una letra en la pantalla para que podamos identificar qué micro:bit es el transmisor y cuál el receptor. Agregue ``||basic.show cadena||`` y agregue la letra "T" en ``||basic.onStart||``. Esto indicará que este es el transmisor micro: bit.
 
 #### ~ tutorialhint
 ```blocks
@@ -20,7 +20,7 @@ basic.showString("T")
 
 ### Step 2
 Dialogo de micro:bit radio en grupos. Necesitamos configurar el grupo de radio en el que están los dos micro:bit, para que se comuniquen entre sí. El grupo puede ser cualquier número del 1 al 255, en este ejemplo usaremos 1. Si hay varios pares de radio de micro:bit, cada par debe usar un número diferente.
-Desde la sección de radio, coloca ``||radio:establecer grupo||`` en el bloque ``||basic.al iniciar||`` y establece el grupo en 1.
+Desde la sección de radio, coloca ``||radio:establecer grupo||`` en el bloque ``||basic.onStart||`` y establece el grupo en 1.
 
 #### ~ tutorialhint
 ```blocks

@@ -10,7 +10,7 @@ En este tutorial, vamos a aprender cómo ajustar las salidas de motor individual
 
 ### Step 1
 Antes de comenzar a realizar ajustes, debemos verificar en qué dirección :MOVE Motor tiende a girar cuando se supone que debe conducir en línea recta.
-En el bucle ``||basic:para siempre||``, agregue un bloque ``||Kitronik_Move_Motor.mover adelante a la velocidad de 100||``
+En el bucle ``||basic:para siempre||``, agregue un bloque ``||Kitronik_Move_Motor.move adelante a la velocidad de 100||``
 
 #### ~ tutorialhint
 ```blocks
@@ -25,7 +25,7 @@ Asegúrese de que haya una buena área abierta para que :MOVE Motor funcione y l
 (Es posible que funcione en una línea perfecta, en cuyo caso no es necesario ajustarlo. Sin embargo, los motores también se ven afectados por el voltaje de la batería, por lo que es posible que no se mantenga recto para siempre).
 
 ### Step 3
-Para ajustar realmente los motores, deberá tirar del bloque ``||Kitronik_Move_Motor.sesgo a la izquierda por 0||``. Póngalo en el bucle ``||basic:para siempre||``, encima del bloque ``||Kitronik_Move_Motor.mover Adelante||``. Si :MOVE Motor giró más a la izquierda en su prueba, establezca el menú desplegable en ``||Kitronik_Move_Motor.Derecha||``; de lo contrario, déjelo como ``||Kitronik_Move_Motor.Izquierda||``.
+Para ajustar realmente los motores, deberá tirar del bloque ``||Kitronik_Move_Motor.bias a la izquierda por 0||``. Póngalo en el bucle ``||basic:para siempre||``, encima del bloque ``||Kitronik_Move_Motor.move Adelante||``. Si :MOVE Motor giró más a la izquierda en su prueba, establezca el menú desplegable en ``||Kitronik_Move_Motor.Right||``; de lo contrario, déjelo como ``||Kitronik_Move_Motor.Left||``.
 
 #### ~ tutorialhint
 ```blocks
@@ -37,7 +37,7 @@ basic.forever(function () {
 
 ### Step 4
 En lugar de tener que seguir reprogramando @boardname@ cada vez que el número de polarización necesita cambiarse, vamos a usar los botones en su lugar.
-Cree una variable llamada ``||variables:valorSesgo||`` y en el bloque ``||basic:al iniciar||``, ``||variables:establecer valorSesgo a 0||``. Agregue un bloque ``||input:al presionar el botón A||`` y luego coloque un bloque ``||variables:cambiar biasValue por -1||`` dentro. Finalmente, coloque ``||variables:biasValue||`` en el bloque ``||Kitronik_Move_Motor.sesgo a Izquierda/Derecha||``.
+Cree una variable llamada ``||variables:valorSesgo||`` y en el bloque ``||basic:al iniciar||``, ``||variables:establecer valorSesgo a 0||``. Agregue un bloque ``||input:al presionar el botón A||`` y luego coloque un bloque ``||variables:cambiar biasValue por -1||`` dentro. Finalmente, coloque ``||variables:biasValue||`` en el bloque ``||Kitronik_Move_Motor.bias a Izquierda/Derecha||``.
 
 #### ~ tutorialhint
 ```blocks
@@ -106,4 +106,4 @@ input.onButtonPressed(Button.B, function () {
 ```
 
 ### Step 8
-¡CODIFICACIÓN COMPLETA! Si tiene un @boardname@ conectado, haga clic en ``|Download|`` para transferir su código. Ahora puede ajustar la polarización del motor como antes, pero ahora no puede configurarlo fuera de los límites y puede ver qué valor tiene presionando ``||input:botones A+B||``. Una vez que tenga este valor, puede ingresar el valor en el bloque ``||Kitronik_Move_Motor.sesgo||`` para cualquier otro código.
+¡CODIFICACIÓN COMPLETA! Si tiene un @boardname@ conectado, haga clic en ``|Download|`` para transferir su código. Ahora puede ajustar la polarización del motor como antes, pero ahora no puede configurarlo fuera de los límites y puede ver qué valor tiene presionando ``||input:botones A+B||``. Una vez que tenga este valor, puede ingresar el valor en el bloque ``||Kitronik_Move_Motor.bias||`` para cualquier otro código.

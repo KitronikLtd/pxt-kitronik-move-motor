@@ -14,7 +14,7 @@ Lea la introducción en el editor de la izquierda y siga las instrucciones. Cuan
 ### Step 1
 Ahora que el código del tutorial del transmisor está listo, comencemos con el código del receptor. Tendremos que programar esto en el segundo micro: bit.
 Al igual que al comienzo del código del transmisor, debemos indicar qué micro: bit de la BBC es este y configurar el grupo de radio.
-Agregue ``||basic.mostrar Cadena||`` a ``||basic.al iniciar||`` y muestre la letra "R", esto muestra que es el receptor BBC micro:bit. Agregue ``||radio:radio establecer grupo||`` y configure su grupo para que coincida con el transmisor (usamos 1 en nuestro ejemplo).
+Agregue ``||basic.show Cadena||`` a ``||basic.onStart||`` y muestre la letra "R", esto muestra que es el receptor BBC micro:bit. Agregue ``||radio:radio establecer grupo||`` y configure su grupo para que coincida con el transmisor (usamos 1 en nuestro ejemplo).
 
 #### ~ tutorialhint
 ```blocks
@@ -47,8 +47,8 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 4
-Luego, dentro del bloque if, necesitamos decirle al :MOVE Motor que avance. Agregue ``||Kitronik_Move_Motor.mover dirección||`` en el bloque if y asegúrese de que esté seleccionado "Adelante".
-Haga clic y arrastre el "value" del bloque ``||radio:al recibir radio||`` a la sección de velocidad del bloque ``||Kitronik_Move_Motor.mover dirección||``.
+Luego, dentro del bloque if, necesitamos decirle al :MOVE Motor que avance. Agregue ``||Kitronik_Move_Motor.move dirección||`` en el bloque if y asegúrese de que esté seleccionado "Adelante".
+Haga clic y arrastre el "value" del bloque ``||radio:al recibir radio||`` a la sección de velocidad del bloque ``||Kitronik_Move_Motor.move dirección||``.
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
@@ -102,7 +102,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 8
-Ahora, agregue los bloques para controlar los motores en los corchetes ``||logic:si no, si||`` y ``||logic:entonces||``. Agregue un bloque ``||Kitronik_Move_Motor.mover dirección||`` en el corchete ``||logic:si no, si||``.
+Ahora, agregue los bloques para controlar los motores en los corchetes ``||logic:si no, si||`` y ``||logic:entonces||``. Agregue un bloque ``||Kitronik_Move_Motor.move dirección||`` en el corchete ``||logic:si no, si||``.
 Coloque la variable "value" en la entrada de velocidad (haga clic y arrastre la palabra "value" desde la parte superior del bloque ``||radio:al recibir radio||``).
 Establezca la dirección para que sea "Atrás". Seleccione esto del menú desplegable en el bloque.
 #### ~ tutorialhint
@@ -119,7 +119,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 9
-La condición final que queremos es detener los motores si recibimos un mensaje que no es "Adelante" o "Atrás". Este es un controlador predeterminado y proporciona una forma segura de capturar mensajes desconocidos. Desde la sección :MOVE Motor en motores, agregue un bloque ``||Kitronik_Move_Motor.detener||`` dentro del corchete ``||logic:entonces||``.
+La condición final que queremos es detener los motores si recibimos un mensaje que no es "Adelante" o "Atrás". Este es un controlador predeterminado y proporciona una forma segura de capturar mensajes desconocidos. Desde la sección :MOVE Motor en motores, agregue un bloque ``||Kitronik_Move_Motor.stop||`` dentro del corchete ``||logic:entonces||``.
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
@@ -213,7 +213,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 15
-Dentro de la sección :MOVE Motor en los bloques de motor, hay ``||Kitronik_Move_Motor.girar motor||`` que permite el control de cada motor individualmente. Agregue uno de estos bloques al corchete superior de la declaración if recién agregada.
+Dentro de la sección :MOVE Motor en los bloques de motor, hay ``||Kitronik_Move_Motor.turn motor||`` que permite el control de cada motor individualmente. Agregue uno de estos bloques al corchete superior de la declaración if recién agregada.
 Seleccione el motor "Izquierdo" e inserte la variable "value" en la velocidad del bloque.
 #### ~ tutorialhint
 ```blocks
@@ -233,7 +233,7 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 16
-Ahora tenemos que lidiar con si el valor recibido es un número negativo. Agregue otro ``||Kitronik_Move_Motor.girar motor||`` en el corchete else, una vez más seleccionando el motor "Izquierda", pero tenga la dirección inversa.
+Ahora tenemos que lidiar con si el valor recibido es un número negativo. Agregue otro ``||Kitronik_Move_Motor.turn motor||`` en el corchete else, una vez más seleccionando el motor "Izquierda", pero tenga la dirección inversa.
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
@@ -252,8 +252,8 @@ radio.onReceivedValue(function (name, value) {
 ```
 
 ### Step 17
-El valor recibido es un número negativo que indica la velocidad, pero a la inversa. Sin embargo, ``||Kitronik_Move_Motor.girar motor||`` no toma un número negativo. Para permitirnos usar simplemente la magnitud de un número, podemos usar el bloque ``||math.absoluto de||``.
-Inserte esto en ``||Kitronik_Move_Motor.girar motor||`` luego el valor de la variable.
+El valor recibido es un número negativo que indica la velocidad, pero a la inversa. Sin embargo, ``||Kitronik_Move_Motor.turn motor||`` no toma un número negativo. Para permitirnos usar simplemente la magnitud de un número, podemos usar el bloque ``||math.absoluto de||``.
+Inserte esto en ``||Kitronik_Move_Motor.turn motor||`` luego el valor de la variable.
 #### ~ tutorialhint
 ```blocks
 radio.onReceivedValue(function (name, value) {
