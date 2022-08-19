@@ -22,7 +22,7 @@ let moveMotorZIP = Kitronik_Move_Motor.createMoveMotorZIPLED(4)
 
 ### Step 2
 Como vamos a tener luces delanteras y luces traseras, también necesitamos crear dos variables, ``||variables:farosDelanteros||`` y ``||variables:pilotosTraseros||``.  
-En el ``||basic:al iniciar||`` bloque, use el ``||variables:configurar variable a||`` bloque para hacer ``||variables:farosDelanteros||`` igual a ``||Kitronik_Move_Motor.range desde 0 hasta 2 leds||`` y ``||variables:pilotosTraseros||`` igual a``||Kitronik_Move_Motor.range desde 0 hasta 2 leds||``. Los rangos separados significan que los dos juegos de luces se pueden controlar individualmente.
+En el ``||basic:al iniciar||`` bloque, use el ``||variables:configurar variable a||`` bloque para hacer ``||variables:farosDelanteros||`` igual a ``||Kitronik_Move_Motor.rango desde 0 hasta 2 leds||`` y ``||variables:pilotosTraseros||`` igual a``||Kitronik_Move_Motor.rango desde 0 hasta 2 leds||``. Los rangos separados significan que los dos juegos de luces se pueden controlar individualmente.
 
 #### ~ tutorialhint
 ```blocks
@@ -33,7 +33,7 @@ let rearlights = moveMotorZIP.range(2, 2)
 
 ### Step 3
 Ahora debemos configurar las luces para que tengan los colores correctos: **blanco** para los faros, **rojo** para las luces traseras.  
-En el ``||basic:para siempre||`` bucle, usa el ``||Kitronik_Move_Motor.show color||`` bloque de la ``||Kitronik_Move_Motor.Lights||`` sección de la ``||Kitronik_Move_Motor.MOVE Motor||`` categoría para mostrar los colores. Cambie el menú desplegable para seleccionar el ``||variables:farosDelanteros||`` y ``||variables:pilotosTraseros||`` variables en los diferentes bloques.
+En el ``||basic:para siempre||`` bucle, usa el ``||Kitronik_Move_Motor.mostrar color||`` bloque de la ``||Kitronik_Move_Motor.Luces||`` sección de la ``||Kitronik_Move_Motor.MOVE Motor||`` categoría para mostrar los colores. Cambie el menú desplegable para seleccionar el ``||variables:farosDelanteros||`` y ``||variables:pilotosTraseros||`` variables en los diferentes bloques.
 
 #### ~ tutorialhint
 ```blocks
@@ -55,7 +55,7 @@ Muchos coches modernos tienen luces que se encienden automáticamente cuando se 
 
 ### Step 5
 La pantalla LED micro:bit también puede funcionar como un sensor de luz, que luego podemos usar como un interruptor para encender y apagar las luces de :MOVE Motor.  
-Arrastrar el ``||Kitronik_Move_Motor.show color||`` bloques fuera de la ``||basic:para siempre||`` bucle, dejándolos a un lado, y añadir un ``||logic:si||`` bloque de la ``||logic:Lógica||`` categoria.
+Arrastrar el ``||Kitronik_Move_Motor.mostrar color||`` bloques fuera de la ``||basic:para siempre||`` bucle, dejándolos a un lado, y añadir un ``||logic:si||`` bloque de la ``||logic:Lógica||`` categoria.
 
 #### ~ tutorialhint
 ```blocks
@@ -72,7 +72,7 @@ basic.forever(function () {
 ### Step 6
 Agregue una condición de prueba a la ``||logic:si||`` declaración para comprobar si ``||input:nivel de luz||`` (encontrado en el ``||input:Entradas||`` categoría) es ``||logic:< 20||``.  
 **Nota:** Es posible que sea necesario variar el número real para sus condiciones de luz particulares. 20 funcionó bien durante las pruebas.  
-Finalmente, arrastre esos ``||Kitronik_Move_Motor.show color||`` bloques dentro de la ``||logic:si||`` bloque.
+Finalmente, arrastre esos ``||Kitronik_Move_Motor.mostrar color||`` bloques dentro de la ``||logic:si||`` bloque.
 
 #### ~ tutorialhint
 ```blocks
@@ -93,7 +93,7 @@ Intente variar la luz que brilla en la pantalla de micro: bit y observe cómo la
 
 ### Step 8
 Las luces ahora se encienden cuando oscurece lo suficiente, pero por el momento, permanecen encendidas para siempre. Necesitamos hacer que se apaguen nuevamente cuando los niveles de luz sean lo suficientemente altos.
-Click en el ``||logic:+||`` icono en el ``||logic:si||`` bloque para añadir una ``||logic:si no||`` sección, entoces añadir un ``||Kitronik_Move_Motor.clear||`` bloque seguido por un ``||Kitronik_Move_Motor.show||`` bloque dede el ``||Kitronik_Move_Motor.Lights||`` sección de la ``||Kitronik_Move_Motor.MOVE Motor||`` categoría.
+Click en el ``||logic:+||`` icono en el ``||logic:si||`` bloque para añadir una ``||logic:si no||`` sección, entoces añadir un ``||Kitronik_Move_Motor.borrar||`` bloque seguido por un ``||Kitronik_Move_Motor.mostrar||`` bloque dede el ``||Kitronik_Move_Motor.Luces||`` sección de la ``||Kitronik_Move_Motor.MOVE Motor||`` categoría.
 
 #### ~ tutorialhint
 ```blocks
@@ -165,7 +165,7 @@ function indicate (direction: string) {
 ```
 
 ### Step 3
-A continuación, debemos configurar el indicador izquierdo. Poner un``||loops:repetir 4 veces||`` bucle en el ``||logic:si||`` Comprobación de declaración de **``"left"``**, luego adentro, ``||Kitronik_Move_Motor.set ZIP LED||`` 0 y 3 ser naranja. Sigue esto con un ``||Kitronik_Move_Motor.show||`` bloque.
+A continuación, debemos configurar el indicador izquierdo. Poner un``||loops:repetir 4 veces||`` bucle en el ``||logic:si||`` Comprobación de declaración de **``"left"``**, luego adentro, ``||Kitronik_Move_Motor.establecer ZIP LED||`` 0 y 3 ser naranja. Sigue esto con un ``||Kitronik_Move_Motor.mostrar||`` bloque.
 
 #### ~ tutorialhint
 ```blocks
@@ -185,7 +185,7 @@ function indicate (direction: string) {
 
 ### Step 4
 Si se llama a la función, ahora se encenderán los LED ZIP del lado izquierdo. Pero los indicadores se encienden y apagan, por lo que debemos agregar algunas pausas y apagar los LED.
-Después de ``||Kitronik_Move_Motor.show||`` agregue 200 ms ``||basic:pausa||`` , seguido de ``||Kitronik_Move_Motor.clear||`` y ``||Kitronik_Move_Motor.mostrar||``bloque, y finalmente otros 200ms ``||basic:pausa||``. El bucle ``||loops:repetir||`` hará que los indicadores se enciendan y apaguen 4 veces.
+Después de ``||Kitronik_Move_Motor.mostrar||`` agregue 200 ms ``||basic:pausa||`` , seguido de ``||Kitronik_Move_Motor.borrar||`` y ``||Kitronik_Move_Motor.mostrar||``bloque, y finalmente otros 200ms ``||basic:pausa||``. El bucle ``||loops:repetir||`` hará que los indicadores se enciendan y apaguen 4 veces.
 
 #### ~ tutorialhint
 ```blocks
@@ -208,7 +208,7 @@ function indicate (direction: string) {
 ```
 
 ### Step 5
-El código para el indicador de la derecha es casi idéntico al de la izquierda, así que haga clic con el botón derecho y duplique el ``||loops:repeti||`` bucle y todo lo que hay dentro, luego pon el nuevo código en el ``||logic:si no, si||`` sección. Lo único que queda por cambiar son los LED. Para usar las luces laterales derechas, ``||Kitronik_Move_Motor.set ZIP LED||`` 1 y 2 para ser naranja. 
+El código para el indicador de la derecha es casi idéntico al de la izquierda, así que haga clic con el botón derecho y duplique el ``||loops:repeti||`` bucle y todo lo que hay dentro, luego pon el nuevo código en el ``||logic:si no, si||`` sección. Lo único que queda por cambiar son los LED. Para usar las luces laterales derechas, ``||Kitronik_Move_Motor.establecer ZIP LED||`` 1 y 2 para ser naranja. 
 
 #### ~ tutorialhint
 
@@ -243,7 +243,7 @@ function indicate (direction: string) {
 
 ### Step 6
 Ahora que hemos completado la función, es hora de usarla. Introduzca un bloque ``||input:al presionarse el botón A||`` y use los bloques ``||Kitronik_Move_Motor.MOVE Motor||`` para hacer que :MOVE Motor avance, gire a la izquierda y luego se detenga (usted necesita ``||basic:pausa||`` después de que el movimiento se bloquee para darle a :MOVE Motor tiempo para moverse).
-Inmediatamente después del bloque ``||Kitronik_Move_Motor.move izquierda a velocidad||``, agregue el bloque ``||functions:llamada intermitencia||`` de la categoría ``||functions:Funciónes||``. Escriba **``"left"``** en el bloque de llamada de función.
+Inmediatamente después del bloque ``||Kitronik_Move_Motor.mover izquierda a velocidad||``, agregue el bloque ``||functions:llamada intermitencia||`` de la categoría ``||functions:Funciónes||``. Escriba **``"left"``** en el bloque de llamada de función.
 
 #### ~ tutorialhint
 ```blocks
@@ -260,7 +260,7 @@ function indicate (direction: string) {}
 ```
 
 ### Step 7
-Duplica el bloque ``||input:botón A||``. Luego, cambie el menú desplegable para que sea ``||input:botón B||``, cambie ``||Kitronik_Move_Motor.move Izquierda||`` a ``||Kitronik_Move_Motor.move Derecha||``, y la llamada de función a **``"right"``**.
+Duplica el bloque ``||input:botón A||``. Luego, cambie el menú desplegable para que sea ``||input:botón B||``, cambie ``||Kitronik_Move_Motor.mover Izquierda||`` a ``||Kitronik_Move_Motor.mover Derecha||``, y la llamada de función a **``"right"``**.
 
 #### ~ tutorialhint
 ```blocks
@@ -326,7 +326,7 @@ Pruébalo. Ahora no debería haber ningún problema con los faros o los indicado
 Ahora podemos controlar las luces de :MOVE Motors para que sean faros delanteros, luces traseras e indicadores. En esta última sección, vamos a combinar las luces con el zumbador de :MOVE Motor para crear un coche de policía.
 
 ### Step 1
-Al igual que con los indicadores, el "modo" de coche de policía se activará con la pulsación de botones. Extraiga un bloque ``||input:al presionarse el botón A+B||``, y luego agregue el bloque ``||Kitronik_Move_motor.turn sirena||`` del ``||Kitronik_Move_Motor.Sonidos||`` sección `` de la categoría ``||Kitronik_Move_Motor.MOVE Motor||``. Esto hará que el zumbador emita un sonido de sirena continuo hasta que se apague.
+Al igual que con los indicadores, el "modo" de coche de policía se activará con la pulsación de botones. Extraiga un bloque ``||input:al presionarse el botón A+B||``, y luego agregue el bloque ``||Kitronik_Move_motor.activar sirena||`` del ``||Kitronik_Move_Motor.Sonidos||`` sección `` de la categoría ``||Kitronik_Move_Motor.MOVE Motor||``. Esto hará que el zumbador emita un sonido de sirena continuo hasta que se apague.
 
 #### ~ tutorialhint
 ```blocks
@@ -336,12 +336,12 @@ input.onButtonPressed(Button.AB, function () {
 ```
 
 ### Step 2
-Ese es el sonido ordenado, ahora para algunas luces estilo policía. También en el bloque ``||input:botón A+B||``, use 4 de los bloques ``||Kitronik_Move_Motor.set ZIP LED # a color||`` para establecer:
+Ese es el sonido ordenado, ahora para algunas luces estilo policía. También en el bloque ``||input:botón A+B||``, use 4 de los bloques ``||Kitronik_Move_Motor.establecer ZIP LED # a color||`` para establecer:
 * LED 0 to ``||variables:rojo||``
 * LED 1 to ``||basic:azul||``
 * LED 2 to ``||variables:rojo||``
 * LED 3 to ``||basic:azul||``  
-Siga estos con un bloque ``||Kitronik_Move_Motor.show||`` para que se muestren.
+Siga estos con un bloque ``||Kitronik_Move_Motor.mostrar||`` para que se muestren.
 
 #### ~ tutorialhint
 ```blocks
@@ -380,7 +380,7 @@ input.onButtonPressed(Button.AB, function () {
 Eso estuvo bien, pero las luces de los coches de policía suelen parpadear y es posible que haya notado que :MOVE Motor no deja de moverse hacia adelante. Hay un par de cosas más que hacer para que el coche de policía quede perfecto.
 
 ### Step 4
-Introduce otro bucle ``||loops:repetir 4 veces||`` y colócalo en el bloque ``||input:al presionarse el botón A+B||`` después del bloque ``||Kitronik_Move_Motor.move Adelante||``, pero cambia el número de repetición a 30. Dentro de este ciclo, agrega un bloque ``||Kitronik_Move_Motor.rotate los LEDs ZIP a 1||``, seguido de un ``||Kitronik_Move_Motor.show||`` y luego 100ms ``||basic:pausa||``. A medida que los colores giran alrededor de los 4 LED, parecerá que parpadean entre ``||variables:rojo||`` y ``||basic:azul||``.
+Introduce otro bucle ``||loops:repetir 4 veces||`` y colócalo en el bloque ``||input:al presionarse el botón A+B||`` después del bloque ``||Kitronik_Move_Motor.mover Adelante||``, pero cambia el número de repetición a 30. Dentro de este ciclo, agrega un bloque ``||Kitronik_Move_Motor.rotar los LEDs ZIP a 1||``, seguido de un ``||Kitronik_Move_Motor.mostrar||`` y luego 100ms ``||basic:pausa||``. A medida que los colores giran alrededor de los 4 LED, parecerá que parpadean entre ``||variables:rojo||`` y ``||basic:azul||``.
 
 #### ~ tutorialhint
 ```blocks
@@ -403,7 +403,7 @@ input.onButtonPressed(Button.AB, function () {
 ```
 
 ### Step 5
-Después de que las luces hayan completado sus 30 parpadeos, ``||Kitronik_Move_Motor.stop||`` :MOVE Motor y ``||Kitronik_Move_Motor.turn sirena apagado||``.
+Después de que las luces hayan completado sus 30 parpadeos, ``||Kitronik_Move_Motor.parar||`` :MOVE Motor y ``||Kitronik_Move_Motor.activar sirena apagado||``.
 
 #### ~ tutorialhint
 ```blocks

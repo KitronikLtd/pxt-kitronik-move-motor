@@ -22,7 +22,7 @@ El primero va a ser un círculo grande (luego haremos uno pequeño). Haga clic e
 ![Create bigCircle function image](https://KitronikLtd.github.io/pxt-kitronik-move-motor/assets/create-bigcircle-function.png)
 
 ### Step 2
-Dentro de nuestro nuevo bloque ``||functions:función bigCircle||``, agregue un bloque ``||Kitronik_Move_Motor.set un radio de giro Estrecho||`` de la sección ``||Kitronik_Move_Motor.Motores||`` de la categoría ``||Kitronik_Move_Motor.MOVE Motor||`` y cambie el menú desplegable a ``||Kitronik_Move_Motor.Standard||``. Es este valor el que podemos cambiar para variar el tamaño de nuestros círculos.
+Dentro de nuestro nuevo bloque ``||functions:función bigCircle||``, agregue un bloque ``||Kitronik_Move_Motor.establecer un radio de giro Estrecho||`` de la sección ``||Kitronik_Move_Motor.Motores||`` de la categoría ``||Kitronik_Move_Motor.MOVE Motor||`` y cambie el menú desplegable a ``||Kitronik_Move_Motor.Estándar||``. Es este valor el que podemos cambiar para variar el tamaño de nuestros círculos.
 #### ~ tutorialhint
 ```blocks
 function bigCircle () {
@@ -31,7 +31,7 @@ function bigCircle () {
 ```
 
 ### Step 3
-A continuación, agregue un bloque ``||Kitronik_Move_Motor.move Derecha a velocidad 75||``, seguido de ``||basic:pausa||`` de 4000 ms y luego ``||Kitronik_Move_Motor.stop||``.
+A continuación, agregue un bloque ``||Kitronik_Move_Motor.mover Derecha a velocidad 75||``, seguido de ``||basic:pausa||`` de 4000 ms y luego ``||Kitronik_Move_Motor.parar||``.
 **Nota:** Los valores dados en este tutorial para velocidades y tiempos ``||basic:pause||`` funcionaron para nosotros, pero es posible que deba modificarlos ligeramente para que funcionen para su :MOVE Motor.
 
 #### ~ tutorialhint

@@ -27,7 +27,7 @@ basic.forever(function () {
 ```
 
 ### Step 2
-Ahora necesitamos leer los valores de los sensores. Desde la sección ``||Kitronik_Move_Motor.Sensores||`` de la categoría ``||Kitronik_Move_Motor.MOVE Motor||``, arrastre una línea ``||Kitronik_Move_Motor.Left del sensor de linea izquierdo||`` y ponlo en la sentencia ``||variables:establecer izquierdaSensor||``. Haga lo mismo para ``||variables:establecer derechaSensor||`` pero cambie el menú desplegable para leer el valor del sensor derecho
+Ahora necesitamos leer los valores de los sensores. Desde la sección ``||Kitronik_Move_Motor.Sensores||`` de la categoría ``||Kitronik_Move_Motor.MOVE Motor||``, arrastre una línea ``||Kitronik_Move_Motor.Valor del sensor de linea izquierdo||`` y ponlo en la sentencia ``||variables:establecer izquierdaSensor||``. Haga lo mismo para ``||variables:establecer derechaSensor||`` pero cambie el menú desplegable para leer el valor del sensor derecho
 
 #### ~ tutorialhint
 ```blocks
@@ -175,7 +175,7 @@ Todavía no hemos puesto ningún comando de conducción del motor en el código,
 A continuación, reemplazaremos las flechas con los comandos de conducción del motor correctos, para que el motor :MOVE pueda conducirse solo.
 
 ### Step 1
-La flecha más simple de reemplazar es la de línea recta en uno. Cámbielo a un bloque ``||Kitronik_Move_Motor:Move Adelante||`` de la sección ``||Kitronik_Move_Motor.Motors||`` de ``||Kitronik_Move_Motor.MOVE Motor||``. Establece la velocidad en 30. No olvides eliminar el bloque ``||basic:mostrar LEDS||``. Mostrar los LED al mismo tiempo que se sigue la línea puede hacer que el código se ejecute demasiado lento para funcionar correctamente.
+La flecha más simple de reemplazar es la de línea recta en uno. Cámbielo a un bloque ``||Kitronik_Move_Motor:Mover Adelante||`` de la sección ``||Kitronik_Move_Motor.Motores||`` de ``||Kitronik_Move_Motor.MOVE Motor||``. Establece la velocidad en 30. No olvides eliminar el bloque ``||basic:mostrar LEDS||``. Mostrar los LED al mismo tiempo que se sigue la línea puede hacer que el código se ejecute demasiado lento para funcionar correctamente.
 
 #### ~ tutorialhint
 ```blocks
@@ -211,7 +211,7 @@ basic.showLeds(`
 ```
 
 ###Step 2 
-Ahora tenemos que ocuparnos de volver a la línea. En ``||logic:si(izquierdaSensor>derechaSensor)||`` queremos girar a la derecha. Para ello pararemos el motor derecho y pondremos en marcha el motor izquierdo. Reemplace ``||basic:show LEDS||`` con ``||Kitronik_Move_Motor.turn el motor Izquierdo||`` usando el bloque de la sección ``||Kitronik_Move_Motor.Motors||``. Cambie el menú desplegable para que el motor ``||Kitronik_Move_Motor:Right||`` se detenga. Agregue ``||Kitronik_Move_Motor.turn Izquierda motor en dirección Adelante velocidad 0||``, y establezca la velocidad en 30. Haga un cambio similar a la sección ``||logic:si no||``, pero apague el motor izquierdo y haciendo funcionar el motor derecho a la velocidad 30.
+Ahora tenemos que ocuparnos de volver a la línea. En ``||logic:si(izquierdaSensor>derechaSensor)||`` queremos girar a la derecha. Para ello pararemos el motor derecho y pondremos en marcha el motor izquierdo. Reemplace ``||basic:mostrar LEDS||`` con ``||Kitronik_Move_Motor.parar el motor Izquierdo||`` usando el bloque de la sección ``||Kitronik_Move_Motor.Motores||``. Cambie el menú desplegable para que el motor ``||Kitronik_Move_Motor:Derecha||`` se detenga. Agregue ``||Kitronik_Move_Motor.girar Izquierda motor en dirección Adelante velocidad 0||``, y establezca la velocidad en 30. Haga un cambio similar a la sección ``||logic:si no||``, pero apague el motor izquierdo y haciendo funcionar el motor derecho a la velocidad 30.
 
 #### ~ tutorialhint
 ```blocks

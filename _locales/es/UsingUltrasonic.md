@@ -12,7 +12,7 @@ Aprenda a utilizar el sensor de distancia ultrasónico de :MOVE Motor para detec
 ### Step 1
 Primero, usemos el sensor para mostrar la distancia a un objeto.
 Comience creando una variable llamada ``||variables:distancia||`` y coloque el bloque ``||variables:establecer distancia para ||`` en el bucle ``||basic:para siempre||``.
-Haga ``||variables:distancia||`` igual a ``||Kitronik_Move_Motor.measure distancia||`` soltando el bloque dentro (esto se puede encontrar en la sección ``||Kitronik_Move_Motor.Sensores||`` de la categoría ``||Kitronik_Move_Motor.MOVE Motor||``).
+Haga ``||variables:distancia||`` igual a ``||Kitronik_Move_Motor.medir distancia||`` soltando el bloque dentro (esto se puede encontrar en la sección ``||Kitronik_Move_Motor.Sensores||`` de la categoría ``||Kitronik_Move_Motor.MOVE Motor||``).
 
 #### ~ tutorialhint
 ```blocks
@@ -44,7 +44,7 @@ Ahora que conocemos la distancia a la caja, podemos usarla para accionar los mot
 
 ### Step 1
 Comience eliminando el bloque ``||basic:mostrar numero||``, luego agregue una declaración ``||logic:si||``, con ``||variables:distancia||`` ``|| lógica:> 10||`` como condición de prueba.
-Dentro del bloque ``||logic:si||``, haga que :MOVE Motor ``||Kitronik_Move_Motor.move adelante||`` si se cumple la condición.
+Dentro del bloque ``||logic:si||``, haga que :MOVE Motor ``||Kitronik_Move_Motor.mover adelante||`` si se cumple la condición.
 
 #### ~ tutorialhint
 ```blocks
@@ -65,7 +65,7 @@ Pero hay un problema. ¡Solo arrancamos los motores!
 ### Step 3
 Esto significa que los motores arrancan tan pronto como la caja está a más de 10 cm de distancia, pero nunca se detienen, por lo que el motor :MOVE seguirá funcionando.
 Tenemos que parar cuando estemos más cerca del objeto.
-Por lo tanto, haga clic en el icono ``||logic:+||`` para agregar una declaración ``||logic:si no||`` y coloque un bloque ``||Kitronik_Move_Motor.stop||`` dentro.
+Por lo tanto, haga clic en el icono ``||logic:+||`` para agregar una declaración ``||logic:si no||`` y coloque un bloque ``||Kitronik_Move_Motor.parar||`` dentro.
 
 #### ~ tutorialhint
 
@@ -93,7 +93,7 @@ Actualmente, el código solo permite que :MOVE Motor siga al objeto si se aleja.
 Para ello, necesitamos otra condición de prueba para comprobar si la distancia es inferior a 10 cm. Si es así, damos marcha atrás.
 
 Haga clic en el icono ``||logic:+||`` en el bloque ``||logic:si no||`` para agregar una declaración ``||logic:si no si||``.
-Ponga ``||variables:distancia||`` ``||logic:< 10||`` como la condición de prueba, y haga :MOVE Motor ``||Kitronik_Move_Motor.reverse||`` si la condición se cumple.
+Ponga ``||variables:distancia||`` ``||logic:< 10||`` como la condición de prueba, y haga :MOVE Motor ``||Kitronik_Move_Motor.atras||`` si la condición se cumple.
 
 #### ~ tutorialhint
 ```blocks
@@ -121,7 +121,7 @@ Pero solo puede moverse en línea recta. Sería mucho mejor si pudiera conducir 
 
 ### Step 1
 Para convertir :MOVE Motor en un robot itinerante libre, solo necesitamos hacer algunos cambios en nuestro código.
-Comience moviendo el bloque ``||Kitronik_Move_Motor.stop||`` a la sección ``||logic:si no si||``, arriba del bloque ``||Kitronik_Move_Motor.reverse||``.
+Comience moviendo el bloque ``||Kitronik_Move_Motor.parar||`` a la sección ``||logic:si no si||``, arriba del bloque ``||Kitronik_Move_Motor.atrás||``.
 Luego, haga clic en el ícono ``||logic:-||`` en la declaración ``||logic:si no||`` para eliminarlo.
 
 #### ~ tutorialhint
@@ -139,8 +139,8 @@ basic.forever(function () {
 ```
 
 ### Step 2
-A continuación, agregue ``||basic:pausa||`` de 500 ms después de ``||Kitronik_Move_Motor.stop||``, y ``||basic:pausa||`` de 1 segundo después de ``||Kitronik_Move_Motor.reverse||`` bloque.
-También queremos reducir un poco la velocidad de :MOVE Motor cuando está evitando obstáculos, así que cambie la velocidad ``||Kitronik_Move_Motor.reverse||`` a 50.
+A continuación, agregue ``||basic:pausa||`` de 500 ms después de ``||Kitronik_Move_Motor.parar||``, y ``||basic:pausa||`` de 1 segundo después de ``||Kitronik_Move_Motor.atrás||`` bloque.
+También queremos reducir un poco la velocidad de :MOVE Motor cuando está evitando obstáculos, así que cambie la velocidad ``||Kitronik_Move_Motor.atrás||`` a 50.
 
 #### ~ tutorialhint
 ```blocks
@@ -160,7 +160,7 @@ basic.forever(function () {
 
 ### Step 3
 Finalmente, necesitamos hacer que :MOVE Motor se aleje del obstáculo que ha detectado.
-Agregue un bloque ``||Kitronik_Move_Motor.spin izquierda a velocidad 50||`` a la sección ``||logic:si no, si||``, seguido de otros 500ms ``||basic:pausa||`` y un bloque ``||Kitronik_Move_Motor.stop||``.
+Agregue un bloque ``||Kitronik_Move_Motor.girar izquierda a velocidad 50||`` a la sección ``||logic:si no, si||``, seguido de otros 500ms ``||basic:pausa||`` y un bloque ``||Kitronik_Move_Motor.parar||``.
 
 #### ~ tutorialhint
 ```blocks
