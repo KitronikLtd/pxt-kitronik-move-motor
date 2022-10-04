@@ -37,6 +37,7 @@ basic.forever(function () {
 
 ### Step 3
 If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor. Then move a box in front of the :MOVE Motor and see the micro:bit display show the distance to the box.
+When the sensor cannot properly detect the distance to an object it shows 0 (zero). You can use this as a test condition inside your code to react when the sensor isn't able to detect the distance to an object. 
 
 ## Follow the Object
 ### Follow the Object @unplugged
