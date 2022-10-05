@@ -37,7 +37,6 @@ basic.forever(function () {
 
 ### Step 3
 If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor. Then move a box in front of the :MOVE Motor and see the micro:bit display show the distance to the box.
-When the sensor cannot properly detect the distance to an object it shows 0 (zero). You can use this as a test condition inside your code to react when the sensor isn't able to detect the distance to an object. 
 
 ## Follow the Object
 ### Follow the Object @unplugged
@@ -112,6 +111,31 @@ basic.forever(function () {
 ```
 
 ### Step 6
+Currently, the sensor reads zero when it does not know the distance between itself and the object. This can happen if the object reflects the sound waves at an angle, meaning they aren’t bounced back towards the sensor, or if the object absorbs the sound waves, then they aren’t bounced back at all.
+This case sits inside of our distance is less than 10cm condition, however, we should stop if our sensor doesn't know the distance between itself and an object
+
+Click the ``||logic:+||`` icon on the ``||logic:if else||`` block to add an ``||logic:else if||`` statement.
+Move down the condition ``||variables:distance||`` ``||logic:< 10||`` to the new ``||logic:if else||`` block, along with its :MOVE Motor ``||Kitronik_Move_Motor.reverse||`` code.
+Put in ``||variables:distance||`` ``||logic:= 10||`` as the test condition in the empty block, and make the :MOVE Motor ``||Kitronik_Move_Motor.stop||`` if the condition is met.
+
+#### ~ tutorialhint
+```blocks
+let distance = 0
+basic.forever(function () {
+    distance = Kitronik_Move_Motor.measure()
+    if (distance > 10) {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
+    } else if (distance = 10) {
+        Kitronik_Move_Motor.stop()
+    } else if (distance < 10) {
+        Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Reverse, 100)
+    } else {
+        Kitronik_Move_Motor.stop()
+    }
+})
+```
+
+### Step 7
 If you have a @boardname@ connected, click ``|Download|`` to transfer your code and switch on :MOVE Motor. 
 Now try out making the :MOVE Motor drive forwards and backwards as you move the box.
 
@@ -122,7 +146,7 @@ But it can only move in a straight line. It would be much better if it could dri
 
 ### Step 1
 To turn :MOVE Motor into a free roaming robot, we just need to make a few changes to our code.
-Begin by moving the ``||Kitronik_Move_Motor.stop||`` block to the ``||logic:else if||`` section, above the ``||Kitronik_Move_Motor.reverse||`` block.
+Begin by moving the ``||Kitronik_Move_Motor.stop||`` block from ``||logic:else||`` to the ``||logic:else if||`` section, above the ``||Kitronik_Move_Motor.reverse||`` block.
 Then, click the ``||logic:-||`` icon on the ``||logic:else||`` statement to remove it.
 
 #### ~ tutorialhint
@@ -132,6 +156,8 @@ basic.forever(function () {
     distance = Kitronik_Move_Motor.measure()
     if (distance > 10) {
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
+    } else if (distance = 10) {
+        Kitronik_Move_Motor.stop()
     } else if (distance < 10) {
         Kitronik_Move_Motor.stop()
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Reverse, 100)
@@ -150,6 +176,8 @@ basic.forever(function () {
     distance = Kitronik_Move_Motor.measure()
     if (distance > 10) {
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
+    } else if (distance = 10) {
+        Kitronik_Move_Motor.stop()
     } else if (distance < 10) {
         Kitronik_Move_Motor.stop()
         basic.pause(500)
@@ -170,6 +198,8 @@ basic.forever(function () {
     distance = Kitronik_Move_Motor.measure()
     if (distance > 10) {
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
+    } else if (distance = 10) {
+        Kitronik_Move_Motor.stop()
     } else if (distance < 10) {
         Kitronik_Move_Motor.stop()
         basic.pause(500)
