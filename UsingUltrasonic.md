@@ -111,12 +111,12 @@ basic.forever(function () {
 ```
 
 ### Step 6
-Currently, the sensor reads zero when it does not know the distance between itself and the object. This can happen if the object reflects the sound waves at an angle, meaning they aren’t bounced back towards the sensor, or if the object absorbs the sound waves, then they aren’t bounced back at all.
+The sensor reads zero when it does not know the distance between itself and the object. This can happen if the object reflects the sound waves at an angle, meaning they aren’t bounced back towards the sensor, or if the object absorbs the sound waves, then they aren’t bounced back at all.
 This case sits inside of our distance is less than 10cm condition, however, we should stop if our sensor doesn't know the distance between itself and an object
 
 Click the ``||logic:+||`` icon on the ``||logic:if else||`` block to add an ``||logic:else if||`` statement.
-Move down the condition ``||variables:distance||`` ``||logic:< 10||`` to the new ``||logic:if else||`` block, along with its :MOVE Motor ``||Kitronik_Move_Motor.reverse||`` code.
-Put in ``||variables:distance||`` ``||logic:= 10||`` as the test condition in the empty block, and make the :MOVE Motor ``||Kitronik_Move_Motor.stop||`` if the condition is met.
+Move down the condition ``||variables:distance||`` ``||logic:[<] [10]||`` to the new ``||logic:if else||`` block, along with its :MOVE Motor ``||Kitronik_Move_Motor.reverse||`` code.
+Put in ``||variables:distance||`` ``||logic:[=] [10]||`` as the test condition in the empty block, and make the :MOVE Motor ``||Kitronik_Move_Motor.stop||`` if the condition is met.
 
 #### ~ tutorialhint
 ```blocks
