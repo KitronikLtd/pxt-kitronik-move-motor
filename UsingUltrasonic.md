@@ -115,8 +115,8 @@ The sensor reads zero when it does not know the distance between itself and the 
 This case sits inside of our distance is less than 10cm condition, however, we should stop if our sensor doesn't know the distance between itself and an object
 
 Click the ``||logic:+||`` icon on the ``||logic:if else||`` block to add an ``||logic:else if||`` statement.
-Move down the condition ``||variables:distance||`` ``||logic:[<] [10]||`` to the new ``||logic:if else||`` block, along with its :MOVE Motor ``||Kitronik_Move_Motor.reverse||`` code.
-Put in ``||variables:distance||`` ``||logic:[=] [10]||`` as the test condition in the empty block, and make the :MOVE Motor ``||Kitronik_Move_Motor.stop||`` if the condition is met.
+Move down the condition ``||variables:distance||`` ``||logic:< 10||`` to the new ``||logic:if else||`` block, along with its :MOVE Motor ``||Kitronik_Move_Motor.reverse||`` code.
+Put in ``||variables:distance||`` ``||logic:= 0||`` as the test condition in the empty block, and make the :MOVE Motor ``||Kitronik_Move_Motor.stop||`` if the condition is met.
 
 #### ~ tutorialhint
 ```blocks
@@ -125,7 +125,7 @@ basic.forever(function () {
     distance = Kitronik_Move_Motor.measure()
     if (distance > 10) {
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
-    } else if (distance == 10) {
+    } else if (distance == 0) {
         Kitronik_Move_Motor.stop()
     } else if (distance < 10) {
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Reverse, 100)
