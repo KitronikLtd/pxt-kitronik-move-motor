@@ -156,7 +156,7 @@ basic.forever(function () {
     distance = Kitronik_Move_Motor.measure()
     if (distance > 10) {
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
-    } else if (distance = 10) {
+    } else if (distance == 0) {
         Kitronik_Move_Motor.stop()
     } else if (distance < 10) {
         Kitronik_Move_Motor.stop()
@@ -176,7 +176,7 @@ basic.forever(function () {
     distance = Kitronik_Move_Motor.measure()
     if (distance > 10) {
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
-    } else if (distance = 10) {
+    } else if (distance == 0) {
         Kitronik_Move_Motor.stop()
     } else if (distance < 10) {
         Kitronik_Move_Motor.stop()
@@ -198,7 +198,7 @@ basic.forever(function () {
     distance = Kitronik_Move_Motor.measure()
     if (distance > 10) {
         Kitronik_Move_Motor.move(Kitronik_Move_Motor.DriveDirections.Forward, 100)
-    } else if (distance = 10) {
+    } else if (distance == 0) {
         Kitronik_Move_Motor.stop()
     } else if (distance < 10) {
         Kitronik_Move_Motor.stop()
