@@ -44,7 +44,7 @@ Now we know the distance to the box, we can use that to drive the motors and mak
 
 ### Step 1
 Start by removing the ``||basic:show number||`` block, then add an ``||logic:if||`` statement, with ``||variables:distance||`` ``||logic:> 10||`` as the test condition.
-Inside the ``||logic:if||`` block, make the :MOVE Motor ``||Kitronik_Move_Motor.move forward||`` if the condition is met.
+Inside the ``||logic:if||`` block, make the :MOVE Motor ``||Kitronik_Move_Motor.move forward||`` at a speed of 100 if the condition is met.
 
 #### ~ tutorialhint
 ```blocks
@@ -111,8 +111,7 @@ basic.forever(function () {
 ```
 
 ### Step 6
-The sensor reads zero when it does not know the distance between itself and the object. This can happen if the object reflects the sound waves at an angle, meaning they aren’t bounced back towards the sensor, or if the object absorbs the sound waves, then they aren’t bounced back at all.
-This case sits inside of our distance is less than 10cm condition, however, we should stop if our sensor doesn't know the distance between itself and an object
+Now we follow the object forwards and backwards, but sometimes the sensor isn't able to tell the distance between itself and the object. When this happens the sensor reads a distance of zero. This could be confused for our distance is less than 10cm condition, so we should stop if our sensor doesn't know the distance between itself and the object.
 
 Click the ``||logic:+||`` icon on the ``||logic:if else||`` block to add an ``||logic:else if||`` statement.
 Move down the condition ``||variables:distance||`` ``||logic:< 10||`` to the new ``||logic:if else||`` block, along with its :MOVE Motor ``||Kitronik_Move_Motor.reverse||`` code.
