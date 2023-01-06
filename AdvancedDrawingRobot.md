@@ -24,10 +24,6 @@ It is important to note that the turn values and timing used for drawing shapes 
 Let's get started with drawing some circles. We are going to setup a function to lift the pen up and a function to put the pen down. To move the pen lifter we will need to control the servo which is connected to. In this tutorial we assume the pen lifter is connected to servo 1.
 
 ### Step 1
-```package
-Kitronik_Move_Motor=github:KitronikLtd/pxt-kitronik-move-motor
-```
-
 ```template
 function bigCircle() {
     Kitronik_Move_Motor.turnRadius(Kitronik_Move_Motor.TurnRadii.Standard)
