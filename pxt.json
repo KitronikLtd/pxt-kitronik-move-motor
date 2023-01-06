@@ -1,6 +1,6 @@
 {
     "name": "pxt-kitronik-move-motor",
-    "version": "0.4.15",
+    "version": "0.4.16",
     "description": "Blocks to simplify using Kitronik MOVE Motor board in PXT",
     "license": "MIT",
     "dependencies": {
@@ -13,6 +13,7 @@
         "README.md",
         "LightsandSound.md",
         "UsingUltrasonic.md",
+        "AdvancedDrawingRobot.md",
         "AdvancedMotorAdjustment.md",
         "DrawingRobot.md",
         "LineFollowing.md",
