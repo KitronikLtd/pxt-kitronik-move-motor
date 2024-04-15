@@ -20,6 +20,9 @@
         "RadioControlRx.md",
         "RadioControlTx.md",
         "Klaw.md",
+        "_locales/de/pxt-kitronik-move-motor-jsodc-strings.json",
+        "_locales/de/pxt-kitronik-move-motor-strings.json",
+
         "_locales/fr/pxt-kitronik-move-motor-jsodc-strings.json",
         "_locales/fr/pxt-kitronik-move-motor-strings.json",
         "_locales/fr/LightsandSound.md",
